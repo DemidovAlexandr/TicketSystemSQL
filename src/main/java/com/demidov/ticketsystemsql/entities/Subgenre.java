@@ -1,12 +1,9 @@
-package com.demidov.ticketsystemsql.Entities;
+package com.demidov.ticketsystemsql.entities;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -17,8 +14,10 @@ public class Subgenre {
     @GeneratedValue
     private Integer id;
 
+    @Column(nullable = false)
     private String name;
 
-    @ManyToOne
+    @JoinColumn(nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Genre genre;
 }

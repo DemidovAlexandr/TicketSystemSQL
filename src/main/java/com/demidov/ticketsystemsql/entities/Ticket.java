@@ -1,4 +1,4 @@
-package com.demidov.ticketsystemsql.Entities;
+package com.demidov.ticketsystemsql.entities;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,14 +10,14 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @Setter
-public class Venue {
+public class Ticket {
 
     @Id
     @GeneratedValue
     private Integer id;
 
-    private String name;
-    private String address;
-    private String description;
-    private String contacts;
+    private Integer rowNumber;
+    private Integer seatNumber;
+    private Integer price;
+
 }

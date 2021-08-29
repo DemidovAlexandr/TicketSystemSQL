@@ -1,11 +1,11 @@
-package com.demidov.ticketsystemsql.Entities;
+package com.demidov.ticketsystemsql.entities;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Entity
@@ -18,7 +18,7 @@ public class Event {
     private Integer id;
 
     private String name;
-    private Timestamp beginDateTime;
+    private ZonedDateTime beginDateTime;
 
     @OneToOne
     private Venue venue;
