@@ -8,7 +8,6 @@ import com.demidov.ticketsystemsql.repositories.SubgenreRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,18 +31,23 @@ public class ArtistService {
         } else throw new CommonAppException(NO_ARTIST_MESSAGE + artistId);
     }
 
+    public List<Artist> getAll() {
+        return artistRepository.findAll();
+    }
+
+    public List<Artist> getAllBySubgenreList(List<Integer> subgenreIdList) {
+        List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList);
+        Optional<List<Artist>> artistList = artistRepository.getAllBySubgenreListOrderByNameAsc(subgenreList);
+        if (artistList.isPresent()) {
+            return artistList.get();
+        } else throw new CommonAppException("No artists found by this subgenre criteria: " + subgenreList);
+    }
+
     @Transactional
     public Artist create(String name, List<Integer> subgenreIdList) {
         Artist artist = new Artist();
         artist.setName(name);
-        List<Subgenre> subgenreList = new ArrayList<>();
-        for (Integer id : subgenreIdList
-        ) {
-            Optional<Subgenre> subgenre = subgenreRepository.findById(id);
-            if (subgenre.isPresent()) {
-                subgenreList.add(subgenre.get());
-            } else throw new CommonAppException(NO_SUBGENRE_MESSAGE + id);
-        }
+        List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList);
         artist.setSubgenreList(subgenreList);
         return artistRepository.save(artist);
     }
@@ -59,23 +63,15 @@ public class ArtistService {
     @Transactional
     public Artist updateSubgenres(Integer artistId, List<Integer> subgenreIdList) {
         Artist artist = artistRepository.findById(artistId).orElseThrow(() -> new CommonAppException(NO_ARTIST_MESSAGE + artistId));
-        List<Subgenre> subgenreList = new ArrayList<>();
-        for (Integer id : subgenreIdList
-        ) {
-            Optional<Subgenre> subgenre = subgenreRepository.findById(id);
-            if (subgenre.isPresent()) {
-                subgenreList.add(subgenre.get());
-            } else throw new CommonAppException(NO_SUBGENRE_MESSAGE + id);
-        }
+        List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList);
         artist.setSubgenreList(subgenreList);
         return artistRepository.save(artist);
     }
 
     @Transactional
     public void deleteById(Integer artistId) {
-        if(!artistRepository.existsById(artistId)) {
+        if (!artistRepository.existsById(artistId)) {
             throw new CommonAppException(NO_ARTIST_MESSAGE + artistId);
-        }
-        else artistRepository.deleteById(artistId);
+        } else artistRepository.deleteById(artistId);
     }
 }

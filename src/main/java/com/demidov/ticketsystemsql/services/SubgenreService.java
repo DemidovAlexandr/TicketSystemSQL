@@ -17,6 +17,7 @@ public class SubgenreService {
     private static final String NO_SUBGENRE_MESSAGE = "There is no such subgenre with id: ";
     private static final String SUBGENRE_EXISTS = "Subgenre with such name already exists, id: ";
     private static final String NO_GENRE_MESSAGE = "There is no such genre with id: ";
+
     private final SubgenreRepository subgenreRepository;
     private final GenreRepository genreRepository;
 

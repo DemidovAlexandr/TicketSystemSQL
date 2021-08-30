@@ -37,14 +37,14 @@ public class GenreService {
         } else throw new CommonAppException("There is no such genre with name: " + name);
     }
 
-    public List<Genre> getAll(){
+    public List<Genre> getAll() {
         return genreRepository.findAll();
     }
 
     @Transactional
     public Genre create(String name) {
 
-        if(genreRepository.findByNameAllIgnoreCase(name).isPresent()) {
+        if (genreRepository.findByNameAllIgnoreCase(name).isPresent()) {
             throw new CommonAppException(GENRE_EXISTS + genreRepository.findByNameAllIgnoreCase(name).get().getId());
         } else {
             Genre genre = new Genre();
@@ -53,32 +53,32 @@ public class GenreService {
         }
     }
 
-//    @Transactional
-//    public Genre create(String name, List<Integer> subgenreIdList) {
-//
-//        if(genreRepository.findByNameAllIgnoreCase(name).isPresent()) {
-//            throw new CommonAppException(GENRE_EXISTS + genreRepository.findByNameAllIgnoreCase(name).get().getId());
-//        } else {
-//            Genre genre = new Genre();
-//            genre.setName(name);
-//            List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList);
-//            genre.setSubgenreList(subgenreList);
-//            return genreRepository.save(genre);
-//        }
-//    }
+    @Transactional
+    public Genre create(String name, List<Integer> subgenreIdList) {
+
+        if (genreRepository.findByNameAllIgnoreCase(name).isPresent()) {
+            throw new CommonAppException(GENRE_EXISTS + genreRepository.findByNameAllIgnoreCase(name).get().getId());
+        } else {
+            Genre genre = new Genre();
+            genre.setName(name);
+            List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList);
+            genre.setSubgenreList(subgenreList);
+            return genreRepository.save(genre);
+        }
+    }
 
     @Transactional
-    public Genre update(Integer id, String name) {
+    public Genre update(Integer id, String name, List<Integer> subgenreIdList) {
         Genre genre = genreRepository.findById(id).orElseThrow(() -> new CommonAppException(NO_GENRE_MESSAGE + id));
         genre.setName(name);
-//        List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList);
-        //genre.setSubgenreList(subgenreList);
+        List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList);
+        genre.setSubgenreList(subgenreList);
         return genreRepository.save(genre);
     }
 
     @Transactional
     public void deleteById(Integer id) {
-        if(!genreRepository.existsById(id)) {
+        if (!genreRepository.existsById(id)) {
             throw new CommonAppException(NO_GENRE_MESSAGE + id);
         } else genreRepository.deleteById(id);
     }

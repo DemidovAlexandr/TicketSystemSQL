@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface SubgenreRepository extends JpaRepository<Subgenre, Integer> {
     Optional<Subgenre> findByNameAllIgnoreCase(String name);
+
     @Query("select s from Subgenre s where s.id in :idList")
     List<Subgenre> findAllById(@Param("idList") List<Integer> idList);
 }

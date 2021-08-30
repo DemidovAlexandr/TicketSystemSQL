@@ -17,7 +17,8 @@ public class Venue {
     private Integer id;
 
     private String name;
-    private String address;
+    private String city;
+    private String streetAddress;
     private String description;
     private String contacts;
 }

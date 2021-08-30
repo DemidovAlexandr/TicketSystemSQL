@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -32,6 +31,7 @@ public class Event {
     @OneToMany
     private List<Subgenre> subgenreList;
 
-    @OneToMany
+    @OrderBy("rowNumber, seatNumber ASC")
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ticket> ticketList;
 }
