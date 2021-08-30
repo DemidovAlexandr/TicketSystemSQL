@@ -53,12 +53,26 @@ public class GenreService {
         }
     }
 
+//    @Transactional
+//    public Genre create(String name, List<Integer> subgenreIdList) {
+//
+//        if(genreRepository.findByNameAllIgnoreCase(name).isPresent()) {
+//            throw new CommonAppException(GENRE_EXISTS + genreRepository.findByNameAllIgnoreCase(name).get().getId());
+//        } else {
+//            Genre genre = new Genre();
+//            genre.setName(name);
+//            List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList);
+//            genre.setSubgenreList(subgenreList);
+//            return genreRepository.save(genre);
+//        }
+//    }
+
     @Transactional
-    public Genre update(Integer id, String name, List<Integer> subgenreIdList) {
+    public Genre update(Integer id, String name) {
         Genre genre = genreRepository.findById(id).orElseThrow(() -> new CommonAppException(NO_GENRE_MESSAGE + id));
         genre.setName(name);
-        List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList);
-        genre.setSubgenreList(subgenreList);
+//        List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList);
+        //genre.setSubgenreList(subgenreList);
         return genreRepository.save(genre);
     }
 

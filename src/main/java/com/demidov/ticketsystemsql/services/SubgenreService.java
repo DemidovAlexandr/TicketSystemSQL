@@ -46,7 +46,7 @@ public class SubgenreService {
             if (genreRepository.existsById(genreId)) {
                 subgenre.setGenre(genreRepository.getById(genreId));
             } else throw new CommonAppException(NO_GENRE_MESSAGE + genreId);
-            return subgenre;
+            return subgenreRepository.save(subgenre);
         }
     }
 
