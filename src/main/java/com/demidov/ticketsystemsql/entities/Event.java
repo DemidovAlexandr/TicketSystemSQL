@@ -1,26 +1,32 @@
 package com.demidov.ticketsystemsql.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@Table(uniqueConstraints = {@UniqueConstraint(name = "Event is unique",
+        columnNames = {"name", "event_date_time", "venue"})})
 public class Event {
 
     @Id
     @GeneratedValue
     private Integer id;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(columnDefinition = "DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
-    private ZonedDateTime beginDateTime;
+    @JsonFormat(pattern = "dd.MM.yyyy HH:mm")
+    private LocalDateTime beginDateTime;
 
     @OneToOne
     private Venue venue;

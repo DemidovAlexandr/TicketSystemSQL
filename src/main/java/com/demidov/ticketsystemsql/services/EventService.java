@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -85,7 +86,7 @@ public class EventService {
     }
 
     @Transactional
-    public Event update(Integer id, String name, ZonedDateTime beginDateTime, Integer venueId, List<Integer> artistIdList,
+    public Event update(Integer id, String name, LocalDateTime beginDateTime, Integer venueId, List<Integer> artistIdList,
                         Integer genreId, List<Integer> subgenreIdList, List<Integer> ticketIdList) {
         Event event = eventRepository.findById(id).orElseThrow(() -> new CommonAppException(NO_EVENT_MESSAGE + id));
 
