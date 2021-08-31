@@ -1,12 +1,8 @@
 package com.demidov.ticketsystemsql;
 
-import com.demidov.ticketsystemsql.entities.Artist;
-import com.demidov.ticketsystemsql.entities.Genre;
-import com.demidov.ticketsystemsql.entities.Subgenre;
+import com.demidov.ticketsystemsql.entities.*;
 import com.demidov.ticketsystemsql.initData.DataInitializer;
-import com.demidov.ticketsystemsql.services.ArtistService;
-import com.demidov.ticketsystemsql.services.GenreService;
-import com.demidov.ticketsystemsql.services.SubgenreService;
+import com.demidov.ticketsystemsql.services.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +10,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -34,20 +32,24 @@ public class DataInitializationTests {
     private SubgenreService subgenreService;
 
     @Autowired
+    private EventService eventService;
+
+    @Autowired
+    private PurchaseService purchaseService;
+
+    @Autowired
+    private TicketService ticketService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private VenueService venueService;
+
+    @Autowired
     private DataInitializer dataInitializer;
 
     private boolean isInitialized;
-
-//    @Autowired
-//    EntityManager entityManager;
-//
-//    String artistName = "Children Of Bodom";
-//    String artistName2 = "Foals";
-//    String genreName = "Concert";
-//    String subgenreName = "Metal";
-//    String subgenreName1 = "Rock";
-//    String subgenreName2 = "Classical music";
-//    String subgenreName3 = "Indie";
 
     @BeforeAll
     public void setUp() {
@@ -89,5 +91,33 @@ public class DataInitializationTests {
         Subgenre subgenre2 = subgenreService.getById(2);
         Assertions.assertEquals(subgenre1.getGenre(), genreService.getById(1));
         Assertions.assertEquals(subgenre2.getGenre(), genreService.getById(1));
+    }
+
+    @Test
+    public void testIfVenueInitialized() {
+        Venue venue = venueService.getById(1);
+        Assertions.assertEquals("Aurora Concert Hall", venue.getName());
+    }
+
+    @Test
+    public void testIfUserInitialized() {
+        User user = userService.getById(1);
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+        Assertions.assertEquals("29.10.1993", format.format(user.getDateOfBirth()));
+    }
+
+    @Test
+    public void testIfEventInitialized() {
+        Event event = eventService.getById(1);
+        Assertions.assertEquals("Концерт группы Pantera", event.getName());
+    }
+
+    @Test
+    public void testIfTicketsInitialized() {
+        Random random = new Random();
+        Integer id = random.nextInt(99)+1;
+        Ticket ticket = ticketService.getById(id);
+        Assertions.assertEquals(3000, ticket.getPrice());
+        Assertions.assertEquals("Концерт группы Pantera", ticket.getEvent().getName());
     }
 }

@@ -35,14 +35,6 @@ public class ArtistService {
         return artistRepository.findAll();
     }
 
-    public List<Artist> getAllBySubgenreList(List<Integer> subgenreIdList) {
-        List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList).orElseThrow(() -> new CommonAppException(NO_SUBGENRE_MESSAGE + subgenreIdList));
-        Optional<List<Artist>> artistList = artistRepository.getAllBySubgenreListOrderByNameAsc(subgenreList);
-        if (artistList.isPresent()) {
-            return artistList.get();
-        } else throw new CommonAppException("No artists found by this subgenre criteria: " + subgenreList);
-    }
-
     @Transactional
     public Artist create(String name, List<Integer> subgenreIdList) {
         Artist artist = new Artist();

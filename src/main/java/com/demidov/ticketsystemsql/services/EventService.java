@@ -33,17 +33,17 @@ public class EventService {
         } else throw new CommonAppException(NO_EVENT_MESSAGE + id);
     }
 
-    public List<Event> getAllByArtistList(List<Integer> artistIdList) {
-        Optional<List<Artist>> optionalArtists = artistRepository.findAllById(artistIdList);
-        if (optionalArtists.isPresent()) {
-            Optional<List<Event>> optionalEvents = eventRepository.findAllByArtistList(optionalArtists.get());
-            if (optionalEvents.isPresent()) {
-                return optionalEvents.get();
-            } else throw new CommonAppException("No events found with this artists: " + optionalArtists.get());
-        } else throw new CommonAppException("No artists found with this ids: " + artistIdList);
-    }
+//    public List<Event> getAllByArtistList(List<Integer> artistIdList) {
+//        Optional<List<Artist>> optionalArtists = artistRepository.findAllById(artistIdList);
+//        if (optionalArtists.isPresent()) {
+//            Optional<List<Event>> optionalEvents = eventRepository.findAllByArtistList(optionalArtists.get());
+//            if (optionalEvents.isPresent()) {
+//                return optionalEvents.get();
+//            } else throw new CommonAppException("No events found with this artists: " + optionalArtists.get());
+//        } else throw new CommonAppException("No artists found with this ids: " + artistIdList);
+//    }
 
-    public List<Event> getAllByDateGenreCity(ZonedDateTime dateTime, Integer genreId, String city) {
+    public List<Event> getAllByDateGenreCity(LocalDateTime dateTime, Integer genreId, String city) {
         Optional<Genre> optionalGenre = genreRepository.findById(genreId);
         if (optionalGenre.isPresent()) {
             Genre genre = optionalGenre.get();
@@ -55,7 +55,7 @@ public class EventService {
     }
 
     @Transactional
-    public Event create(String name, ZonedDateTime beginDateTime, Integer venueId, List<Integer> artistIdList,
+    public Event create(String name, LocalDateTime beginDateTime, Integer venueId, List<Integer> artistIdList,
                         Integer genreId, List<Integer> subgenreIdList, List<Integer> ticketIdList) {
         Event event = new Event();
         event.setName(name);

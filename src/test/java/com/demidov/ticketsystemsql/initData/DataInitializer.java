@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +29,10 @@ public class DataInitializer {
         initGenre();
         initSubgenre();
         initArtist();
+        initUser();
+        initVenue();
+        initEvent();
+        initTickets();
     }
 
     public void initGenre() {
@@ -65,19 +68,27 @@ public class DataInitializer {
     }
 
     public void initEvent() {
-        LocalDateTime dateTime =
-
-        Event event = eventService.create("Концерт группы Pantera", )
+        LocalDateTime dateTime = LocalDateTime.of(2021, 10, 15, 20, 0);
+        List<Integer> artistList = new ArrayList<>();
+        artistList.add(1);
+        List<Integer> subgenreList = new ArrayList<>();
+        subgenreList.add(1);
+        subgenreList.add(2);
+        List<Integer> ticketList = new ArrayList<>();
+        for (int i = 1; i <= 100; i++) {
+            ticketList.add(i);
+        }
+        Event event = eventService.create("Концерт группы Pantera", dateTime, 1, artistList, 1,  subgenreList, ticketList);
+        log.info("Created event {}", event);
     }
 
 
     public void initTickets() {
-        List<Ticket> ticketList = new ArrayList<>();
         int rows = 10;
         int seats = 10;
         for (int i = 1; i <= rows; i++) {
             for (int j = 1; j <= seats ; j++) {
-
+                Ticket ticket = ticketService.create(i, j, 3000, 1);
             }
         }
     }

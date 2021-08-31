@@ -1,5 +1,6 @@
 package com.demidov.ticketsystemsql.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,7 +16,7 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String name;
@@ -23,6 +24,7 @@ public class User {
 
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern = "dd.MM.yyyy")
     private Date dateOfBirth;
 
     private String telephone;

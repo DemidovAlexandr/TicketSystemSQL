@@ -2,6 +2,7 @@ package com.demidov.ticketsystemsql.entities;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
@@ -10,13 +11,14 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@ToString
 public class Purchase {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Temporal(value = TemporalType.TIMESTAMP)
+    //@Temporal(value = TemporalType.TIMESTAMP)
     private ZonedDateTime purchaseDate;
 
     @JoinColumn(nullable = false)
@@ -29,6 +31,7 @@ public class Purchase {
 
     @OrderBy("price")
     @OneToMany
+    @ToString.Exclude
     private List<Ticket> ticketList;
 
     @Column(nullable = false)

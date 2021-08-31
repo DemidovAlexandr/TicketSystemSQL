@@ -3,6 +3,7 @@ package com.demidov.ticketsystemsql.entities;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -12,19 +13,22 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Table(uniqueConstraints = {@UniqueConstraint(name = "Event is unique",
-        columnNames = {"name", "event_date_time", "venue"})})
+@ToString
+@Table(uniqueConstraints = {@UniqueConstraint(name = "wwwwwwwww",
+        columnNames = {"name", "beginDateTime", "venue_id"})})
 public class Event {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(nullable = false)
     private String name;
 
+    //todo Split date and time into LocalDate and LocalTime. Change query and service accordingly.
+
     @Column(columnDefinition = "DATETIME")
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime beginDateTime;
 
@@ -32,14 +36,17 @@ public class Event {
     private Venue venue;
 
     @OneToMany
+    @ToString.Exclude
     private List<Artist> artistList;
 
     @OneToOne
     private Genre genre;
 
     @OneToMany
+    @ToString.Exclude
     private List<Subgenre> subgenreList;
 
+    @ToString.Exclude
     @Nullable
     @OrderBy("rowNumber, seatNumber ASC")
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)

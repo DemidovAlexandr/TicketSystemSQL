@@ -5,6 +5,7 @@ import com.demidov.ticketsystemsql.exceptions.CommonAppException;
 import com.demidov.ticketsystemsql.repositories.EventRepository;
 import com.demidov.ticketsystemsql.repositories.TicketRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +39,7 @@ public class TicketService {
         } else throw new CommonAppException("No tickets found for event with id: " + id);
     }
 
+    @Transactional
     public Ticket create(Integer rowNumber, Integer seatNumber, Integer price, Integer eventId) {
         Ticket ticket = new Ticket();
         ticket.setRowNumber(rowNumber);
@@ -51,6 +53,7 @@ public class TicketService {
         } else return ticketRepository.save(ticket);
     }
 
+    @Transactional
     public Ticket update(Integer id, Integer rowNumber, Integer seatNumber, Integer price, Integer eventId) {
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
         if (optionalTicket.isPresent()) {
@@ -67,6 +70,7 @@ public class TicketService {
         } else throw new CommonAppException(NO_TICKET_MESSAGE + id);
     }
 
+    @Transactional
     public void deleteById(Integer id) {
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
         if (optionalTicket.isPresent()) {

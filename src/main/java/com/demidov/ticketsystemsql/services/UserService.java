@@ -42,7 +42,7 @@ public class UserService {
             log.error("Wrong date format: {}", exception.getMessage());
         }
         user.setTelephone(telephone);
-        user.setCity(email);
+        user.setEmail(email);
         user.setCity(city);
 
         return userRepository.save(user);

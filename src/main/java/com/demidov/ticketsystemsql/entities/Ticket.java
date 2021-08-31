@@ -10,12 +10,12 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
-@Table(uniqueConstraints = {@UniqueConstraint(name = "Ticket is unique",
-        columnNames = {"row_number", "seat_number", "price", "event"})})
+@Table(uniqueConstraints = {@UniqueConstraint(name = "Twwwwwww",
+        columnNames = {"rowNumber", "seatNumber", "price", "event_id"})})
 public class Ticket {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(nullable = false)
