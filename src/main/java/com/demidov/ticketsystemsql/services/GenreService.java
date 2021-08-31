@@ -61,7 +61,7 @@ public class GenreService {
         } else {
             Genre genre = new Genre();
             genre.setName(name);
-            List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList);
+            List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList).orElseThrow(() -> new CommonAppException("No subgenres found with ids: " + subgenreIdList));
             genre.setSubgenreList(subgenreList);
             return genreRepository.save(genre);
         }
@@ -71,7 +71,7 @@ public class GenreService {
     public Genre update(Integer id, String name, List<Integer> subgenreIdList) {
         Genre genre = genreRepository.findById(id).orElseThrow(() -> new CommonAppException(NO_GENRE_MESSAGE + id));
         genre.setName(name);
-        List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList);
+        List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList).orElseThrow(() -> new CommonAppException("No subgenres found with ids: " + subgenreIdList));
         genre.setSubgenreList(subgenreList);
         return genreRepository.save(genre);
     }

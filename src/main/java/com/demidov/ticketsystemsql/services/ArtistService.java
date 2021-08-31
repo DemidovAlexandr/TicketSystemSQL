@@ -36,7 +36,7 @@ public class ArtistService {
     }
 
     public List<Artist> getAllBySubgenreList(List<Integer> subgenreIdList) {
-        List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList);
+        List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList).orElseThrow(() -> new CommonAppException(NO_SUBGENRE_MESSAGE + subgenreIdList));
         Optional<List<Artist>> artistList = artistRepository.getAllBySubgenreListOrderByNameAsc(subgenreList);
         if (artistList.isPresent()) {
             return artistList.get();
@@ -47,7 +47,7 @@ public class ArtistService {
     public Artist create(String name, List<Integer> subgenreIdList) {
         Artist artist = new Artist();
         artist.setName(name);
-        List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList);
+        List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList).orElseThrow(() -> new CommonAppException(NO_SUBGENRE_MESSAGE + subgenreIdList));
         artist.setSubgenreList(subgenreList);
         return artistRepository.save(artist);
     }
@@ -63,7 +63,7 @@ public class ArtistService {
     @Transactional
     public Artist updateSubgenres(Integer artistId, List<Integer> subgenreIdList) {
         Artist artist = artistRepository.findById(artistId).orElseThrow(() -> new CommonAppException(NO_ARTIST_MESSAGE + artistId));
-        List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList);
+        List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList).orElseThrow(() -> new CommonAppException(NO_SUBGENRE_MESSAGE + subgenreIdList));
         artist.setSubgenreList(subgenreList);
         return artistRepository.save(artist);
     }

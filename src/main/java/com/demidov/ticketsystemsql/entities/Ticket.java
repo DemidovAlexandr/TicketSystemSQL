@@ -28,4 +28,6 @@ public class Ticket {
     @JoinColumn(nullable = false)
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Event event;
+
+
 }

@@ -2,15 +2,16 @@ package com.demidov.ticketsystemsql.entities;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@ToString
 public class User {
 
     @Id
@@ -19,9 +20,18 @@ public class User {
 
     private String name;
     private String surname;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
-    private Integer age;
+
     private String telephone;
+
+    @Column(nullable = false, unique = true)
     private String email;
     private String city;
+
+    @ToString.Exclude
+    @OneToMany
+    private List<Purchase> purchaseList;
 }

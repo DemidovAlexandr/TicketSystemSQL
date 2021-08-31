@@ -2,6 +2,7 @@ package com.demidov.ticketsystemsql.entities;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
@@ -17,6 +18,8 @@ public class Event {
     private Integer id;
 
     private String name;
+
+    @Temporal(TemporalType.TIMESTAMP)
     private ZonedDateTime beginDateTime;
 
     @OneToOne
@@ -31,6 +34,7 @@ public class Event {
     @OneToMany
     private List<Subgenre> subgenreList;
 
+    @Nullable
     @OrderBy("rowNumber, seatNumber ASC")
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ticket> ticketList;

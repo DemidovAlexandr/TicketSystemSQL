@@ -4,17 +4,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.List;
 
-@Entity(name = "orders")
+@Entity
 @Getter
 @Setter
-public class Order {
+public class Purchase {
 
     @Id
     @GeneratedValue
     private Integer id;
+
+    @Temporal(value = TemporalType.TIMESTAMP)
+    private ZonedDateTime purchaseDate;
 
     @JoinColumn(nullable = false)
     @ManyToOne(optional = false)
@@ -28,7 +31,7 @@ public class Order {
     @OneToMany
     private List<Ticket> ticketList;
 
-    @Column(nullable = false, precision = 0, scale = 2)
-    private BigDecimal total;
+    @Column(nullable = false)
+    private Integer total;
 
 }
