@@ -5,6 +5,7 @@ import com.demidov.ticketsystemsql.dto.out.EventOutDTO;
 import com.demidov.ticketsystemsql.services.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -39,14 +40,17 @@ public class EventWebService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public EventOutDTO create(EventInDTO dto){
         return eventService.toOutDTO(eventService.create(dto));
     }
 
+    @Transactional
     public EventOutDTO update(EventInDTO dto) {
         return eventService.toOutDTO(eventService.update(dto));
     }
 
+    @Transactional
     public void deleteById(Integer id) {
         eventService.deleteById(id);
     }

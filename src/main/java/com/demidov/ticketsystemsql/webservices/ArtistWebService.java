@@ -5,6 +5,7 @@ import com.demidov.ticketsystemsql.dto.out.ArtistOutDTO;
 import com.demidov.ticketsystemsql.services.ArtistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +26,7 @@ public class ArtistWebService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public ArtistOutDTO create(ArtistInDTO dto) {
         return artistService.toOutDTO(artistService.create(
                 dto.getName(),
@@ -32,6 +34,7 @@ public class ArtistWebService {
         ));
     }
 
+    @Transactional
     public ArtistOutDTO update(ArtistInDTO dto) {
         return artistService.toOutDTO(artistService.update(
                 dto.getId(),
@@ -40,6 +43,7 @@ public class ArtistWebService {
         ));
     }
 
+    @Transactional
     public void deleteById(Integer id){
         artistService.deleteById(id);
     }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,6 +34,10 @@ public class UserService {
         if (user.isPresent()) {
             return user.get();
         } else throw new CommonAppException(NO_USER_MESSAGE + id);
+    }
+
+    public List<User> getAll() {
+        return userRepository.findAll();
     }
 
     @Transactional

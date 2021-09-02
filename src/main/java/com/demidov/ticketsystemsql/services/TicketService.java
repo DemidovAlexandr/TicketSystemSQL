@@ -1,10 +1,7 @@
 package com.demidov.ticketsystemsql.services;
 
-import com.demidov.ticketsystemsql.dto.in.SubgenreInDTO;
 import com.demidov.ticketsystemsql.dto.in.TicketInDTO;
-import com.demidov.ticketsystemsql.dto.out.SubgenreOutDTO;
 import com.demidov.ticketsystemsql.dto.out.TicketOutDTO;
-import com.demidov.ticketsystemsql.entities.Subgenre;
 import com.demidov.ticketsystemsql.entities.Ticket;
 import com.demidov.ticketsystemsql.exceptions.CommonAppException;
 import com.demidov.ticketsystemsql.repositories.EventRepository;
@@ -37,7 +34,7 @@ public class TicketService {
         } else throw new CommonAppException(NO_TICKET_MESSAGE + id);
     }
 
-    public List<Ticket> getByEventId(Integer id) {
+    public List<Ticket> getAllByEventId(Integer id) {
         Optional<List<Ticket>> optionalTickets = ticketRepository.findAllByEvent_IdOrderByRowNumberAscSeatNumberAsc(id);
         if (optionalTickets.isPresent()) {
             return optionalTickets.get();
@@ -45,34 +42,24 @@ public class TicketService {
     }
 
     @Transactional
-    public Ticket create(Integer rowNumber, Integer seatNumber, Integer price, Integer eventId) {
+    public Ticket create(TicketInDTO dto) {
         Ticket ticket = new Ticket();
-        ticket.setRowNumber(rowNumber);
-        ticket.setSeatNumber(seatNumber);
-        ticket.setPrice(price);
-        if (eventRepository.existsById(eventId)) {
-            ticket.setEvent(eventRepository.getById(eventId));
-        } else throw new CommonAppException(NO_EVENT_MESSAGE + eventId);
+        setData(ticket, dto);
+
         if (!checkIfUnique(ticket)) {
             throw new CommonAppException(NOT_UNIQUE_TICKET + ticket);
         } else return ticketRepository.save(ticket);
     }
 
     @Transactional
-    public Ticket update(Integer id, Integer rowNumber, Integer seatNumber, Integer price, Integer eventId) {
-        Optional<Ticket> optionalTicket = ticketRepository.findById(id);
-        if (optionalTicket.isPresent()) {
-            Ticket ticket = optionalTicket.get();
-            ticket.setRowNumber(rowNumber);
-            ticket.setSeatNumber(seatNumber);
-            ticket.setPrice(price);
-            if (eventRepository.existsById(eventId)) {
-                ticket.setEvent(eventRepository.getById(eventId));
-            } else throw new CommonAppException(NO_EVENT_MESSAGE + eventId);
-            if (!checkIfUnique(ticket)) {
-                throw new CommonAppException(NOT_UNIQUE_TICKET + optionalTicket);
-            } else return ticketRepository.save(ticket);
-        } else throw new CommonAppException(NO_TICKET_MESSAGE + id);
+    public Ticket update(TicketInDTO dto) {
+        Ticket ticket = ticketRepository.findById(dto.getId())
+                .orElseThrow(() -> new CommonAppException(NO_TICKET_MESSAGE + dto.getId()));
+        setData(ticket, dto);
+
+        if (!checkIfUnique(ticket)) {
+            throw new CommonAppException(NOT_UNIQUE_TICKET + ticket);
+        } else return ticketRepository.save(ticket);
     }
 
     @Transactional
@@ -101,5 +88,14 @@ public class TicketService {
         return Optional.ofNullable(ticket)
                 .map(entity -> mapper.convertValue(entity, TicketOutDTO.class))
                 .orElseThrow(() -> new CommonAppException(DTO_IS_NULL));
+    }
+
+    private void setData(Ticket ticket, TicketInDTO dto) {
+
+        ticket.setRowNumber(dto.getRowNumber());
+        ticket.setSeatNumber(dto.getSeatNumber());
+        ticket.setPrice(dto.getPrice());
+        ticket.setEvent(eventRepository.findById(dto.getEventId())
+                .orElseThrow(() -> new CommonAppException(NO_EVENT_MESSAGE + dto.getEventId())));
     }
 }

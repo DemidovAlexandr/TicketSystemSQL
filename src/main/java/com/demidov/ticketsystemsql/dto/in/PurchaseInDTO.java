@@ -10,8 +10,6 @@ public class PurchaseInDTO {
 
     private Integer id;
 
-    private LocalDateTime purchaseDate;
-
     private Integer userId;
     private Integer eventId;
 

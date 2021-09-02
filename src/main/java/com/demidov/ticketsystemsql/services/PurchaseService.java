@@ -1,8 +1,6 @@
 package com.demidov.ticketsystemsql.services;
 
-import com.demidov.ticketsystemsql.dto.in.EventInDTO;
 import com.demidov.ticketsystemsql.dto.in.PurchaseInDTO;
-import com.demidov.ticketsystemsql.dto.out.EventOutDTO;
 import com.demidov.ticketsystemsql.dto.out.PurchaseOutDTO;
 import com.demidov.ticketsystemsql.entities.Event;
 import com.demidov.ticketsystemsql.entities.Purchase;
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +40,10 @@ public class PurchaseService {
         } else throw new CommonAppException(NO_ORDER_FOUND + id);
     }
 
+    public List<Purchase> getAll() {
+        return purchaseRepository.findAll();
+    }
+
     public List<Purchase> getAllByUser(Integer userId) {
         Optional<List<Purchase>> optionalPurchases = purchaseRepository.findAllByUserId(userId);
         if (optionalPurchases.isPresent()) {
@@ -51,49 +52,18 @@ public class PurchaseService {
     }
 
     @Transactional
-    public Purchase create(Integer userId, Integer eventId, List<Integer> ticketIdList) {
+    public Purchase create(PurchaseInDTO dto) {
         Purchase purchase = new Purchase();
-        User user = userRepository.findById(userId).orElseThrow(() -> new CommonAppException("No user found with id: " + userId));
-        purchase.setUser(user);
-
-        Event event = eventRepository.findById(eventId).orElseThrow(() -> new CommonAppException("No event found with id: " + eventId));
-        purchase.setEvent(event);
-
-        List<Ticket> tickets = ticketRepository.findAllById(ticketIdList).orElseThrow(() -> new CommonAppException("No tickets found from the id list: " + ticketIdList));
-        purchase.setTicketList(tickets);
-
-        purchase.setPurchaseDate(LocalDateTime.now());
-
-        Integer total = 0;
-        for (Ticket ticket : tickets
-        ) {
-            total = total + ticket.getPrice();
-        }
-        purchase.setTotal(total);
+        setData(purchase, dto);
         return purchaseRepository.save(purchase);
     }
 
     @Transactional
-    public Purchase update(Integer id, Integer userId, Integer eventId, List<Integer> ticketIdList) {
-        Purchase purchase = purchaseRepository.findById(id).orElseThrow(() -> new CommonAppException(NO_ORDER_FOUND + id));
+    public Purchase update(PurchaseInDTO dto) {
+        Purchase purchase = purchaseRepository.findById(dto.getId())
+                .orElseThrow(() -> new CommonAppException(NO_ORDER_FOUND + dto.getId()));
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new CommonAppException("No user found with id: " + userId));
-        purchase.setUser(user);
-
-        Event event = eventRepository.findById(eventId).orElseThrow(() -> new CommonAppException("No event found with id: " + eventId));
-        purchase.setEvent(event);
-
-        List<Ticket> tickets = ticketRepository.findAllById(ticketIdList).orElseThrow(() -> new CommonAppException("No tickets found from the id list: " + ticketIdList));
-        purchase.setTicketList(tickets);
-
-        purchase.setPurchaseDate(LocalDateTime.now());
-
-        Integer total = 0;
-        for (Ticket ticket : tickets
-        ) {
-            total = total + ticket.getPrice();
-        }
-        purchase.setTotal(total);
+        setData(purchase, dto);
         return purchaseRepository.save(purchase);
     }
 
@@ -115,5 +85,28 @@ public class PurchaseService {
         return Optional.ofNullable(purchase)
                 .map(entity -> mapper.convertValue(entity, PurchaseOutDTO.class))
                 .orElseThrow(() -> new CommonAppException(DTO_IS_NULL));
+    }
+
+    private void setData(Purchase purchase, PurchaseInDTO dto) {
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new CommonAppException("No user found with id: " + dto.getUserId()));
+        purchase.setUser(user);
+
+        Event event = eventRepository.findById(dto.getEventId())
+                .orElseThrow(() -> new CommonAppException("No event found with id: " + dto.getEventId()));
+        purchase.setEvent(event);
+
+        List<Ticket> tickets = ticketRepository.findAllById(dto.getTicketIdList())
+                .orElseThrow(() -> new CommonAppException("No tickets found from the id list: " + dto.getTicketIdList()));
+        purchase.setTicketList(tickets);
+
+        purchase.setPurchaseDate(LocalDateTime.now());
+
+        Integer total = 0;
+        for (Ticket ticket : tickets
+        ) {
+            total = total + ticket.getPrice();
+        }
+        purchase.setTotal(total);
     }
 }

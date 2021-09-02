@@ -100,7 +100,7 @@ public class EventService {
                 .orElseThrow(() -> new CommonAppException(DTO_IS_NULL));
     }
 
-    public void setData(Event event, EventInDTO dto) {
+    private void setData(Event event, EventInDTO dto) {
         event.setName(dto.getName());
         event.setBeginDateTime(dto.getBeginDateTime());
 
