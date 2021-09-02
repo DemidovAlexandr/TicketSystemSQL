@@ -2,6 +2,7 @@ package com.demidov.ticketsystemsql.initData;
 
 import com.demidov.ticketsystemsql.entities.*;
 import com.demidov.ticketsystemsql.services.*;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Getter
 public class DataInitializer {
 
     private final ArtistService artistService;
@@ -20,7 +22,16 @@ public class DataInitializer {
     private final EventService eventService;
     private final PurchaseService purchaseService;
 
-    public ValidDTO validDTO;
+    private final ValidDTO validDTO;
+
+    private Genre genre;
+    private Subgenre subgenre;
+    private Artist artist;
+    private User user;
+    private Venue venue;
+    private Event event;
+    private Ticket ticket;
+    private Purchase purchase;
 
     public void initData() {
         initGenre();
@@ -29,47 +40,55 @@ public class DataInitializer {
         initUser();
         initVenue();
         initEvent();
-        initTickets();
+        initTicket();
+        initPurchase();
     }
 
-    public void initGenre() {
+    private void initGenre() {
         Genre genre = genreService.create(validDTO.getGenreInDTO());
         log.info("Created genre: {}", genre);
+        this.genre = genre;
     }
 
-    public void initSubgenre() {
+    private void initSubgenre() {
         Subgenre subgenre = subgenreService.create(validDTO.getSubgenreInDTO());
         log.info("Created subgenre: {}", subgenre);
+        this.subgenre = subgenre;
     }
 
-    public void initArtist() {
+    private void initArtist() {
         Artist artist = artistService.create(validDTO.getArtistInDTO());
         log.info("Created Artist: {}", artist);
+        this.artist = artist;
     }
 
-    public void initUser() {
+    private void initUser() {
         User user = userService.create(validDTO.getUserInDTO());
         log.info("Created user: {}", user);
+        this.user = user;
     }
 
-    public void initVenue() {
+    private void initVenue() {
         Venue venue = venueService.create(validDTO.getVenueInDTO());
         log.info("Created venue: {}", venue);
+        this.venue = venue;
     }
 
-    public void initEvent() {
+    private void initEvent() {
         Event event = eventService.create(validDTO.getEventInDTO());
         log.info("Created event: {}", event);
+        this.event = event;
     }
 
-
-    public void initTickets() {
+    private void initTicket() {
         Ticket ticket = ticketService.create(validDTO.getTicketInDTO());
         log.info("Created ticket: {}", ticket);
+        this.ticket = ticket;
     }
 
-    public void initPurchase() {
+    private void initPurchase() {
         Purchase purchase = purchaseService.create(validDTO.getPurchaseInDTO());
         log.info("Created purchase: {}", purchase);
+        this.purchase = purchase;
     }
 }

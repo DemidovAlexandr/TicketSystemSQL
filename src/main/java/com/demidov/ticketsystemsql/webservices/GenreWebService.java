@@ -32,19 +32,12 @@ public class GenreWebService {
 
     @Transactional
     public GenreOutDTO create(GenreInDTO dto) {
-        return genreService.toOutDTO(genreService.create(
-                dto.getName(),
-                dto.getSubgenreIdList()
-        ));
+        return genreService.toOutDTO(genreService.create(dto));
     }
 
     @Transactional
     public GenreOutDTO update(GenreInDTO dto) {
-        return genreService.toOutDTO(genreService.update(
-                dto.getId(),
-                dto.getName(),
-                dto.getSubgenreIdList()
-        ));
+        return genreService.toOutDTO(genreService.update(dto));
     }
 
     @Transactional

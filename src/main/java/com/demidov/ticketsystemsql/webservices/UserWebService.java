@@ -27,26 +27,11 @@ public class UserWebService {
     }
 
     public UserOutDTO create(UserInDTO dto) {
-        return userService.toOutDTO(userService.create(
-                dto.getName(),
-                dto.getSurname(),
-                dto.getDateOfBirth(),
-                dto.getTelephone(),
-                dto.getEmail(),
-                dto.getCity()
-        ));
+        return userService.toOutDTO(userService.create(dto));
     }
 
     public UserOutDTO update(UserInDTO dto) {
-        return userService.toOutDTO(userService.update(
-                dto.getId(),
-                dto.getName(),
-                dto.getSurname(),
-                dto.getDateOfBirth(),
-                dto.getTelephone(),
-                dto.getEmail(),
-                dto.getCity()
-        ));
+        return userService.toOutDTO(userService.update(dto));
     }
 
     public void deleteById(Integer id){

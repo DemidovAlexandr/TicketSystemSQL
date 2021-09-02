@@ -27,24 +27,11 @@ public class VenueWebService {
     }
 
     public VenueOutDTO create(VenueInDTO dto) {
-        return venueService.toOutDTO(venueService.create(
-                dto.getName(),
-                dto.getCity(),
-                dto.getStreetAddress(),
-                dto.getDescription(),
-                dto.getContacts()
-        ));
+        return venueService.toOutDTO(venueService.create(dto));
     }
 
     public VenueOutDTO update(VenueInDTO dto) {
-        return venueService.toOutDTO(venueService.update(
-                dto.getId(),
-                dto.getName(),
-                dto.getCity(),
-                dto.getStreetAddress(),
-                dto.getDescription(),
-                dto.getContacts()
-        ));
+        return venueService.toOutDTO(venueService.update(dto));
     }
 
     public void deleteById(Integer id) {

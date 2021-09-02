@@ -5,6 +5,7 @@ import com.demidov.ticketsystemsql.initData.DataInitializer;
 import com.demidov.ticketsystemsql.services.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
+import org.mockito.internal.matchers.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -59,68 +60,63 @@ public class DataInitializationTests {
 
     @Test
     public void testGenreCreation() {
-        Genre genre = genreService.getById(1);
-        Assertions.assertEquals(genre.getName(), "Concert");
+        Genre genre = dataInitializer.getGenre();
+        Assertions.assertEquals(genreService.getById(genre.getId()).getName(), "Concert");
     }
 
     @Test
-    public void testIfGenreHasSubgenreList() {
-        List<Subgenre> subgenreList = new ArrayList<>();
-        subgenreList.add(subgenreService.getById(1));
-        subgenreList.add(subgenreService.getById(2));
-        Genre genre = genreService.getById(1);
-        assert genre.getSubgenreList() != null;
-        log.info("Genre with ID 1 is: " + genre + genre.getSubgenreList().toString());
-        Assertions.assertEquals(genre.getSubgenreList().toString(), subgenreList.toString());
+    public void testSubgenreCreation() {
+        Subgenre subgenre = dataInitializer.getSubgenre();
+        Genre genre = dataInitializer.getGenre();
+        Assertions.assertEquals(Objects.requireNonNull(genreService.getById(genre.getId()).getSubgenreList()).toString(),
+                subgenreService.getById(subgenre.getId()).toString());
     }
 
     @Test
     public void testIfArtistHasSubgenreList() {
-        List<Subgenre> subgenreList = new ArrayList<>();
-        subgenreList.add(subgenreService.getById(1));
-        subgenreList.add(subgenreService.getById(2));
-        Artist artist = artistService.getById(1);
-        Assertions.assertEquals(artist.getSubgenreList().toString(), subgenreList.toString());
+        Artist artist = artistService.getById(dataInitializer.getArtist().getId());
+        Assertions.assertEquals(artist.getSubgenreList().toString(),
+                artistService.getById(artist.getId()).getSubgenreList().toString());
     }
 
     @Test
     public void testIfSubgenresHaveGenre() {
-        Subgenre subgenre1 = subgenreService.getById(1);
-        Subgenre subgenre2 = subgenreService.getById(2);
-        Assertions.assertEquals(subgenre1.getGenre(), genreService.getById(1));
-        Assertions.assertEquals(subgenre2.getGenre(), genreService.getById(1));
+        Subgenre subgenre = dataInitializer.getSubgenre();
+        Assertions.assertEquals(subgenre.getGenre().getName(),
+                subgenreService.getById(subgenre.getId()).getGenre().getName());
     }
 
     @Test
     public void testIfVenueInitialized() {
-        Venue venue = venueService.getById(1);
-        Assertions.assertEquals("Aurora Concert Hall", venue.getName());
+        Venue venue = dataInitializer.getVenue();
+        Assertions.assertEquals(venue.getName(), venueService.getById(venue.getId()).getName());
     }
 
     @Test
     public void testIfUserInitialized() {
-        User user = userService.getById(dataInitializer.validUser.getId());
-        Assertions.assertEquals(dataInitializer.validUser, user);
+        User user = dataInitializer.getUser();
+        Assertions.assertEquals(user.getDateOfBirth(), userService.getById(user.getId()).getDateOfBirth());
     }
 
     @Test
     public void testIfEventInitialized() {
-        Event event = eventService.getById(1);
-        Assertions.assertEquals("Концерт группы Pantera", event.getName());
+        Event event = dataInitializer.getEvent();
+        Assertions.assertEquals(event.getName(), eventService.getById(event.getId()).getName());
     }
 
     @Test
     public void testIfTicketsInitialized() {
-        Random random = new Random();
-        Integer id = random.nextInt(99)+1;
-        Ticket ticket = ticketService.getById(id);
-        Assertions.assertEquals(3000, ticket.getPrice());
-        Assertions.assertEquals("Концерт группы Pantera", ticket.getEvent().getName());
+        Ticket ticket = dataInitializer.getTicket();
+        Assertions.assertEquals(ticket.getPrice(), ticketService.getById(ticket.getId()).getPrice());
+        Assertions.assertEquals(ticket.getEvent().getName(), ticketService.getById(ticket.getId()).getEvent().getName());
     }
 
     @Test
     public void testIfEventsFoundByArtist() {
-        List<Event> events = eventService.getAllByArtist(1);
-        Assertions.assertEquals(events.get(0).getName(), "Концерт группы Pantera");
+        Artist artist = dataInitializer.getArtist();
+        Event event = dataInitializer.getEvent();
+        List<Event> events = eventService.getAllByArtist(artist.getId());
+        Assertions.assertEquals(events.size(), 1);
+        Assertions.assertEquals(event.getName(), events.get(0).getName());
     }
 }

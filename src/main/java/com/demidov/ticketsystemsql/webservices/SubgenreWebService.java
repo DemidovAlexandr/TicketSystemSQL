@@ -28,19 +28,12 @@ public class SubgenreWebService {
 
     @Transactional
     public SubgenreOutDTO create(SubgenreInDTO dto) {
-        return subgenreService.toOutDTO(subgenreService.create(
-                dto.getName(),
-                dto.getGenreId()
-        ));
+        return subgenreService.toOutDTO(subgenreService.create(dto));
     }
 
     @Transactional
     public SubgenreOutDTO update(SubgenreInDTO dto) {
-        return subgenreService.toOutDTO(subgenreService.update(
-                dto.getId(),
-                dto.getName(),
-                dto.getGenreId()
-        ));
+        return subgenreService.toOutDTO(subgenreService.update(dto));
     }
 
     @Transactional

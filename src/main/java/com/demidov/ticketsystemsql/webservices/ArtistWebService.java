@@ -28,19 +28,12 @@ public class ArtistWebService {
 
     @Transactional
     public ArtistOutDTO create(ArtistInDTO dto) {
-        return artistService.toOutDTO(artistService.create(
-                dto.getName(),
-                dto.getSubgenreIdList()
-        ));
+        return artistService.toOutDTO(artistService.create(dto));
     }
 
     @Transactional
     public ArtistOutDTO update(ArtistInDTO dto) {
-        return artistService.toOutDTO(artistService.update(
-                dto.getId(),
-                dto.getName(),
-                dto.getSubgenreIdList()
-        ));
+        return artistService.toOutDTO(artistService.update(dto));
     }
 
     @Transactional
