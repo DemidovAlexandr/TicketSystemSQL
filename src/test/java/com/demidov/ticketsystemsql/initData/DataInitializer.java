@@ -2,10 +2,13 @@ package com.demidov.ticketsystemsql.initData;
 
 import com.demidov.ticketsystemsql.entities.*;
 import com.demidov.ticketsystemsql.services.*;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +27,7 @@ public class DataInitializer {
     private final EventService eventService;
     private final PurchaseService purchaseService;
 
+    public User validUser;
 
     public void initData(){
         initGenre();
@@ -36,7 +40,7 @@ public class DataInitializer {
     }
 
     public void initGenre() {
-        Genre genre = genreService.create("Concert");
+        Genre genre = genreService.create("Concert", List.of());
         log.info("Created genre: {}", genre);
     }
 
@@ -56,8 +60,9 @@ public class DataInitializer {
     }
 
     public void initUser() {
-        User user = userService.create("Иван", "Петров", "29.10.1993", "+79991234567", "usermail@user.com", "Санкт-Петербург");
-        log.info("Created user: {}", user);
+        LocalDate dateOfBirth = LocalDate.of(1993, 10,29);
+        validUser = userService.create("Иван", "Петров", dateOfBirth, "+79991234567", "usermail@user.com", "Санкт-Петербург");
+        log.info("Created user: {}", validUser);
     }
 
     public void initVenue() {

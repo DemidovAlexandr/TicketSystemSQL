@@ -1,9 +1,16 @@
 package com.demidov.ticketsystemsql.services;
 
+import com.demidov.ticketsystemsql.dto.in.SubgenreInDTO;
+import com.demidov.ticketsystemsql.dto.in.TicketInDTO;
+import com.demidov.ticketsystemsql.dto.out.SubgenreOutDTO;
+import com.demidov.ticketsystemsql.dto.out.TicketOutDTO;
+import com.demidov.ticketsystemsql.entities.Subgenre;
 import com.demidov.ticketsystemsql.entities.Ticket;
 import com.demidov.ticketsystemsql.exceptions.CommonAppException;
 import com.demidov.ticketsystemsql.repositories.EventRepository;
 import com.demidov.ticketsystemsql.repositories.TicketRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,19 +18,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class TicketService {
 
     private final static String NO_TICKET_MESSAGE = "There is no such ticket with id: ";
     private final static String NO_EVENT_MESSAGE = "There is no such event with id: ";
     private final static String NOT_UNIQUE_TICKET = "This ticket is not unique: ";
+    private final static String DTO_IS_NULL = "DTO must not be null";
 
     private final TicketRepository ticketRepository;
     private final EventRepository eventRepository;
-
-    public TicketService(TicketRepository ticketRepository, EventRepository eventRepository) {
-        this.ticketRepository = ticketRepository;
-        this.eventRepository = eventRepository;
-    }
+    private final ObjectMapper mapper;
 
     public Ticket getById(Integer id) {
         Optional<Ticket> ticket = ticketRepository.findById(id);
@@ -84,5 +89,17 @@ public class TicketService {
         Integer price = ticket.getPrice();
         Integer eventId = ticket.getEvent().getId();
         return ticketRepository.findByEvent_IdAndPriceAndRowNumberAndSeatNumber(eventId, price, rowNumber, seatNumber).isEmpty();
+    }
+
+    public TicketInDTO toInDTO(Ticket ticket) {
+        return Optional.ofNullable(ticket)
+                .map(entity -> mapper.convertValue(entity, TicketInDTO.class))
+                .orElseThrow(() -> new CommonAppException(DTO_IS_NULL));
+    }
+
+    public TicketOutDTO toOutDTO(Ticket ticket) {
+        return Optional.ofNullable(ticket)
+                .map(entity -> mapper.convertValue(entity, TicketOutDTO.class))
+                .orElseThrow(() -> new CommonAppException(DTO_IS_NULL));
     }
 }

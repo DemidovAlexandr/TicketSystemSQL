@@ -1,10 +1,17 @@
 package com.demidov.ticketsystemsql.services;
 
+import com.demidov.ticketsystemsql.dto.in.ArtistInDTO;
+import com.demidov.ticketsystemsql.dto.in.GenreInDTO;
+import com.demidov.ticketsystemsql.dto.out.ArtistOutDTO;
+import com.demidov.ticketsystemsql.dto.out.GenreOutDTO;
 import com.demidov.ticketsystemsql.entities.Artist;
+import com.demidov.ticketsystemsql.entities.Genre;
 import com.demidov.ticketsystemsql.entities.Subgenre;
 import com.demidov.ticketsystemsql.exceptions.CommonAppException;
 import com.demidov.ticketsystemsql.repositories.ArtistRepository;
 import com.demidov.ticketsystemsql.repositories.SubgenreRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,17 +19,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ArtistService {
 
     private static final String NO_ARTIST_MESSAGE = "There is no such artist with id: ";
     private static final String NO_SUBGENRE_MESSAGE = "There is no such subgenre with id: ";
+    private static final String DTO_IS_NULL = "DTO must not be null";
+
     private final ArtistRepository artistRepository;
     private final SubgenreRepository subgenreRepository;
-
-    public ArtistService(ArtistRepository artistRepository, SubgenreRepository subgenreRepository) {
-        this.artistRepository = artistRepository;
-        this.subgenreRepository = subgenreRepository;
-    }
+    private final ObjectMapper mapper;
 
     public Artist getById(Integer artistId) {
         Optional<Artist> artist = artistRepository.findById(artistId);
@@ -45,16 +51,9 @@ public class ArtistService {
     }
 
     @Transactional
-    public Artist updateName(Integer artistId, String name) {
+    public Artist update(Integer artistId, String name, List<Integer> subgenreIdList) {
         Artist artist = artistRepository.findById(artistId).orElseThrow(() -> new CommonAppException(NO_ARTIST_MESSAGE + artistId));
         artist.setName(name);
-        return artistRepository.save(artist);
-    }
-
-
-    @Transactional
-    public Artist updateSubgenres(Integer artistId, List<Integer> subgenreIdList) {
-        Artist artist = artistRepository.findById(artistId).orElseThrow(() -> new CommonAppException(NO_ARTIST_MESSAGE + artistId));
         List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList).orElseThrow(() -> new CommonAppException(NO_SUBGENRE_MESSAGE + subgenreIdList));
         artist.setSubgenreList(subgenreList);
         return artistRepository.save(artist);
@@ -65,5 +64,17 @@ public class ArtistService {
         if (!artistRepository.existsById(artistId)) {
             throw new CommonAppException(NO_ARTIST_MESSAGE + artistId);
         } else artistRepository.deleteById(artistId);
+    }
+
+    public ArtistInDTO toInDTO(Artist artist) {
+        return Optional.ofNullable(artist)
+                .map(entity -> mapper.convertValue(entity, ArtistInDTO.class))
+                .orElseThrow(() -> new CommonAppException(DTO_IS_NULL));
+    }
+
+    public ArtistOutDTO toOutDTO(Artist artist) {
+        return Optional.ofNullable(artist)
+                .map(entity -> mapper.convertValue(entity, ArtistOutDTO.class))
+                .orElseThrow(() -> new CommonAppException(DTO_IS_NULL));
     }
 }

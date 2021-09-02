@@ -1,28 +1,32 @@
 package com.demidov.ticketsystemsql.services;
 
+import com.demidov.ticketsystemsql.dto.in.TicketInDTO;
+import com.demidov.ticketsystemsql.dto.in.UserInDTO;
+import com.demidov.ticketsystemsql.dto.out.TicketOutDTO;
+import com.demidov.ticketsystemsql.dto.out.UserOutDTO;
+import com.demidov.ticketsystemsql.entities.Ticket;
 import com.demidov.ticketsystemsql.entities.User;
 import com.demidov.ticketsystemsql.exceptions.CommonAppException;
 import com.demidov.ticketsystemsql.repositories.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class UserService {
 
     private final static String NO_USER_MESSAGE = "There is no such user with id: ";
-    private final static SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
-    private final UserRepository userRepository;
+    private final static String DTO_IS_NULL = "DTO must not be null";
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final UserRepository userRepository;
+    private final ObjectMapper mapper;
 
     public User getById(Integer id) {
         Optional<User> user = userRepository.findById(id);
@@ -32,15 +36,11 @@ public class UserService {
     }
 
     @Transactional
-    public User create(String name, String surname, String dateOfBirth, String telephone, String email, String city) {
+    public User create(String name, String surname, LocalDate dateOfBirth, String telephone, String email, String city) {
         User user = new User();
         user.setName(name);
         user.setSurname(surname);
-        try {
-            user.setDateOfBirth(formatter.parse(dateOfBirth));
-        } catch (ParseException exception) {
-            log.error("Wrong date format: {}", exception.getMessage());
-        }
+        user.setDateOfBirth(dateOfBirth);
         user.setTelephone(telephone);
         user.setEmail(email);
         user.setCity(city);
@@ -49,17 +49,13 @@ public class UserService {
     }
 
     @Transactional
-    public User update(Integer id, String name, String surname, String dateOfBirth, String telephone, String email, String city) {
+    public User update(Integer id, String name, String surname, LocalDate dateOfBirth, String telephone, String email, String city) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             user.setName(name);
             user.setSurname(surname);
-            try {
-                user.setDateOfBirth(formatter.parse(dateOfBirth));
-            } catch (ParseException exception) {
-                log.error("Wrong date format: {}", exception.getMessage());
-            }
+            user.setDateOfBirth(dateOfBirth);
             user.setTelephone(telephone);
             user.setCity(email);
             user.setCity(city);
@@ -73,5 +69,17 @@ public class UserService {
         if (optionalUser.isEmpty()) {
             throw new CommonAppException(NO_USER_MESSAGE + id);
         } else userRepository.deleteById(id);
+    }
+
+    public UserInDTO toInDTO(User user) {
+        return Optional.ofNullable(user)
+                .map(entity -> mapper.convertValue(entity, UserInDTO.class))
+                .orElseThrow(() -> new CommonAppException(DTO_IS_NULL));
+    }
+
+    public UserOutDTO toOutDTO(User user) {
+        return Optional.ofNullable(user)
+                .map(entity -> mapper.convertValue(entity, UserOutDTO.class))
+                .orElseThrow(() -> new CommonAppException(DTO_IS_NULL));
     }
 }

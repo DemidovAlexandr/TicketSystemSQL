@@ -11,9 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -101,9 +99,8 @@ public class DataInitializationTests {
 
     @Test
     public void testIfUserInitialized() {
-        User user = userService.getById(1);
-        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-        Assertions.assertEquals("29.10.1993", format.format(user.getDateOfBirth()));
+        User user = userService.getById(dataInitializer.validUser.getId());
+        Assertions.assertEquals(dataInitializer.validUser, user);
     }
 
     @Test
@@ -119,5 +116,11 @@ public class DataInitializationTests {
         Ticket ticket = ticketService.getById(id);
         Assertions.assertEquals(3000, ticket.getPrice());
         Assertions.assertEquals("Концерт группы Pantera", ticket.getEvent().getName());
+    }
+
+    @Test
+    public void testIfEventsFoundByArtist() {
+        List<Event> events = eventService.getAllByArtist(1);
+        Assertions.assertEquals(events.get(0).getName(), "Концерт группы Pantera");
     }
 }

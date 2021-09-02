@@ -1,10 +1,17 @@
 package com.demidov.ticketsystemsql.services;
 
+import com.demidov.ticketsystemsql.dto.in.PurchaseInDTO;
+import com.demidov.ticketsystemsql.dto.in.SubgenreInDTO;
+import com.demidov.ticketsystemsql.dto.out.PurchaseOutDTO;
+import com.demidov.ticketsystemsql.dto.out.SubgenreOutDTO;
 import com.demidov.ticketsystemsql.entities.Genre;
+import com.demidov.ticketsystemsql.entities.Purchase;
 import com.demidov.ticketsystemsql.entities.Subgenre;
 import com.demidov.ticketsystemsql.exceptions.CommonAppException;
 import com.demidov.ticketsystemsql.repositories.GenreRepository;
 import com.demidov.ticketsystemsql.repositories.SubgenreRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,19 +19,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class SubgenreService {
 
     private static final String NO_SUBGENRE_MESSAGE = "There is no such subgenre with id: ";
     private static final String SUBGENRE_EXISTS = "Subgenre with such name already exists, id: ";
     private static final String NO_GENRE_MESSAGE = "There is no such genre with id: ";
+    private final static String DTO_IS_NULL = "DTO must not be null";
 
     private final SubgenreRepository subgenreRepository;
     private final GenreRepository genreRepository;
-
-    public SubgenreService(SubgenreRepository subgenreRepository, GenreRepository genreRepository) {
-        this.subgenreRepository = subgenreRepository;
-        this.genreRepository = genreRepository;
-    }
+    private final ObjectMapper mapper;
 
     public Subgenre getById(Integer id) {
         Optional<Subgenre> subgenre = subgenreRepository.findById(id);
@@ -65,5 +70,17 @@ public class SubgenreService {
         if (!subgenreRepository.existsById(id)) {
             throw new CommonAppException(NO_SUBGENRE_MESSAGE + id);
         } else subgenreRepository.deleteById(id);
+    }
+
+    public SubgenreInDTO toInDTO(Subgenre subgenre) {
+        return Optional.ofNullable(subgenre)
+                .map(entity -> mapper.convertValue(entity, SubgenreInDTO.class))
+                .orElseThrow(() -> new CommonAppException(DTO_IS_NULL));
+    }
+
+    public SubgenreOutDTO toOutDTO(Subgenre subgenre) {
+        return Optional.ofNullable(subgenre)
+                .map(entity -> mapper.convertValue(entity, SubgenreOutDTO.class))
+                .orElseThrow(() -> new CommonAppException(DTO_IS_NULL));
     }
 }

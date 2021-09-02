@@ -1,5 +1,9 @@
 package com.demidov.ticketsystemsql.services;
 
+import com.demidov.ticketsystemsql.dto.in.EventInDTO;
+import com.demidov.ticketsystemsql.dto.in.PurchaseInDTO;
+import com.demidov.ticketsystemsql.dto.out.EventOutDTO;
+import com.demidov.ticketsystemsql.dto.out.PurchaseOutDTO;
 import com.demidov.ticketsystemsql.entities.Event;
 import com.demidov.ticketsystemsql.entities.Purchase;
 import com.demidov.ticketsystemsql.entities.Ticket;
@@ -9,28 +13,28 @@ import com.demidov.ticketsystemsql.repositories.EventRepository;
 import com.demidov.ticketsystemsql.repositories.PurchaseRepository;
 import com.demidov.ticketsystemsql.repositories.TicketRepository;
 import com.demidov.ticketsystemsql.repositories.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class PurchaseService {
 
     private final static String NO_ORDER_FOUND = "No order found with id: ";
+    private final static String DTO_IS_NULL = "DTO must not be null";
+
     private final PurchaseRepository purchaseRepository;
     private final EventRepository eventRepository;
     private final TicketRepository ticketRepository;
     private final UserRepository userRepository;
-
-    public PurchaseService(PurchaseRepository purchaseRepository, EventRepository eventRepository, TicketRepository ticketRepository, UserRepository userRepository) {
-        this.purchaseRepository = purchaseRepository;
-        this.eventRepository = eventRepository;
-        this.ticketRepository = ticketRepository;
-        this.userRepository = userRepository;
-    }
+    private final ObjectMapper mapper;
 
     public Purchase getById(Integer id) {
         Optional<Purchase> optionalPurchase = purchaseRepository.findById(id);
@@ -58,7 +62,7 @@ public class PurchaseService {
         List<Ticket> tickets = ticketRepository.findAllById(ticketIdList).orElseThrow(() -> new CommonAppException("No tickets found from the id list: " + ticketIdList));
         purchase.setTicketList(tickets);
 
-        purchase.setPurchaseDate(ZonedDateTime.now());
+        purchase.setPurchaseDate(LocalDateTime.now());
 
         Integer total = 0;
         for (Ticket ticket : tickets
@@ -82,7 +86,7 @@ public class PurchaseService {
         List<Ticket> tickets = ticketRepository.findAllById(ticketIdList).orElseThrow(() -> new CommonAppException("No tickets found from the id list: " + ticketIdList));
         purchase.setTicketList(tickets);
 
-        purchase.setPurchaseDate(ZonedDateTime.now());
+        purchase.setPurchaseDate(LocalDateTime.now());
 
         Integer total = 0;
         for (Ticket ticket : tickets
@@ -99,5 +103,17 @@ public class PurchaseService {
         if (optionalPurchase.isEmpty()) {
             throw new CommonAppException(NO_ORDER_FOUND + id);
         } else purchaseRepository.deleteById(id);
+    }
+
+    public PurchaseInDTO toInDTO(Purchase purchase) {
+        return Optional.ofNullable(purchase)
+                .map(entity -> mapper.convertValue(entity, PurchaseInDTO.class))
+                .orElseThrow(() -> new CommonAppException(DTO_IS_NULL));
+    }
+
+    public PurchaseOutDTO toOutDTO(Purchase purchase) {
+        return Optional.ofNullable(purchase)
+                .map(entity -> mapper.convertValue(entity, PurchaseOutDTO.class))
+                .orElseThrow(() -> new CommonAppException(DTO_IS_NULL));
     }
 }

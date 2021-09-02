@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -18,8 +19,8 @@ public class Purchase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    //@Temporal(value = TemporalType.TIMESTAMP)
-    private ZonedDateTime purchaseDate;
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDateTime purchaseDate;
 
     @JoinColumn(nullable = false)
     @ManyToOne(optional = false)

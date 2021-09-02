@@ -28,7 +28,6 @@ public class Event {
     //todo Split date and time into LocalDate and LocalTime. Change query and service accordingly.
 
     @Column(columnDefinition = "DATETIME")
-    //@Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime beginDateTime;
 

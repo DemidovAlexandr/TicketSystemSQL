@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -22,10 +23,9 @@ public class User {
     private String name;
     private String surname;
 
-    @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
+    @Column(nullable = false, columnDefinition = "DATE")
     @JsonFormat(pattern = "dd.MM.yyyy")
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
     private String telephone;
 
