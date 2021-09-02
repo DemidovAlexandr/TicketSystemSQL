@@ -35,7 +35,7 @@ public class TicketService {
     }
 
     public List<Ticket> getAllByEventId(Integer id) {
-        Optional<List<Ticket>> optionalTickets = ticketRepository.findAllByEvent_IdOrderByRowNumberAscSeatNumberAsc(id);
+        Optional<List<Ticket>> optionalTickets = ticketRepository.findAllByEvent_IdOrderByLineNumberAscSeatNumberAsc(id);
         if (optionalTickets.isPresent()) {
             return optionalTickets.get();
         } else throw new CommonAppException("No tickets found for event with id: " + id);
@@ -71,11 +71,11 @@ public class TicketService {
     }
 
     private boolean checkIfUnique(Ticket ticket) {
-        Integer rowNumber = ticket.getRowNumber();
+        Integer rowNumber = ticket.getLineNumber();
         Integer seatNumber = ticket.getSeatNumber();
         Integer price = ticket.getPrice();
         Integer eventId = ticket.getEvent().getId();
-        return ticketRepository.findByEvent_IdAndPriceAndRowNumberAndSeatNumber(eventId, price, rowNumber, seatNumber).isEmpty();
+        return ticketRepository.findByEvent_IdAndPriceAndLineNumberAndSeatNumber(eventId, price, rowNumber, seatNumber).isEmpty();
     }
 
     public TicketInDTO toInDTO(Ticket ticket) {
@@ -92,7 +92,7 @@ public class TicketService {
 
     private void setData(Ticket ticket, TicketInDTO dto) {
 
-        ticket.setRowNumber(dto.getRowNumber());
+        ticket.setLineNumber(dto.getRowNumber());
         ticket.setSeatNumber(dto.getSeatNumber());
         ticket.setPrice(dto.getPrice());
         ticket.setEvent(eventRepository.findById(dto.getEventId())

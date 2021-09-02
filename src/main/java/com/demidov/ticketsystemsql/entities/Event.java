@@ -14,8 +14,6 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@Table(uniqueConstraints = {@UniqueConstraint(name = "wwwwwwwww",
-        columnNames = {"name", "beginDateTime", "venue_id"})})
 public class Event {
 
     @Id
@@ -47,7 +45,7 @@ public class Event {
 
     @ToString.Exclude
     @Nullable
-    @OrderBy("rowNumber, seatNumber ASC")
+    @OrderBy("lineNumber, seatNumber ASC")
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ticket> ticketList;
 }

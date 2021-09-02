@@ -10,8 +10,6 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
-@Table(uniqueConstraints = {@UniqueConstraint(name = "Twwwwwww",
-        columnNames = {"rowNumber", "seatNumber", "price", "event_id"})})
 public class Ticket {
 
     @Id
@@ -19,7 +17,7 @@ public class Ticket {
     private Integer id;
 
     @Column(nullable = false)
-    private Integer rowNumber;
+    private Integer lineNumber;
     @Column(nullable = false)
     private Integer seatNumber;
     @Column(nullable = false)

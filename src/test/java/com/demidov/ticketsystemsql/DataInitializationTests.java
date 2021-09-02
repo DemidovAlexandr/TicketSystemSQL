@@ -68,8 +68,8 @@ public class DataInitializationTests {
     public void testSubgenreCreation() {
         Subgenre subgenre = dataInitializer.getSubgenre();
         Genre genre = dataInitializer.getGenre();
-        Assertions.assertEquals(Objects.requireNonNull(genreService.getById(genre.getId()).getSubgenreList()).toString(),
-                subgenreService.getById(subgenre.getId()).toString());
+        Assertions.assertEquals(genreService.getById(genre.getId()).getSubgenreList().toString(),
+                List.of(subgenreService.getById(subgenre.getId())).toString());
     }
 
     @Test
