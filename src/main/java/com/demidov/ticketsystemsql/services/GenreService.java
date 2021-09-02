@@ -59,25 +59,22 @@ public class GenreService {
 //    }
 
     @Transactional
-    public Genre create(String name, List<Integer> subgenreIdList) {
+    public Genre create(GenreInDTO dto) {
 
-        if (genreRepository.findByNameAllIgnoreCase(name).isPresent()) {
-            throw new CommonAppException(GENRE_EXISTS + genreRepository.findByNameAllIgnoreCase(name).get().getId());
+        if (genreRepository.findByNameAllIgnoreCase(dto.getName()).isPresent()) {
+            throw new CommonAppException(GENRE_EXISTS + genreRepository.findByNameAllIgnoreCase(dto.getName()).get().getId());
         } else {
             Genre genre = new Genre();
-            genre.setName(name);
-            List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList).orElse(List.of());
-            genre.setSubgenreList(subgenreList);
+            setData(genre, dto);
             return genreRepository.save(genre);
         }
     }
 
     @Transactional
-    public Genre update(Integer id, String name, List<Integer> subgenreIdList) {
-        Genre genre = genreRepository.findById(id).orElseThrow(() -> new CommonAppException(NO_GENRE_MESSAGE + id));
-        genre.setName(name);
-        List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList).orElseThrow(() -> new CommonAppException("No subgenres found with ids: " + subgenreIdList));
-        genre.setSubgenreList(subgenreList);
+    public Genre update(GenreInDTO dto) {
+        Genre genre = genreRepository.findById(dto.getId())
+                .orElseThrow(() -> new CommonAppException(NO_GENRE_MESSAGE + dto.getId()));
+        setData(genre, dto);
         return genreRepository.save(genre);
     }
 
@@ -98,5 +95,11 @@ public class GenreService {
         return Optional.ofNullable(genre)
                 .map(entity -> mapper.convertValue(entity, GenreOutDTO.class))
                 .orElseThrow(() -> new CommonAppException(DTO_IS_NULL));
+    }
+
+    private void setData(Genre genre, GenreInDTO dto) {
+        genre.setName(dto.getName());
+        List<Subgenre> subgenreList = subgenreRepository.findAllById(dto.getSubgenreIdList()).orElse(List.of());
+        genre.setSubgenreList(subgenreList);
     }
 }

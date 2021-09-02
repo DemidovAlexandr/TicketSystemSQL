@@ -2,16 +2,9 @@ package com.demidov.ticketsystemsql.initData;
 
 import com.demidov.ticketsystemsql.entities.*;
 import com.demidov.ticketsystemsql.services.*;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -27,9 +20,9 @@ public class DataInitializer {
     private final EventService eventService;
     private final PurchaseService purchaseService;
 
-    public User validUser;
+    public ValidDTO validDTO;
 
-    public void initData(){
+    public void initData() {
         initGenre();
         initSubgenre();
         initArtist();
@@ -40,61 +33,43 @@ public class DataInitializer {
     }
 
     public void initGenre() {
-        Genre genre = genreService.create("Concert", List.of());
+        Genre genre = genreService.create(validDTO.getGenreInDTO());
         log.info("Created genre: {}", genre);
     }
 
     public void initSubgenre() {
-        Subgenre metal = subgenreService.create("Metal", 1);
-        log.info("Created subgenre: {}", metal);
-        Subgenre rock = subgenreService.create("Rock", 1);
-        log.info("Created subgenre: {}", rock);
+        Subgenre subgenre = subgenreService.create(validDTO.getSubgenreInDTO());
+        log.info("Created subgenre: {}", subgenre);
     }
 
     public void initArtist() {
-        List<Integer> subgenreIdList = new ArrayList<>();
-        subgenreIdList.add(1);
-        subgenreIdList.add(2);
-        Artist artist = artistService.create("Pantera", subgenreIdList);
+        Artist artist = artistService.create(validDTO.getArtistInDTO());
         log.info("Created Artist: {}", artist);
     }
 
     public void initUser() {
-        LocalDate dateOfBirth = LocalDate.of(1993, 10,29);
-        validUser = userService.create("Иван", "Петров", dateOfBirth, "+79991234567", "usermail@user.com", "Санкт-Петербург");
-        log.info("Created user: {}", validUser);
+        User user = userService.create(validDTO.getUserInDTO());
+        log.info("Created user: {}", user);
     }
 
     public void initVenue() {
-        Venue venue = venueService.create("Aurora Concert Hall", "Санкт-Петербург", "Пироговская наб., 5/2",
-                "Современный клуб и концертный зал, где выступают российские и зарубежные рок-артисты",
-                "Телефон: 8 (812) 907-19-17");
+        Venue venue = venueService.create(validDTO.getVenueInDTO());
         log.info("Created venue: {}", venue);
     }
 
     public void initEvent() {
-        LocalDateTime dateTime = LocalDateTime.of(2021, 10, 15, 20, 0);
-        List<Integer> artistList = new ArrayList<>();
-        artistList.add(1);
-        List<Integer> subgenreList = new ArrayList<>();
-        subgenreList.add(1);
-        subgenreList.add(2);
-        List<Integer> ticketList = new ArrayList<>();
-        for (int i = 1; i <= 100; i++) {
-            ticketList.add(i);
-        }
-        Event event = eventService.create("Концерт группы Pantera", dateTime, 1, artistList, 1,  subgenreList, ticketList);
-        log.info("Created event {}", event);
+        Event event = eventService.create(validDTO.getEventInDTO());
+        log.info("Created event: {}", event);
     }
 
 
     public void initTickets() {
-        int rows = 10;
-        int seats = 10;
-        for (int i = 1; i <= rows; i++) {
-            for (int j = 1; j <= seats ; j++) {
-                Ticket ticket = ticketService.create(i, j, 3000, 1);
-            }
-        }
+        Ticket ticket = ticketService.create(validDTO.getTicketInDTO());
+        log.info("Created ticket: {}", ticket);
+    }
+
+    public void initPurchase() {
+        Purchase purchase = purchaseService.create(validDTO.getPurchaseInDTO());
+        log.info("Created purchase: {}", purchase);
     }
 }

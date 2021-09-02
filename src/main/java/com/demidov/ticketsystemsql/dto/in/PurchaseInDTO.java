@@ -15,5 +15,4 @@ public class PurchaseInDTO {
 
     private List<Integer> ticketIdList;
 
-    private Integer total;
 }

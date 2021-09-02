@@ -43,25 +43,17 @@ public class SubgenreService {
     }
 
     @Transactional
-    public Subgenre create(String name, Integer genreId) {
-        if (subgenreRepository.findByNameAllIgnoreCase(name).isPresent()) {
-            throw new CommonAppException(SUBGENRE_EXISTS + subgenreRepository.findByNameAllIgnoreCase(name).get().getId());
-        } else {
+    public Subgenre create(SubgenreInDTO dto) {
             Subgenre subgenre = new Subgenre();
-            subgenre.setName(name);
-            if (genreRepository.existsById(genreId)) {
-                subgenre.setGenre(genreRepository.getById(genreId));
-            } else throw new CommonAppException(NO_GENRE_MESSAGE + genreId);
+            setData(subgenre, dto);
             return subgenreRepository.save(subgenre);
-        }
     }
 
     @Transactional
-    public Subgenre update(Integer id, String name, Integer genreId) {
-        Subgenre subgenre = subgenreRepository.findById(id).orElseThrow(() -> new CommonAppException(NO_SUBGENRE_MESSAGE + id));
-        subgenre.setName(name);
-        Genre genre = genreRepository.findById(genreId).orElseThrow(() -> new CommonAppException(NO_GENRE_MESSAGE + genreId));
-        subgenre.setGenre(genre);
+    public Subgenre update(SubgenreInDTO dto) {
+        Subgenre subgenre = subgenreRepository.findById(dto.getId())
+                .orElseThrow(() -> new CommonAppException(NO_SUBGENRE_MESSAGE + dto.getId()));
+        setData(subgenre, dto);
         return subgenreRepository.save(subgenre);
     }
 
@@ -82,5 +74,15 @@ public class SubgenreService {
         return Optional.ofNullable(subgenre)
                 .map(entity -> mapper.convertValue(entity, SubgenreOutDTO.class))
                 .orElseThrow(() -> new CommonAppException(DTO_IS_NULL));
+    }
+
+    private void setData(Subgenre subgenre, SubgenreInDTO dto) {
+        if (subgenreRepository.findByNameAllIgnoreCase(dto.getName()).isPresent()) {
+            throw new CommonAppException(SUBGENRE_EXISTS + subgenreRepository.findByNameAllIgnoreCase(dto.getName()).get().getId());
+        } else subgenre.setName(dto.getName());
+
+        if (genreRepository.existsById(dto.getGenreId())) {
+            subgenre.setGenre(genreRepository.getById(dto.getGenreId()));
+        } else throw new CommonAppException(NO_GENRE_MESSAGE + dto.getGenreId());
     }
 }

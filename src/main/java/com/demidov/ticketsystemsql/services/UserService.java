@@ -1,10 +1,7 @@
 package com.demidov.ticketsystemsql.services;
 
-import com.demidov.ticketsystemsql.dto.in.TicketInDTO;
 import com.demidov.ticketsystemsql.dto.in.UserInDTO;
-import com.demidov.ticketsystemsql.dto.out.TicketOutDTO;
 import com.demidov.ticketsystemsql.dto.out.UserOutDTO;
-import com.demidov.ticketsystemsql.entities.Ticket;
 import com.demidov.ticketsystemsql.entities.User;
 import com.demidov.ticketsystemsql.exceptions.CommonAppException;
 import com.demidov.ticketsystemsql.repositories.UserRepository;
@@ -14,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,31 +37,18 @@ public class UserService {
     }
 
     @Transactional
-    public User create(String name, String surname, LocalDate dateOfBirth, String telephone, String email, String city) {
+    public User create(UserInDTO dto) {
         User user = new User();
-        user.setName(name);
-        user.setSurname(surname);
-        user.setDateOfBirth(dateOfBirth);
-        user.setTelephone(telephone);
-        user.setEmail(email);
-        user.setCity(city);
-
+        setData(user, dto);
         return userRepository.save(user);
     }
 
     @Transactional
-    public User update(Integer id, String name, String surname, LocalDate dateOfBirth, String telephone, String email, String city) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            user.setName(name);
-            user.setSurname(surname);
-            user.setDateOfBirth(dateOfBirth);
-            user.setTelephone(telephone);
-            user.setCity(email);
-            user.setCity(city);
-            return userRepository.save(user);
-        } else throw new CommonAppException(NO_USER_MESSAGE + id);
+    public User update(UserInDTO dto) {
+        User user = userRepository.findById(dto.getId())
+                .orElseThrow(() -> new CommonAppException(NO_USER_MESSAGE + dto.getId()));
+        setData(user, dto);
+        return userRepository.save(user);
     }
 
     @Transactional
@@ -86,5 +69,14 @@ public class UserService {
         return Optional.ofNullable(user)
                 .map(entity -> mapper.convertValue(entity, UserOutDTO.class))
                 .orElseThrow(() -> new CommonAppException(DTO_IS_NULL));
+    }
+
+    private void setData(User user, UserInDTO dto) {
+        user.setName(dto.getName());
+        user.setSurname(dto.getSurname());
+        user.setEmail(dto.getEmail());
+        user.setTelephone(dto.getTelephone());
+        user.setCity(dto.getCity());
+        user.setDateOfBirth(dto.getDateOfBirth());
     }
 }

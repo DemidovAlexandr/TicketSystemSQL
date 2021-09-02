@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -34,6 +35,7 @@ public class User {
     private String city;
 
     @ToString.Exclude
-    @OneToMany
+    @OneToMany(mappedBy = "user")
+    @Nullable
     private List<Purchase> purchaseList;
 }

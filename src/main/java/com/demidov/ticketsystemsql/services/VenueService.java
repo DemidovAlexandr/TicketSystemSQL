@@ -45,24 +45,17 @@ public class VenueService {
     }
 
     @Transactional
-    public Venue create(String name, String city, String streetAddress, String description, String contacts) {
+    public Venue create(VenueInDTO dto) {
         Venue venue = new Venue();
-        venue.setName(name);
-        venue.setCity(city);
-        venue.setStreetAddress(streetAddress);
-        venue.setDescription(description);
-        venue.setContacts(contacts);
+        setData(venue, dto);
         return venueRepository.save(venue);
     }
 
     @Transactional
-    public Venue update(Integer id, String name, String city, String streetAddress, String description, String contacts) {
-        Venue venue = venueRepository.findById(id).orElseThrow(() -> new CommonAppException(NO_VENUE_MESSAGE + id));
-        venue.setName(name);
-        venue.setCity(city);
-        venue.setStreetAddress(streetAddress);
-        venue.setDescription(description);
-        venue.setContacts(contacts);
+    public Venue update(VenueInDTO dto) {
+        Venue venue = venueRepository.findById(dto.getId())
+                .orElseThrow(() -> new CommonAppException(NO_VENUE_MESSAGE + dto.getId()));
+        setData(venue, dto);
         return venueRepository.save(venue);
     }
 
@@ -83,5 +76,13 @@ public class VenueService {
         return Optional.ofNullable(venue)
                 .map(entity -> mapper.convertValue(entity, VenueOutDTO.class))
                 .orElseThrow(() -> new CommonAppException(DTO_IS_NULL));
+    }
+
+    private void setData(Venue venue, VenueInDTO dto) {
+        venue.setName(dto.getName());
+        venue.setCity(dto.getCity());
+        venue.setStreetAddress(dto.getStreetAddress());
+        venue.setDescription(dto.getDescription());
+        venue.setContacts(dto.getContacts());
     }
 }

@@ -42,20 +42,17 @@ public class ArtistService {
     }
 
     @Transactional
-    public Artist create(String name, List<Integer> subgenreIdList) {
+    public Artist create(ArtistInDTO dto) {
         Artist artist = new Artist();
-        artist.setName(name);
-        List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList).orElseThrow(() -> new CommonAppException(NO_SUBGENRE_MESSAGE + subgenreIdList));
-        artist.setSubgenreList(subgenreList);
+        setData(artist, dto);
         return artistRepository.save(artist);
     }
 
     @Transactional
-    public Artist update(Integer artistId, String name, List<Integer> subgenreIdList) {
-        Artist artist = artistRepository.findById(artistId).orElseThrow(() -> new CommonAppException(NO_ARTIST_MESSAGE + artistId));
-        artist.setName(name);
-        List<Subgenre> subgenreList = subgenreRepository.findAllById(subgenreIdList).orElseThrow(() -> new CommonAppException(NO_SUBGENRE_MESSAGE + subgenreIdList));
-        artist.setSubgenreList(subgenreList);
+    public Artist update(ArtistInDTO dto) {
+        Artist artist = artistRepository.findById(dto.getId())
+                .orElseThrow(() -> new CommonAppException(NO_ARTIST_MESSAGE + dto.getId()));
+        setData(artist, dto);
         return artistRepository.save(artist);
     }
 
@@ -76,5 +73,12 @@ public class ArtistService {
         return Optional.ofNullable(artist)
                 .map(entity -> mapper.convertValue(entity, ArtistOutDTO.class))
                 .orElseThrow(() -> new CommonAppException(DTO_IS_NULL));
+    }
+
+    private void setData(Artist artist, ArtistInDTO dto) {
+        artist.setName(dto.getName());
+        List<Subgenre> subgenreList = subgenreRepository.findAllById(dto.getSubgenreIdList())
+                .orElseThrow(() -> new CommonAppException(NO_SUBGENRE_MESSAGE + dto.getSubgenreIdList()));
+        artist.setSubgenreList(subgenreList);
     }
 }
