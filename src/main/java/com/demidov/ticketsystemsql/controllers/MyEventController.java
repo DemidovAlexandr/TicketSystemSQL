@@ -13,12 +13,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/events")
-public class EventController {
+public class MyEventController {
 
     private final EventWebService webService;
 
     @Autowired
-    public EventController(EventWebService webService) {
+    public MyEventController(EventWebService webService) {
         this.webService = webService;
     }
 
@@ -27,14 +27,14 @@ public class EventController {
         return webService.getById(id);
     }
 
-    @GetMapping()
+    @GetMapping("/byArtist")
     @ResponseBody public List<EventOutDTO> getAllByArtistName(
             @RequestParam(value = "artistId") Integer artistId) {
         return webService.getAllByArtist(artistId);
     }
 
     //todo: Change LocalDateTime param to LocalDate
-    @GetMapping()
+    @GetMapping("/byDateGenreCity")
     @ResponseBody public List<EventOutDTO> getAllByDateGenreCity(
             @RequestParam(value = "localDate") LocalDateTime localDate,
             @RequestParam(value = "genreId") Integer genreId,

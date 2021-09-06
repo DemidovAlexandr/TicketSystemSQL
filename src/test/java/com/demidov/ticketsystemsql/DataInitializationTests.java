@@ -4,15 +4,16 @@ import com.demidov.ticketsystemsql.entities.*;
 import com.demidov.ticketsystemsql.initData.DataInitializer;
 import com.demidov.ticketsystemsql.services.*;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.*;
-import org.mockito.internal.matchers.NotNull;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.List;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -35,6 +36,7 @@ public class DataInitializationTests {
 
     @Autowired
     private PurchaseService purchaseService;
+    //todo: test purchase
 
     @Autowired
     private TicketService ticketService;
@@ -119,4 +121,6 @@ public class DataInitializationTests {
         Assertions.assertEquals(events.size(), 1);
         Assertions.assertEquals(event.getName(), events.get(0).getName());
     }
+
+    //todo
 }
