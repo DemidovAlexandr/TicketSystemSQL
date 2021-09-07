@@ -25,9 +25,9 @@ public class GenreController {
         return webService.getById(id);
     }
 
-    @GetMapping(path = "/{name}")
+    @GetMapping(path = "/search")
     public @ResponseBody
-    GenreOutDTO getByName(@PathVariable String name) {
+    GenreOutDTO getByName(@RequestParam(value = "name") String name) {
         return webService.getByName(name);
     }
 

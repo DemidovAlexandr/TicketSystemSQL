@@ -46,17 +46,6 @@ public class GenreService {
         return genreRepository.findAll();
     }
 
-//    @Transactional
-//    public Genre create(String name) {
-//
-//        if (genreRepository.findByNameAllIgnoreCase(name).isPresent()) {
-//            throw new CommonAppException(GENRE_EXISTS + genreRepository.findByNameAllIgnoreCase(name).get().getId());
-//        } else {
-//            Genre genre = new Genre();
-//            genre.setName(name);
-//            return genreRepository.save(genre);
-//        }
-//    }
 
     @Transactional
     public Genre create(GenreInDTO dto) {

@@ -2,6 +2,7 @@ package com.demidov.ticketsystemsql.services;
 
 import com.demidov.ticketsystemsql.dto.in.SubgenreInDTO;
 import com.demidov.ticketsystemsql.dto.out.SubgenreOutDTO;
+import com.demidov.ticketsystemsql.entities.Genre;
 import com.demidov.ticketsystemsql.entities.Subgenre;
 import com.demidov.ticketsystemsql.exceptions.CommonAppException;
 import com.demidov.ticketsystemsql.repositories.GenreRepository;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,13 +74,18 @@ public class SubgenreService {
                 .orElseThrow(() -> new CommonAppException(DTO_IS_NULL));
     }
 
+
     private void setData(Subgenre subgenre, SubgenreInDTO dto) {
         if (subgenreRepository.findByNameAllIgnoreCase(dto.getName()).isPresent()) {
             throw new CommonAppException(SUBGENRE_EXISTS + subgenreRepository.findByNameAllIgnoreCase(dto.getName()).get().getId());
         } else subgenre.setName(dto.getName());
 
-        if (genreRepository.existsById(dto.getGenreId())) {
-            subgenre.setGenre(genreRepository.getById(dto.getGenreId()));
+        Optional<Genre> optionalGenre = genreRepository.findById(dto.getGenreId());
+        if (optionalGenre.isPresent()) {
+            Genre genre = optionalGenre.get();
+            subgenre.setGenre(genre);
+            genre.getSubgenreList().add(subgenre);
+
         } else throw new CommonAppException(NO_GENRE_MESSAGE + dto.getGenreId());
     }
 }

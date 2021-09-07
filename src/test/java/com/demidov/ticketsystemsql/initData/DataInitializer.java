@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +34,7 @@ public class DataInitializer {
     private Ticket ticket;
     private Purchase purchase;
 
+
     public void initData() {
         initGenre();
         initSubgenre();
@@ -44,13 +46,15 @@ public class DataInitializer {
         initPurchase();
     }
 
-    private void initGenre() {
+    @Transactional
+    public void initGenre() {
         Genre genre = genreService.create(validDTO.getGenreInDTO());
         log.info("Created genre: {}", genre);
         this.genre = genre;
     }
 
-    private void initSubgenre() {
+    @Transactional
+    public void initSubgenre() {
         Subgenre subgenre = subgenreService.create(validDTO.getSubgenreInDTO());
         log.info("Created subgenre: {}", subgenre);
         this.subgenre = subgenre;

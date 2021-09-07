@@ -27,21 +27,21 @@ public class MyEventController {
         return webService.getById(id);
     }
 
-    @GetMapping("/byArtist")
+    @GetMapping("/search")
     public @ResponseBody
     List<EventOutDTO> getAllByArtistName(
             @RequestParam(value = "artistId") Integer artistId) {
         return webService.getAllByArtist(artistId);
     }
 
-    @GetMapping("/byDate")
+    @GetMapping("/search")
     public @ResponseBody
     List<EventOutDTO> getAllByDate(
             @RequestParam(value = "localDate") LocalDate localDate) {
         return webService.getAllByDate(localDate);
     }
 
-    @GetMapping("/byDateGenreCity")
+    @GetMapping("/search")
     public @ResponseBody
     List<EventOutDTO> getAllByDateGenreCity(
             @RequestParam(value = "localDate") LocalDate localDate,

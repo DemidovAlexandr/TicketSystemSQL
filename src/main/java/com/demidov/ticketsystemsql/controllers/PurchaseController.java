@@ -32,9 +32,9 @@ public class PurchaseController {
         return webService.getAll();
     }
 
-    @GetMapping(path = {"/{userId}"})
+    @GetMapping(path = {"/search"})
     public @ResponseBody
-    List<PurchaseOutDTO> getAllByUser(@PathVariable Integer userId) {
+    List<PurchaseOutDTO> getAllByUser(@RequestParam(value = "userId") Integer userId) {
         return webService.getAllByUser(userId);
     }
 
