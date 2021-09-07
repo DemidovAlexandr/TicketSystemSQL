@@ -44,23 +44,27 @@ public class EventService {
 
     public List<Event> getAllByArtist(Integer artistId) {
         Optional<Artist> optionalArtist = artistRepository.findById(artistId);
+        List<Event> events = List.of();
         if (optionalArtist.isPresent()) {
-            Optional<List<Event>> optionalEvents = eventRepository.findAllByArtistListContainingOrderByBeginDateTime(optionalArtist.get());
-            if (optionalEvents.isPresent()) {
-                return optionalEvents.get();
-            } else throw new CommonAppException("No events found with this artists: " + optionalArtist.get());
-        } else throw new CommonAppException("No artists found with this ids: " + artistId);
+            events = eventRepository.findAllByArtistListContainingOrderByBeginDateTime(optionalArtist.get());
+            if (events.isEmpty()) {
+                log.info("No events found with this artist: {}", optionalArtist.get());
+            }
+        } else log.info("No artist found with id: {}", artistId);
+        return events;
     }
 
     public List<Event> getAllByDateGenreCity(LocalDateTime dateTime, Integer genreId, String city) {
         Optional<Genre> optionalGenre = genreRepository.findById(genreId);
+        List<Event> events = List.of();
         if (optionalGenre.isPresent()) {
             Genre genre = optionalGenre.get();
-            Optional<List<Event>> optionalEvents = eventRepository.findAllByDateAndGenreAndCity(dateTime, genre, city);
-            if (optionalEvents.isPresent()) {
-                return optionalEvents.get();
-            } else throw new CommonAppException("No events found by query with parameters: " + dateTime + genre + city);
-        } else throw new CommonAppException("No genre found with id: " + genreId);
+            events = eventRepository.findAllByDateAndGenreAndCity(dateTime, genre, city);
+            if (events.isEmpty()) {
+                log.info("No events found by query with parameters: {}, {}, {}", dateTime, genre, city);
+            }
+        } else log.info("No genre found with id: {}", genreId);
+        return events;
     }
 
     @Transactional

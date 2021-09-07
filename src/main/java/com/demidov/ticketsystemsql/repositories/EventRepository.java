@@ -12,13 +12,11 @@ import java.util.Optional;
 
 public interface EventRepository extends JpaRepository<Event, Integer> {
 
-    Optional<List<Event>> findAllByArtistListContainingOrderByBeginDateTime(Artist artist);
+    List<Event> findAllByArtistListContainingOrderByBeginDateTime(Artist artist);
 
-    Optional<List<Event>> findAllByBeginDateTimeOrderByNameAsc(LocalDateTime dateTime);
+    List<Event> findAllByBeginDateTimeOrderByNameAsc(LocalDateTime dateTime);
 
     @Query("select e from Event e where e.beginDateTime = ?1 and e.genre = ?2 and e.venue.city = ?3 order by e.name")
-    Optional<List<Event>> findAllByDateAndGenreAndCity(LocalDateTime dateTime, Genre genre, String cityName);
-    //TODO get rid of optional
-
+    List<Event> findAllByDateAndGenreAndCity(LocalDateTime dateTime, Genre genre, String cityName);
 
 }
