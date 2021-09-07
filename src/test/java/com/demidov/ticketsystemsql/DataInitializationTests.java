@@ -36,7 +36,6 @@ public class DataInitializationTests {
 
     @Autowired
     private PurchaseService purchaseService;
-    //todo: test purchase
 
     @Autowired
     private TicketService ticketService;
@@ -122,5 +121,12 @@ public class DataInitializationTests {
         Assertions.assertEquals(event.getName(), events.get(0).getName());
     }
 
-    //todo
+    @Test
+    public void testIfPurchaseInitialized() {
+        Purchase purchase = dataInitializer.getPurchase();
+        User user = dataInitializer.getUser();
+        Ticket ticket = dataInitializer.getTicket();
+        Assertions.assertEquals(user.toString(), purchaseService.getById(purchase.getId()).getUser().toString());
+        Assertions.assertEquals(ticket.getPrice(), purchaseService.getById(purchase.getId()).getTotal());
+    }
 }

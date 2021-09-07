@@ -1,11 +1,8 @@
 package com.demidov.ticketsystemsql.services;
 
 import com.demidov.ticketsystemsql.dto.in.ArtistInDTO;
-import com.demidov.ticketsystemsql.dto.in.GenreInDTO;
 import com.demidov.ticketsystemsql.dto.out.ArtistOutDTO;
-import com.demidov.ticketsystemsql.dto.out.GenreOutDTO;
 import com.demidov.ticketsystemsql.entities.Artist;
-import com.demidov.ticketsystemsql.entities.Genre;
 import com.demidov.ticketsystemsql.entities.Subgenre;
 import com.demidov.ticketsystemsql.exceptions.CommonAppException;
 import com.demidov.ticketsystemsql.repositories.ArtistRepository;

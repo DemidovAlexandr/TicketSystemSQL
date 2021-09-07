@@ -34,7 +34,7 @@ public class UserWebService {
         return userService.toOutDTO(userService.update(dto));
     }
 
-    public void deleteById(Integer id){
+    public void deleteById(Integer id) {
         userService.deleteById(id);
     }
 }

@@ -37,7 +37,7 @@ public class ArtistWebService {
     }
 
     @Transactional
-    public void deleteById(Integer id){
+    public void deleteById(Integer id) {
         artistService.deleteById(id);
     }
 }

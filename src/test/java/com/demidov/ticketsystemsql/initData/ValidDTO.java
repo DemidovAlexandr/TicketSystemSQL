@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -71,7 +72,8 @@ public class ValidDTO {
     private EventInDTO initEventDTO() {
         EventInDTO dto = new EventInDTO();
         dto.setName("Slipknot concert");
-        dto.setBeginDateTime(LocalDateTime.of(2021, 10, 30, 19, 0));
+        dto.setBeginDate(LocalDate.of(2021, 10, 30));
+        dto.setBeginTime(LocalTime.of(19,0));
         dto.setGenreId(1);
         dto.setSubgenreIdList(List.of(1));
         dto.setArtistIdList(List.of(1));

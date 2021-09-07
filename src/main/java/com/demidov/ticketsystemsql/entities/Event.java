@@ -7,7 +7,8 @@ import lombok.ToString;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -23,11 +24,13 @@ public class Event {
     @Column(nullable = false)
     private String name;
 
-    //todo Split date and time into LocalDate and LocalTime. Change query and service accordingly.
+    @Column(columnDefinition = "DATE")
+    @JsonFormat(pattern = "dd.MM.yyyy")
+    private LocalDate beginDate;
 
-    @Column(columnDefinition = "DATETIME")
-    @JsonFormat(pattern = "dd.MM.yyyy HH:mm")
-    private LocalDateTime beginDateTime;
+    @Column(columnDefinition = "TIMESTAMP")
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime beginTime;
 
     @OneToOne
     private Venue venue;

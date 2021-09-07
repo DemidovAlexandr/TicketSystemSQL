@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -23,37 +22,47 @@ public class MyEventController {
     }
 
     @GetMapping(path = "/{id}")
-    @ResponseBody public EventOutDTO getById(@PathVariable Integer id) {
+    public @ResponseBody
+    EventOutDTO getById(@PathVariable Integer id) {
         return webService.getById(id);
     }
 
     @GetMapping("/byArtist")
-    @ResponseBody public List<EventOutDTO> getAllByArtistName(
+    public @ResponseBody
+    List<EventOutDTO> getAllByArtistName(
             @RequestParam(value = "artistId") Integer artistId) {
         return webService.getAllByArtist(artistId);
     }
 
-    //todo: Change LocalDateTime param to LocalDate
+    @GetMapping("/byDate")
+    public @ResponseBody
+    List<EventOutDTO> getAllByDate(
+            @RequestParam(value = "localDate") LocalDate localDate) {
+        return webService.getAllByDate(localDate);
+    }
+
     @GetMapping("/byDateGenreCity")
-    @ResponseBody public List<EventOutDTO> getAllByDateGenreCity(
-            @RequestParam(value = "localDate") LocalDateTime localDate,
+    public @ResponseBody
+    List<EventOutDTO> getAllByDateGenreCity(
+            @RequestParam(value = "localDate") LocalDate localDate,
             @RequestParam(value = "genreId") Integer genreId,
             @RequestParam(value = "city") String city) {
         return webService.getAllByDateGenreCity(localDate, genreId, city);
     }
 
     @PostMapping()
-    @ResponseBody public EventOutDTO create(@RequestBody EventInDTO dto) {
+    public EventOutDTO create(@RequestBody EventInDTO dto) {
         return webService.create(dto);
     }
 
     @PutMapping()
-    @ResponseBody public EventOutDTO update(@RequestBody EventInDTO dto) {
+    public EventOutDTO update(@RequestBody EventInDTO dto) {
         return webService.update(dto);
     }
 
     @DeleteMapping(path = "/{id}")
-    @ResponseBody public String deleteById(@RequestParam Integer id) {
+    public @ResponseBody
+    String deleteById(@PathVariable Integer id) {
         webService.deleteById(id);
         return ControllerMessages.DELETED.name() + id;
     }

@@ -16,7 +16,7 @@ public class VenueWebService {
     private final VenueService venueService;
 
     public VenueOutDTO getById(Integer id) {
-       return venueService.toOutDTO(venueService.getById(id));
+        return venueService.toOutDTO(venueService.getById(id));
     }
 
     public List<VenueOutDTO> getAll() {

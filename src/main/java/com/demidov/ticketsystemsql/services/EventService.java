@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +46,7 @@ public class EventService {
         Optional<Artist> optionalArtist = artistRepository.findById(artistId);
         List<Event> events = List.of();
         if (optionalArtist.isPresent()) {
-            events = eventRepository.findAllByArtistListContainingOrderByBeginDateTime(optionalArtist.get());
+            events = eventRepository.findAllByArtistListContainingOrderByBeginDate(optionalArtist.get());
             if (events.isEmpty()) {
                 log.info("No events found with this artist: {}", optionalArtist.get());
             }
@@ -54,14 +54,23 @@ public class EventService {
         return events;
     }
 
-    public List<Event> getAllByDateGenreCity(LocalDateTime dateTime, Integer genreId, String city) {
+    public List<Event> getAllByDate(LocalDate date) {
+        List<Event> events;
+        events = eventRepository.findAllByBeginDateOrderByBeginTimeAsc(date);
+        if (events.isEmpty()) {
+            log.info("No events found for the date: {}", date);
+        }
+        return events;
+    }
+
+    public List<Event> getAllByDateGenreCity(LocalDate date, Integer genreId, String city) {
         Optional<Genre> optionalGenre = genreRepository.findById(genreId);
         List<Event> events = List.of();
         if (optionalGenre.isPresent()) {
             Genre genre = optionalGenre.get();
-            events = eventRepository.findAllByDateAndGenreAndCity(dateTime, genre, city);
+            events = eventRepository.findAllByDateAndGenreAndCity(date, genre, city);
             if (events.isEmpty()) {
-                log.info("No events found by query with parameters: {}, {}, {}", dateTime, genre, city);
+                log.info("No events found by query with parameters: {}, {}, {}", date, genre, city);
             }
         } else log.info("No genre found with id: {}", genreId);
         return events;
@@ -106,7 +115,8 @@ public class EventService {
 
     private void setData(Event event, EventInDTO dto) {
         event.setName(dto.getName());
-        event.setBeginDateTime(dto.getBeginDateTime());
+        event.setBeginDate(dto.getBeginDate());
+        event.setBeginTime(dto.getBeginTime());
 
         Venue venue = venueRepository.findById(dto.getVenueId())
                 .orElseThrow(() -> new CommonAppException("No venue found with id: " + dto.getVenueId()));

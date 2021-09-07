@@ -1,10 +1,7 @@
 package com.demidov.ticketsystemsql.services;
 
-import com.demidov.ticketsystemsql.dto.in.UserInDTO;
 import com.demidov.ticketsystemsql.dto.in.VenueInDTO;
-import com.demidov.ticketsystemsql.dto.out.UserOutDTO;
 import com.demidov.ticketsystemsql.dto.out.VenueOutDTO;
-import com.demidov.ticketsystemsql.entities.User;
 import com.demidov.ticketsystemsql.entities.Venue;
 import com.demidov.ticketsystemsql.exceptions.CommonAppException;
 import com.demidov.ticketsystemsql.repositories.VenueRepository;

@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +33,14 @@ public class EventWebService {
                 .collect(Collectors.toList());
     }
 
-    public List<EventOutDTO> getAllByDateGenreCity(LocalDateTime date, Integer genreId, String city) {
+    public List<EventOutDTO> getAllByDate(LocalDate date) {
+        return eventService.getAllByDate(date)
+                .stream()
+                .map(eventService::toOutDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<EventOutDTO> getAllByDateGenreCity(LocalDate date, Integer genreId, String city) {
         return eventService.getAllByDateGenreCity(date, genreId, city)
                 .stream()
                 .map(eventService::toOutDTO)
@@ -41,7 +48,7 @@ public class EventWebService {
     }
 
     @Transactional
-    public EventOutDTO create(EventInDTO dto){
+    public EventOutDTO create(EventInDTO dto) {
         return eventService.toOutDTO(eventService.create(dto));
     }
 

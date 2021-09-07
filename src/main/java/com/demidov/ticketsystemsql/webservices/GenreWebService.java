@@ -25,7 +25,7 @@ public class GenreWebService {
     }
 
     public List<GenreOutDTO> getAll() {
-        return  genreService.getAll().stream()
+        return genreService.getAll().stream()
                 .map(genreService::toOutDTO)
                 .collect(Collectors.toList());
     }

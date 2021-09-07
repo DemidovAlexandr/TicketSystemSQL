@@ -21,12 +21,14 @@ public class UserController {
     }
 
     @GetMapping(path = "/{id}")
-    @ResponseBody public UserOutDTO getById(@PathVariable Integer id) {
+    public @ResponseBody
+    UserOutDTO getById(@PathVariable Integer id) {
         return webService.getById(id);
     }
 
     @GetMapping(path = "/all")
-    @ResponseBody public List<UserOutDTO> getAll() {
+    public @ResponseBody
+    List<UserOutDTO> getAll() {
         return webService.getAll();
     }
 
@@ -41,7 +43,8 @@ public class UserController {
     }
 
     @DeleteMapping(path = "/{id}")
-    @ResponseBody public String deleteById(@PathVariable Integer id) {
+    public @ResponseBody
+    String deleteById(@PathVariable Integer id) {
         webService.deleteById(id);
         return ControllerMessages.DELETED.name() + id;
     }

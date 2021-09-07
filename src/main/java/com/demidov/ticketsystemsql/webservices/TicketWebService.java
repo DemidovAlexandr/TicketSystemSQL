@@ -16,7 +16,7 @@ public class TicketWebService {
 
     private final TicketService ticketService;
 
-    public TicketOutDTO getById(Integer id){
+    public TicketOutDTO getById(Integer id) {
         return ticketService.toOutDTO(ticketService.getById(id));
     }
 

@@ -1,11 +1,7 @@
 package com.demidov.ticketsystemsql.services;
 
-import com.demidov.ticketsystemsql.dto.in.PurchaseInDTO;
 import com.demidov.ticketsystemsql.dto.in.SubgenreInDTO;
-import com.demidov.ticketsystemsql.dto.out.PurchaseOutDTO;
 import com.demidov.ticketsystemsql.dto.out.SubgenreOutDTO;
-import com.demidov.ticketsystemsql.entities.Genre;
-import com.demidov.ticketsystemsql.entities.Purchase;
 import com.demidov.ticketsystemsql.entities.Subgenre;
 import com.demidov.ticketsystemsql.exceptions.CommonAppException;
 import com.demidov.ticketsystemsql.repositories.GenreRepository;
@@ -44,9 +40,9 @@ public class SubgenreService {
 
     @Transactional
     public Subgenre create(SubgenreInDTO dto) {
-            Subgenre subgenre = new Subgenre();
-            setData(subgenre, dto);
-            return subgenreRepository.save(subgenre);
+        Subgenre subgenre = new Subgenre();
+        setData(subgenre, dto);
+        return subgenreRepository.save(subgenre);
     }
 
     @Transactional
