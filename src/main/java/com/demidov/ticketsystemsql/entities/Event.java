@@ -39,13 +39,14 @@ public class Event {
     @ToString.Exclude
     private List<Artist> artistList;
 
-    @ManyToOne
-    @Nullable
     @JoinColumn
     @ToString.Exclude
+    @ManyToOne
+    @Nullable
     private Genre genre;
 
-    @OneToMany
+
+    @ManyToMany(mappedBy = "eventList")
     @ToString.Exclude
     private List<Subgenre> subgenreList;
 

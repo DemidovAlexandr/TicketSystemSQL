@@ -5,8 +5,10 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -24,7 +26,22 @@ public class Subgenre {
     @Column(nullable = false)
     private String name;
 
-    @JoinColumn
+
     @ManyToOne
     private Genre genre;
+
+
+    @JoinTable(name = "ARTIST_SUBGENRE",
+            joinColumns = @JoinColumn(name = "SUBGENRE_ID"),
+            inverseJoinColumns = @JoinColumn(name = "ARTIST_ID"))
+    @ManyToMany
+    @ToString.Exclude
+    private List<Artist> artistList;
+
+    @ToString.Exclude
+    @JoinTable(name = "SUBGENRE_EVENT",
+            joinColumns = @JoinColumn(name = "SUBGENRE_ID"),
+            inverseJoinColumns = @JoinColumn(name = "EVENT_ID"))
+    @ManyToMany
+    private List<Event> eventList;
 }

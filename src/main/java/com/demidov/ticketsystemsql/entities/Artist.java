@@ -19,7 +19,7 @@ public class Artist {
 
     private String name;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "artistList")
     @ToString.Exclude
     private List<Subgenre> subgenreList;
 
