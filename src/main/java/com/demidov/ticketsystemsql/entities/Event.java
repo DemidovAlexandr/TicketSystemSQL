@@ -39,7 +39,10 @@ public class Event {
     @ToString.Exclude
     private List<Artist> artistList;
 
-    @OneToOne
+    @ManyToOne
+    @Nullable
+    @JoinColumn
+    @ToString.Exclude
     private Genre genre;
 
     @OneToMany

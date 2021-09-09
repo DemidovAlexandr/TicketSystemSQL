@@ -24,7 +24,7 @@ public class Subgenre {
     @Column(nullable = false)
     private String name;
 
-    @JoinColumn(nullable = false)
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @JoinColumn
+    @ManyToOne
     private Genre genre;
 }

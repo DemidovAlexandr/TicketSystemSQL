@@ -25,9 +25,9 @@ public class Genre {
 
     private String name;
 
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "genre", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "genre", cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @Nullable
     @ToString.Exclude
     private List<Subgenre> subgenreList;
+
 }

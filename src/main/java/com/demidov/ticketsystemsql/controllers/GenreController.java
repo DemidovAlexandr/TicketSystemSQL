@@ -51,6 +51,6 @@ public class GenreController {
     public @ResponseBody
     String delete(@PathVariable Integer id) {
         webService.deleteById(id);
-        return ControllerMessages.DELETED.name() + id;
+        return ControllerMessages.DELETED.getValue() + id;
     }
 }

@@ -26,7 +26,7 @@ public class TicketController {
         return webService.getById(id);
     }
 
-    @GetMapping(path = {"/event/{eventId}"})
+    @GetMapping(path = {"/{eventId}"})
     public List<TicketOutDTO> getByEventId(@PathVariable Integer eventId) {
         return webService.getAllByEvent(eventId);
     }
