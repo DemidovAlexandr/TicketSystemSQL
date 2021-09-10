@@ -10,5 +10,5 @@ public class TicketOutDTO {
     private Integer seatNumber;
     private Integer price;
     private Integer eventId;
-
+    private Integer purchaseId;
 }

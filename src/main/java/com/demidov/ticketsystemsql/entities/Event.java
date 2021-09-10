@@ -1,12 +1,17 @@
 package com.demidov.ticketsystemsql.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import javax.validation.constraints.Null;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -15,6 +20,9 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Event {
 
     /*ManyToMany SubgenreList
@@ -39,22 +47,25 @@ public class Event {
     private LocalTime beginTime;
 
     @ManyToOne
+    @Nullable
     private Venue venue;
 
     @ManyToOne
+    @Nullable
     private Genre genre;
-
-    @JoinTable(name = "Event_Subgenre",
-            joinColumns = @JoinColumn(name = "Event_id"),
-            inverseJoinColumns = @JoinColumn(name = "Subgenre_id"))
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Subgenre> subgenreList = new ArrayList<>();
 
     @JoinTable(name = "EVENT_ARTIST",
             joinColumns = @JoinColumn(name = "EVENT_ID"),
             inverseJoinColumns = @JoinColumn(name = "ARTIST_ID"))
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Artist> artistList = new ArrayList<>();
+
+    @JoinTable(name = "EVENT_SUBGENRE",
+            joinColumns = @JoinColumn(name = "EVENT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "SUBGENRE_ID"))
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Subgenre> subgenreList = new ArrayList<>();
+
 
 //    @JoinColumn
 //    @ToString.Exclude
@@ -69,6 +80,6 @@ public class Event {
 
     @Nullable
     @OrderBy("lineNumber, seatNumber ASC")
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ticket> ticketList=new ArrayList<>();
 }

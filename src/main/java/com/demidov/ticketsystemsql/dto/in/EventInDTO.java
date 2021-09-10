@@ -21,9 +21,9 @@ public class EventInDTO {
 
     private Integer venueId;
 
-    private List<Integer> artistIdList;
-
     private Integer genreId;
+
+    private List<Integer> artistIdList;
 
     private List<Integer> subgenreIdList;
 

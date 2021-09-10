@@ -128,11 +128,11 @@ public class EventService {
 
         Genre genre = genreRepository.findById(dto.getGenreId())
                 .orElseThrow(() -> new CommonAppException("No genre found with id: " + dto.getGenreId()));
-//        event.setGenre(genre);
+        event.setGenre(genre);
 
         List<Subgenre> subgenreList = subgenreRepository.findAllById(dto.getSubgenreIdList())
                 .orElseThrow(() -> new CommonAppException("No subgenres found with ids: " + dto.getSubgenreIdList()));
-//        event.setSubgenreList(subgenreList);
+        event.setSubgenreList(subgenreList);
 
         if (ticketRepository.findAllById(dto.getTicketIdList()).isEmpty()) {
             log.info("No tickets found with ids: " + dto.getTicketIdList());

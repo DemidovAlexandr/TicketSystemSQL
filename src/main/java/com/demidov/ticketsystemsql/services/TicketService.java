@@ -92,7 +92,7 @@ public class TicketService {
 
     private void setData(Ticket ticket, TicketInDTO dto) {
 
-        ticket.setLineNumber(dto.getRowNumber());
+        ticket.setLineNumber(dto.getLineNumber());
         ticket.setSeatNumber(dto.getSeatNumber());
         ticket.setPrice(dto.getPrice());
         ticket.setEvent(eventRepository.findById(dto.getEventId())

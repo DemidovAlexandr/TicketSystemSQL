@@ -12,7 +12,7 @@ public class PurchaseOutDTO {
     private LocalDateTime purchaseDate;
 
     private Integer userId;
-    private Integer eventId;
+  //  private Integer eventId;
 
     private List<Integer> ticketIdList;
 

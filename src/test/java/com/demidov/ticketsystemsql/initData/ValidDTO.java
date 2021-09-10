@@ -3,11 +3,9 @@ package com.demidov.ticketsystemsql.initData;
 import com.demidov.ticketsystemsql.dto.in.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -41,21 +39,18 @@ public class ValidDTO {
     private GenreInDTO initGenreDTO() {
         GenreInDTO dto = new GenreInDTO();
         dto.setName("Concert");
-        dto.setSubgenreIdList(List.of(1));
         return dto;
     }
 
     private SubgenreInDTO initSubgenreDTO() {
         SubgenreInDTO dto = new SubgenreInDTO();
         dto.setName("Metal");
-        dto.setGenreId(1);
         return dto;
     }
 
     private ArtistInDTO initArtistDTO() {
         ArtistInDTO dto = new ArtistInDTO();
         dto.setName("Slipknot");
-        dto.setSubgenreIdList(List.of(1));
         return dto;
     }
 
@@ -71,7 +66,7 @@ public class ValidDTO {
 
     private EventInDTO initEventDTO() {
         EventInDTO dto = new EventInDTO();
-        dto.setName("Slipknot concert");
+        dto.setName("Rammstein concert");
         dto.setBeginDate(LocalDate.of(2021, 10, 30));
         dto.setBeginTime(LocalTime.of(19,0));
         dto.setGenreId(1);
@@ -86,14 +81,14 @@ public class ValidDTO {
         TicketInDTO dto = new TicketInDTO();
         dto.setEventId(1);
         dto.setPrice(5000);
-        dto.setRowNumber(1);
+        dto.setLineNumber(1);
         dto.setSeatNumber(1);
         return dto;
     }
 
     private PurchaseInDTO initPurchaseDTO() {
         PurchaseInDTO dto = new PurchaseInDTO();
-        dto.setEventId(1);
+        //dto.setEventId(1);
         dto.setTicketIdList(List.of(1));
         dto.setUserId(1);
         return dto;

@@ -7,5 +7,4 @@ public class SubgenreOutDTO {
 
     private Integer id;
     private String name;
-    private Integer genreId;
 }

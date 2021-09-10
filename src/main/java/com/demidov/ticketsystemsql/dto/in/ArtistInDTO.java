@@ -9,5 +9,4 @@ public class ArtistInDTO {
 
     private Integer id;
     private String name;
-    private List<Integer> subgenreIdList;
 }

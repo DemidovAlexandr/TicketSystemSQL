@@ -9,5 +9,4 @@ public class GenreInDTO {
 
     private Integer id;
     private String name;
-    private List<Integer> subgenreIdList;
 }

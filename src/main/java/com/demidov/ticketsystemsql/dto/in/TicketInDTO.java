@@ -6,9 +6,10 @@ import lombok.Data;
 public class TicketInDTO {
 
     private Integer id;
-    private Integer rowNumber;
+    private Integer lineNumber;
     private Integer seatNumber;
     private Integer price;
     private Integer eventId;
+    private Integer purchaseId;
 
 }

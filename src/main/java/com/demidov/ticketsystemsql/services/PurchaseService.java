@@ -72,7 +72,15 @@ public class PurchaseService {
         Optional<Purchase> optionalPurchase = purchaseRepository.findById(id);
         if (optionalPurchase.isEmpty()) {
             throw new CommonAppException(NO_ORDER_FOUND + id);
-        } else purchaseRepository.deleteById(id);
+        } else {
+            Purchase purchase = optionalPurchase.get();
+            List<Ticket> tickets = purchase.getTicketList();
+            for (Ticket ticket : tickets
+                 ) {
+                purchase.removeTicket(ticket);
+            }
+            purchaseRepository.deleteById(id);
+        }
     }
 
     public PurchaseInDTO toInDTO(Purchase purchase) {
@@ -92,13 +100,17 @@ public class PurchaseService {
                 .orElseThrow(() -> new CommonAppException("No user found with id: " + dto.getUserId()));
         purchase.setUser(user);
 
-        Event event = eventRepository.findById(dto.getEventId())
-                .orElseThrow(() -> new CommonAppException("No event found with id: " + dto.getEventId()));
-        purchase.setEvent(event);
+//        Event event = eventRepository.findById(dto.getEventId())
+//                .orElseThrow(() -> new CommonAppException("No event found with id: " + dto.getEventId()));
+//        purchase.setEvent(event);
 
         List<Ticket> tickets = ticketRepository.findAllById(dto.getTicketIdList())
                 .orElseThrow(() -> new CommonAppException("No tickets found from the id list: " + dto.getTicketIdList()));
-        purchase.setTicketList(tickets);
+
+        for (Ticket ticket : tickets
+             ) {
+            purchase.addTicket(ticket);
+        }
 
         purchase.setPurchaseDate(LocalDateTime.now());
 
