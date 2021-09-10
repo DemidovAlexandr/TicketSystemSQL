@@ -27,21 +27,4 @@ public class Subgenre {
     private String name;
 
 
-    @ManyToOne
-    private Genre genre;
-
-
-    @JoinTable(name = "ARTIST_SUBGENRE",
-            joinColumns = @JoinColumn(name = "SUBGENRE_ID"),
-            inverseJoinColumns = @JoinColumn(name = "ARTIST_ID"))
-    @ManyToMany
-    @ToString.Exclude
-    private List<Artist> artistList;
-
-    @ToString.Exclude
-    @JoinTable(name = "SUBGENRE_EVENT",
-            joinColumns = @JoinColumn(name = "SUBGENRE_ID"),
-            inverseJoinColumns = @JoinColumn(name = "EVENT_ID"))
-    @ManyToMany
-    private List<Event> eventList;
 }

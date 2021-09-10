@@ -30,11 +30,21 @@ public class Purchase {
     private Event event;
 
     @OrderBy("price")
-    @OneToMany
+    @OneToMany(mappedBy = "purchase")
     @ToString.Exclude
     private List<Ticket> ticketList;
 
     @Column(nullable = false)
     private Integer total;
+
+    public void addTicket(Ticket ticket) {
+        this.ticketList.add(ticket);
+        ticket.setPurchase(this);
+    }
+
+    public void removeTicket(Ticket ticket) {
+        this.ticketList.remove(ticket);
+        ticket.setPurchase(null);
+    }
 
 }

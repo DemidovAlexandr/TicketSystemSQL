@@ -15,7 +15,7 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     List<Event> findAllByBeginDateOrderByBeginTimeAsc(LocalDate date);
 
-    @Query("select e from Event e where e.beginDate = ?1 and e.genre = ?2 and e.venue.city = ?3 order by e.beginTime")
-    List<Event> findAllByDateAndGenreAndCity(LocalDate date, Genre genre, String cityName);
+//    @Query("select e from Event e where e.beginDate = ?1 and e.genre = ?2 and e.venue.city = ?3 order by e.beginTime")
+//    List<Event> findAllByDateAndGenreAndCity(LocalDate date, Genre genre, String cityName);
 
 }

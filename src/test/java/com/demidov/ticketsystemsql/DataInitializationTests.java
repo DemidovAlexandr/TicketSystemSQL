@@ -65,27 +65,27 @@ public class DataInitializationTests {
         Assertions.assertEquals(genreService.getById(genre.getId()).getName(), "Concert");
     }
 
-    @Test
-    public void testSubgenreCreation() {
-        Subgenre subgenre = dataInitializer.getSubgenre();
-        Genre genre = dataInitializer.getGenre();
-        Assertions.assertEquals(genreService.getById(genre.getId()).getSubgenreList().toString(),
-                List.of(subgenreService.getById(subgenre.getId())).toString());
-    }
+//    @Test
+//    public void testSubgenreCreation() {
+//        Subgenre subgenre = dataInitializer.getSubgenre();
+//        Genre genre = dataInitializer.getGenre();
+//        Assertions.assertEquals(genreService.getById(genre.getId()).getSubgenreList().toString(),
+//                List.of(subgenreService.getById(subgenre.getId())).toString());
+//    }
 
-    @Test
-    public void testIfArtistHasSubgenreList() {
-        Artist artist = artistService.getById(dataInitializer.getArtist().getId());
-        Assertions.assertEquals(artist.getSubgenreList().toString(),
-                artistService.getById(artist.getId()).getSubgenreList().toString());
-    }
+//    @Test
+//    public void testIfArtistHasSubgenreList() {
+//        Artist artist = artistService.getById(dataInitializer.getArtist().getId());
+//        Assertions.assertEquals(artist.getSubgenreList().toString(),
+//                artistService.getById(artist.getId()).getSubgenreList().toString());
+//    }
 
-    @Test
-    public void testIfSubgenresHaveGenre() {
-        Subgenre subgenre = dataInitializer.getSubgenre();
-        Assertions.assertEquals(subgenre.getGenre().getName(),
-                subgenreService.getById(subgenre.getId()).getGenre().getName());
-    }
+//    @Test
+//    public void testIfSubgenresHaveGenre() {
+//        Subgenre subgenre = dataInitializer.getSubgenre();
+//        Assertions.assertEquals(subgenre.getGenre().getName(),
+//                subgenreService.getById(subgenre.getId()).getGenre().getName());
+//    }
 
     @Test
     public void testIfVenueInitialized() {

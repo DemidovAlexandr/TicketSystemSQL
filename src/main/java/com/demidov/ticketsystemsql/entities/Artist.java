@@ -19,8 +19,8 @@ public class Artist {
 
     private String name;
 
-    @ManyToMany(mappedBy = "artistList")
-    @ToString.Exclude
-    private List<Subgenre> subgenreList;
+//    @ManyToMany(mappedBy = "artistList", cascade = CascadeType.ALL)
+//    @ToString.Exclude
+//    private List<Subgenre> subgenreList;
 
 }

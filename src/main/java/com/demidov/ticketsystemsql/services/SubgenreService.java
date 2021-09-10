@@ -80,12 +80,12 @@ public class SubgenreService {
             throw new CommonAppException(SUBGENRE_EXISTS + subgenreRepository.findByNameAllIgnoreCase(dto.getName()).get().getId());
         } else subgenre.setName(dto.getName());
 
-        Optional<Genre> optionalGenre = genreRepository.findById(dto.getGenreId());
-        if (optionalGenre.isPresent()) {
-            Genre genre = optionalGenre.get();
-            subgenre.setGenre(genre);
-            genre.getSubgenreList().add(subgenre);
+//        Optional<Genre> optionalGenre = genreRepository.findById(dto.getGenreId());
+//        if (optionalGenre.isPresent()) {
+//            Genre genre = optionalGenre.get();
+//            subgenre.setGenre(genre);
+//            genre.getSubgenreList().add(subgenre);
 
-        } else throw new CommonAppException(NO_GENRE_MESSAGE + dto.getGenreId());
+       // } else throw new CommonAppException(NO_GENRE_MESSAGE + dto.getGenreId());
     }
 }

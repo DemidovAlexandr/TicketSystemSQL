@@ -3,13 +3,14 @@ package com.demidov.ticketsystemsql.entities;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
-@ToString
 public class Ticket {
 
     @Id
@@ -24,8 +25,12 @@ public class Ticket {
     private Integer price;
 
     @JoinColumn(nullable = false)
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Event event;
+
+    @ManyToOne
+    private Purchase purchase;
 
 
 }

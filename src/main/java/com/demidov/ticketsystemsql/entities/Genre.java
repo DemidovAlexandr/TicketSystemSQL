@@ -25,13 +25,9 @@ public class Genre {
 
     private String name;
 
-    @OneToMany(mappedBy = "genre", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @Nullable
-    @ToString.Exclude
-    private List<Subgenre> subgenreList;
+//    @OneToMany(mappedBy = "genre", cascade = CascadeType.REMOVE, orphanRemoval = true)
+//    @Nullable
+//    @ToString.Exclude
+//    private List<Subgenre> subgenreList;
 
-    @OneToMany(mappedBy = "genre", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @Nullable
-    @ToString.Exclude
-    private List<Event> eventList;
 }

@@ -74,8 +74,8 @@ public class ArtistService {
 
     private void setData(Artist artist, ArtistInDTO dto) {
         artist.setName(dto.getName());
-        List<Subgenre> subgenreList = subgenreRepository.findAllById(dto.getSubgenreIdList())
-                .orElseThrow(() -> new CommonAppException(NO_SUBGENRE_MESSAGE + dto.getSubgenreIdList()));
-        artist.setSubgenreList(subgenreList);
+//        List<Subgenre> subgenreList = subgenreRepository.findAllById(dto.getSubgenreIdList())
+//                .orElseThrow(() -> new CommonAppException(NO_SUBGENRE_MESSAGE + dto.getSubgenreIdList()));
+//        artist.setSubgenreList(subgenreList);
     }
 }

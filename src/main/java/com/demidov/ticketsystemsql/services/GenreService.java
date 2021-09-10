@@ -88,7 +88,7 @@ public class GenreService {
 
     private void setData(Genre genre, GenreInDTO dto) {
         genre.setName(dto.getName());
-        List<Subgenre> subgenreList = subgenreRepository.findAllById(dto.getSubgenreIdList()).orElse(List.of());
-        genre.setSubgenreList(subgenreList);
+        //List<Subgenre> subgenreList = subgenreRepository.findAllById(dto.getSubgenreIdList()).orElse(List.of());
+        //genre.setSubgenreList(subgenreList);
     }
 }

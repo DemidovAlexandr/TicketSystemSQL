@@ -9,13 +9,19 @@ import org.springframework.lang.Nullable;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@ToString
 public class Event {
+
+    /*ManyToMany SubgenreList
+    * ManyToOne Genre
+    * ManyToOne Venue
+    * ManyToMany ArtistList
+    * */
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,27 +38,37 @@ public class Event {
     @JsonFormat(pattern = "HH:mm")
     private LocalTime beginTime;
 
-    @OneToOne
+    @ManyToOne
     private Venue venue;
 
-    @OneToMany
-    @ToString.Exclude
-    private List<Artist> artistList;
-
-    @JoinColumn
-    @ToString.Exclude
     @ManyToOne
-    @Nullable
     private Genre genre;
 
+    @JoinTable(name = "Event_Subgenre",
+            joinColumns = @JoinColumn(name = "Event_id"),
+            inverseJoinColumns = @JoinColumn(name = "Subgenre_id"))
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Subgenre> subgenreList = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "eventList")
-    @ToString.Exclude
-    private List<Subgenre> subgenreList;
+    @JoinTable(name = "EVENT_ARTIST",
+            joinColumns = @JoinColumn(name = "EVENT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "ARTIST_ID"))
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Artist> artistList = new ArrayList<>();
 
-    @ToString.Exclude
+//    @JoinColumn
+//    @ToString.Exclude
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @Nullable
+//    private Genre genre;
+
+
+//    @ManyToMany(mappedBy = "eventList", cascade = CascadeType.ALL)
+//    @ToString.Exclude
+//    private List<Subgenre> subgenreList;
+
     @Nullable
     @OrderBy("lineNumber, seatNumber ASC")
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ticket> ticketList;
+    private List<Ticket> ticketList=new ArrayList<>();
 }
