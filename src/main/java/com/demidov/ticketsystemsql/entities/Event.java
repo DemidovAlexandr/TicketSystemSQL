@@ -66,18 +66,6 @@ public class Event {
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Subgenre> subgenreList = new ArrayList<>();
 
-
-//    @JoinColumn
-//    @ToString.Exclude
-//    @ManyToOne(cascade = CascadeType.ALL)
-//    @Nullable
-//    private Genre genre;
-
-
-//    @ManyToMany(mappedBy = "eventList", cascade = CascadeType.ALL)
-//    @ToString.Exclude
-//    private List<Subgenre> subgenreList;
-
     @Nullable
     @OrderBy("lineNumber, seatNumber ASC")
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -92,5 +80,15 @@ public class Event {
         assert ticketList != null;
         ticketList.remove(ticket);
         ticket.setEvent(null);
+    }
+
+    public void addSubgenre(Subgenre subgenre) {
+        assert subgenreList != null;
+        subgenreList.add(subgenre);
+    }
+
+    public void removeSubgenre(Subgenre subgenre) {
+        assert subgenreList != null;
+        subgenreList.remove(subgenre);
     }
 }

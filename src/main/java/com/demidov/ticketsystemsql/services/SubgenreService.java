@@ -2,17 +2,16 @@ package com.demidov.ticketsystemsql.services;
 
 import com.demidov.ticketsystemsql.dto.in.SubgenreInDTO;
 import com.demidov.ticketsystemsql.dto.out.SubgenreOutDTO;
-import com.demidov.ticketsystemsql.entities.Genre;
+import com.demidov.ticketsystemsql.entities.Event;
 import com.demidov.ticketsystemsql.entities.Subgenre;
 import com.demidov.ticketsystemsql.exceptions.CommonAppException;
-import com.demidov.ticketsystemsql.repositories.GenreRepository;
+import com.demidov.ticketsystemsql.repositories.EventRepository;
 import com.demidov.ticketsystemsql.repositories.SubgenreRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,11 +21,10 @@ public class SubgenreService {
 
     private static final String NO_SUBGENRE_MESSAGE = "There is no such subgenre with id: ";
     private static final String SUBGENRE_EXISTS = "Subgenre with such name already exists, id: ";
-    private static final String NO_GENRE_MESSAGE = "There is no such genre with id: ";
     private final static String DTO_IS_NULL = "DTO must not be null";
 
     private final SubgenreRepository subgenreRepository;
-    private final GenreRepository genreRepository;
+    private final EventRepository eventRepository;
     private final ObjectMapper mapper;
 
     public Subgenre getById(Integer id) {
@@ -59,7 +57,17 @@ public class SubgenreService {
     public void deleteById(Integer id) {
         if (!subgenreRepository.existsById(id)) {
             throw new CommonAppException(NO_SUBGENRE_MESSAGE + id);
-        } else subgenreRepository.deleteById(id);
+        } else {
+            Subgenre subgenre = subgenreRepository.getById(id);
+            List<Event> eventList = eventRepository.findAllBySubgenre(subgenre);
+            if (!eventList.isEmpty()) {
+                for (Event event : eventList
+                ) {
+                    event.removeSubgenre(subgenre);
+                }
+            }
+            subgenreRepository.deleteById(id);
+        }
     }
 
     public SubgenreInDTO toInDTO(Subgenre subgenre) {
