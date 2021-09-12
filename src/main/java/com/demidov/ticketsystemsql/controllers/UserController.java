@@ -22,14 +22,14 @@ public class UserController {
 
     @GetMapping(path = "/{id}")
     public @ResponseBody
-    UserOutDTO getById(@PathVariable Integer id) {
-        return webService.getById(id);
+    UserOutDTO getById(@PathVariable Integer id, @RequestParam(value = "isDeleted") boolean isDeleted) {
+        return webService.getById(id, isDeleted);
     }
 
     @GetMapping(path = "/all")
     public @ResponseBody
-    List<UserOutDTO> getAll() {
-        return webService.getAll();
+    List<UserOutDTO> getAll(@RequestParam(value = "isDeleted", required = false, defaultValue = "false") boolean isDeleted) {
+        return webService.getAll(isDeleted);
     }
 
     @PostMapping

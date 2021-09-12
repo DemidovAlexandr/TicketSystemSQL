@@ -1,68 +1,62 @@
 package com.demidov.ticketsystemsql.controllerTests;
 
-import com.demidov.ticketsystemsql.dto.in.GenreInDTO;
-import com.demidov.ticketsystemsql.entities.Genre;
+import com.demidov.ticketsystemsql.dto.in.UserInDTO;
 import com.demidov.ticketsystemsql.exceptions.CommonAppException;
 import com.demidov.ticketsystemsql.initData.DataInitializer;
 import com.demidov.ticketsystemsql.initData.ValidDTO;
-import com.demidov.ticketsystemsql.repositories.GenreRepository;
-import com.demidov.ticketsystemsql.services.GenreService;
+import com.demidov.ticketsystemsql.repositories.UserRepository;
+import com.demidov.ticketsystemsql.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.ConfigurableMockMvcBuilder;
-import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
 
-import java.util.Objects;
+import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DirtiesContext(classMode = BEFORE_EACH_TEST_METHOD)
 @Slf4j
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
-public class GenreControllerTest {
+public class UserControllerTest {
+
+    @Autowired
+    ObjectMapper objectMapper;
+    @Autowired
+    UserService userService;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    ValidDTO validDTO;
 
     private MockMvc mockMvc;
 
     @Autowired
     private DataInitializer dataInitializer;
-
-    @Autowired
-    ObjectMapper objectMapper;
-
-    @Autowired
-    GenreService genreService;
-
-    @Autowired
-    GenreRepository genreRepository;
-
-    @Autowired
-    ValidDTO validDTO;
 
     @BeforeEach
     public void setUp(WebApplicationContext webApplicationContext,
@@ -76,25 +70,45 @@ public class GenreControllerTest {
 
     @Test
     public void testGetById() throws Exception {
-        String uri = "/genres/{id}";
-        this.mockMvc.perform(get(uri, dataInitializer.getGenre().getId()).contentType(MediaType.APPLICATION_JSON))
+        String uri = "/users/{id}";
+        Integer id = dataInitializer.getUser().getId();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+        this.mockMvc.perform(get(uri, id).param("isDeleted", String.valueOf(false)).contentType(MediaType.APPLICATION_JSON))
                 .andDo(document(uri.replace("/", "\\")))
-                .andExpect(jsonPath("name").value(dataInitializer.getGenre().getName()))
+                .andExpect(jsonPath("name").value(validDTO.getUserInDTO().getName()))
+                .andExpect(jsonPath("telephone").value(validDTO.getUserInDTO().getTelephone()))
+                .andExpect(jsonPath("dateOfBirth")
+                        .value(validDTO.getUserInDTO().getDateOfBirth().format(formatter)))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void testGetAll() throws Exception {
-        String uri = "/genres/all";
-        this.mockMvc.perform(get(uri).contentType(MediaType.APPLICATION_JSON))
+    public void testGetAllNotDeleted() throws Exception {
+        String uri = "/users/all";
+        this.mockMvc.perform(get(uri).param("isDeleted", String.valueOf(false)).contentType(MediaType.APPLICATION_JSON))
                 .andDo(document(uri.replace("/", "\\")))
+                .andExpect(jsonPath("$.[0].name").value(validDTO.getUserInDTO().getName()))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void testCreateGenre_NameExists() throws Exception {
-        String uri = "/genres/";
-        GenreInDTO dto = validDTO.getGenreInDTO();
+    public void testCreateWithTestName() throws Exception {
+        String uri = "/users/";
+        UserInDTO dto = userService.toInDTO(dataInitializer.getUser());
+        dto.setName("Test");
+        String content = objectMapper.writeValueAsString(dto);
+        this.mockMvc.perform(put(uri).contentType(MediaType.APPLICATION_JSON).content(content))
+                .andDo(print())
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(jsonPath("name").value(dto.getName()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testCreateWithEmailTaken() throws Exception {
+        String uri = "/users/";
+        UserInDTO dto = userService.toInDTO(dataInitializer.getUser());
         String content = objectMapper.writeValueAsString(dto);
 
         Throwable exception = assertThrows(CommonAppException.class, () ->
@@ -106,42 +120,30 @@ public class GenreControllerTest {
                 throw e.getCause();
             }
         });
-        assertEquals(exception.getMessage(), "Genre with such name already exists, id: "
-                + genreService.getByName(dto.getName()).getId());
+        assertEquals(exception.getMessage(), "This email is already registered: " + dto.getEmail());
     }
 
     @Test
-    public void testCreateGenreWithTestName() throws Exception {
-        String uri = "/genres/";
-        GenreInDTO dto = validDTO.getGenreInDTO();
-        dto.setName("Test");
-        String content = objectMapper.writeValueAsString(dto);
-        this.mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
-                .andDo(document(uri.replace("/", "\\")))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("name").value("Test"));
-    }
-
-    @Test
-    public void testUpdateGenreWithTestName() throws Exception {
-        String uri = "/genres/";
-        GenreInDTO dto = genreService.toInDTO(genreService.getByName(validDTO.getGenreInDTO().getName()));
+    public void testUpdateWithTestName() throws Exception {
+        String uri = "/users/";
+        UserInDTO dto = userService.toInDTO(dataInitializer.getUser());
         dto.setName("Test");
         String content = objectMapper.writeValueAsString(dto);
         this.mockMvc.perform(put(uri).contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(document(uri.replace("/", "\\")))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("name").value("Test"));
+                .andExpect(jsonPath("name").value(dto.getName()))
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void deleteGenre() throws Exception {
-        String uri = "/genres/{id}";
-        Integer id = genreService.getByName(validDTO.getGenreInDTO().getName()).getId();
-        assertTrue(genreRepository.existsById(id), "There is no genre to delete with this id");
+    public void testDeleteById() throws Exception {
+        String uri = "/users/{id}";
+        Integer id = dataInitializer.getUser().getId();
+        assertTrue(userRepository.existsById(id), "There is no User to delete with this id");
         this.mockMvc.perform(delete(uri, id).contentType(MediaType.APPLICATION_JSON))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());
-        assertFalse(genreRepository.existsById(id), "Genre was not deleted");
+        assertTrue(userRepository.existsById(id), "User deleted completely");
+        assertTrue(userRepository.getById(id).isDeleted(), "User's deleted flag is set to false");
     }
 }

@@ -2,6 +2,7 @@ package com.demidov.ticketsystemsql.services;
 
 import com.demidov.ticketsystemsql.dto.in.TicketInDTO;
 import com.demidov.ticketsystemsql.dto.out.TicketOutDTO;
+import com.demidov.ticketsystemsql.entities.Event;
 import com.demidov.ticketsystemsql.entities.Ticket;
 import com.demidov.ticketsystemsql.exceptions.CommonAppException;
 import com.demidov.ticketsystemsql.repositories.EventRepository;
@@ -48,7 +49,10 @@ public class TicketService {
 
         if (!checkIfUnique(ticket)) {
             throw new CommonAppException(NOT_UNIQUE_TICKET + ticket);
-        } else return ticketRepository.save(ticket);
+        } else {
+            ticket.getEvent().addTicket(ticket);
+            return ticket;
+        }
     }
 
     @Transactional
@@ -66,6 +70,9 @@ public class TicketService {
     public void deleteById(Integer id) {
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
         if (optionalTicket.isPresent()) {
+            Ticket ticket = optionalTicket.get();
+            Event event = ticket.getEvent();
+            event.removeTicket(ticket);
             ticketRepository.deleteById(id);
         } else throw new CommonAppException(NO_TICKET_MESSAGE + id);
     }
@@ -95,7 +102,10 @@ public class TicketService {
         ticket.setLineNumber(dto.getLineNumber());
         ticket.setSeatNumber(dto.getSeatNumber());
         ticket.setPrice(dto.getPrice());
-        ticket.setEvent(eventRepository.findById(dto.getEventId())
-                .orElseThrow(() -> new CommonAppException(NO_EVENT_MESSAGE + dto.getEventId())));
+
+        Event event = eventRepository.findById(dto.getEventId())
+                .orElseThrow(() -> new CommonAppException(NO_EVENT_MESSAGE + dto.getEventId()));
+        ticket.setEvent(event);
+
     }
 }

@@ -5,6 +5,7 @@ import com.demidov.ticketsystemsql.dto.out.PurchaseOutDTO;
 import com.demidov.ticketsystemsql.services.PurchaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,14 +34,17 @@ public class PurchaseWebService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public PurchaseOutDTO create(PurchaseInDTO dto) {
         return purchaseService.toOutDTO(purchaseService.create(dto));
     }
 
+    @Transactional
     public PurchaseOutDTO update(PurchaseInDTO dto) {
         return purchaseService.toOutDTO(purchaseService.update(dto));
     }
 
+    @Transactional
     public void deleteById(Integer id) {
         purchaseService.deleteById(id);
     }

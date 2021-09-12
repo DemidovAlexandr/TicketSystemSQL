@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface TicketRepository extends JpaRepository<Ticket, Integer> {
 
     @Query("select t from Ticket t where t.id in :idList")
-    Optional<List<Ticket>> findAllById(List<Integer> idList);
+    List<Ticket> findAllById(List<Integer> idList);
 
     Optional<List<Ticket>> findAllByEvent_IdOrderByLineNumberAscSeatNumberAsc(Integer eventId);
 

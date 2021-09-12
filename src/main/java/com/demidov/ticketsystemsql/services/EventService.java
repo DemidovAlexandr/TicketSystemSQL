@@ -136,9 +136,8 @@ public class EventService {
 
         if (ticketRepository.findAllById(dto.getTicketIdList()).isEmpty()) {
             log.info("No tickets found with ids: " + dto.getTicketIdList());
-            event.setTicketList(List.of());
         } else {
-            List<Ticket> ticketList = ticketRepository.findAllById(dto.getTicketIdList()).get();
+            List<Ticket> ticketList = ticketRepository.findAllById(dto.getTicketIdList());
             event.setTicketList(ticketList);
         }
     }

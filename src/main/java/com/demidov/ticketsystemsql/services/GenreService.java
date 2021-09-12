@@ -2,13 +2,16 @@ package com.demidov.ticketsystemsql.services;
 
 import com.demidov.ticketsystemsql.dto.in.GenreInDTO;
 import com.demidov.ticketsystemsql.dto.out.GenreOutDTO;
+import com.demidov.ticketsystemsql.entities.Event;
 import com.demidov.ticketsystemsql.entities.Genre;
 import com.demidov.ticketsystemsql.entities.Subgenre;
 import com.demidov.ticketsystemsql.exceptions.CommonAppException;
+import com.demidov.ticketsystemsql.repositories.EventRepository;
 import com.demidov.ticketsystemsql.repositories.GenreRepository;
 import com.demidov.ticketsystemsql.repositories.SubgenreRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +27,7 @@ public class GenreService {
     private static final String DTO_IS_NULL = "DTO must not be null";
 
     private final GenreRepository genreRepository;
-    private final SubgenreRepository subgenreRepository;
+    private final EventRepository eventRepository;
     private final ObjectMapper mapper;
 
 
@@ -71,7 +74,15 @@ public class GenreService {
     public void deleteById(Integer id) {
         if (!genreRepository.existsById(id)) {
             throw new CommonAppException(NO_GENRE_MESSAGE + id);
-        } else genreRepository.deleteById(id);
+        } else {
+            Genre genre = genreRepository.getById(id);
+            List<Event> eventList = eventRepository.findAllByGenre(genre);
+            for (Event event : eventList
+                 ) {
+                event.setGenre(null);
+            }
+            genreRepository.deleteById(id);
+        }
     }
 
     public GenreInDTO toInDTO(Genre genre) {
@@ -88,7 +99,5 @@ public class GenreService {
 
     private void setData(Genre genre, GenreInDTO dto) {
         genre.setName(dto.getName());
-        //List<Subgenre> subgenreList = subgenreRepository.findAllById(dto.getSubgenreIdList()).orElse(List.of());
-        //genre.setSubgenreList(subgenreList);
     }
 }

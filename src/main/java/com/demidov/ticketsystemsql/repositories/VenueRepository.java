@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface VenueRepository extends JpaRepository<Venue, Integer> {
-    Optional<List<Venue>> findAllByCityOrderByName(String city);
+    List<Venue> findAllByCityOrderByName(String city);
 }

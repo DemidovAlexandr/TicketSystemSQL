@@ -29,9 +29,7 @@ public class Ticket {
     @Column(nullable = false)
     private Integer price;
 
-    @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Event event;
 
     @ManyToOne

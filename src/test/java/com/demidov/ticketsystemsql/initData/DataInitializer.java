@@ -33,6 +33,7 @@ public class DataInitializer {
     private Event event;
     private Ticket ticket;
     private Purchase purchase;
+    private User deletedUser;
 
 
     public void initData() {
@@ -44,6 +45,7 @@ public class DataInitializer {
         initEvent();
         initTicket();
         initPurchase();
+        initDeletedUser();
     }
 
     @Transactional
@@ -60,39 +62,52 @@ public class DataInitializer {
         this.subgenre = subgenre;
     }
 
-    private void initArtist() {
+    @Transactional
+    public void initArtist() {
         Artist artist = artistService.create(validDTO.getArtistInDTO());
         log.info("Created Artist: {}", artist);
         this.artist = artist;
     }
 
-    private void initUser() {
+    @Transactional
+    public void initUser() {
         User user = userService.create(validDTO.getUserInDTO());
         log.info("Created user: {}", user);
         this.user = user;
     }
 
-    private void initVenue() {
+    @Transactional
+    public void initVenue() {
         Venue venue = venueService.create(validDTO.getVenueInDTO());
         log.info("Created venue: {}", venue);
         this.venue = venue;
     }
 
-    private void initEvent() {
+    @Transactional
+    public void initEvent() {
         Event event = eventService.create(validDTO.getEventInDTO());
         log.info("Created event: {}", event);
         this.event = event;
     }
 
-    private void initTicket() {
+    @Transactional
+    public void initTicket() {
         Ticket ticket = ticketService.create(validDTO.getTicketInDTO());
         log.info("Created ticket: {}", ticket);
         this.ticket = ticket;
     }
 
-    private void initPurchase() {
+    @Transactional
+    public void initPurchase() {
         Purchase purchase = purchaseService.create(validDTO.getPurchaseInDTO());
         log.info("Created purchase: {}", purchase);
         this.purchase = purchase;
+    }
+
+    @Transactional
+    public void initDeletedUser() {
+        User user = userService.create(validDTO.getDeletedUserInDto());
+        log.info("Created deleted user: {}", user);
+        this.deletedUser = user;
     }
 }

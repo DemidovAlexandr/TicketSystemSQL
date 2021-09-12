@@ -80,6 +80,17 @@ public class Event {
 
     @Nullable
     @OrderBy("lineNumber, seatNumber ASC")
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ticket> ticketList=new ArrayList<>();
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ticket> ticketList = new ArrayList<>();
+
+    public void addTicket(Ticket ticket) {
+        assert ticketList != null;
+        ticketList.add(ticket);
+    }
+
+    public void removeTicket(Ticket ticket) {
+        assert ticketList != null;
+        ticketList.remove(ticket);
+        ticket.setEvent(null);
+    }
 }

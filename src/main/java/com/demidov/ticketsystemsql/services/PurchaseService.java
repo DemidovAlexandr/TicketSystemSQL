@@ -104,8 +104,10 @@ public class PurchaseService {
 //                .orElseThrow(() -> new CommonAppException("No event found with id: " + dto.getEventId()));
 //        purchase.setEvent(event);
 
-        List<Ticket> tickets = ticketRepository.findAllById(dto.getTicketIdList())
-                .orElseThrow(() -> new CommonAppException("No tickets found from the id list: " + dto.getTicketIdList()));
+        List<Ticket> tickets = ticketRepository.findAllById(dto.getTicketIdList());
+        if (tickets.isEmpty()) {
+            throw new CommonAppException("No tickets found from the id list: " + dto.getTicketIdList());
+        }
 
         for (Ticket ticket : tickets
              ) {

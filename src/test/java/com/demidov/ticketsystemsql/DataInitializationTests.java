@@ -86,8 +86,8 @@ public class DataInitializationTests {
     @Test
     public void testUserCreation() {
         User user = dataInitializer.getUser();
-        assertEquals(user.getDateOfBirth(), userService.getById(user.getId()).getDateOfBirth());
-        assertEquals(user.getName(), userService.getById(user.getId()).getName());
+        assertEquals(user.getDateOfBirth(), userService.getById(user.getId(), false).getDateOfBirth());
+        assertEquals(user.getName(), userService.getById(user.getId(), false).getName());
     }
 
     @Test
@@ -124,11 +124,17 @@ public class DataInitializationTests {
     }
 
     @Test
-    public void testIfPurchaseInitialized() {
+    public void testPurchaseCreation() {
         Purchase purchase = dataInitializer.getPurchase();
         User user = dataInitializer.getUser();
         Ticket ticket = dataInitializer.getTicket();
         Assertions.assertEquals(user.toString(), purchaseService.getById(purchase.getId()).getUser().toString());
         Assertions.assertEquals(ticket.getPrice(), purchaseService.getById(purchase.getId()).getTotal());
+    }
+
+    @Test
+    public void testDeletedUserCreation() {
+        User user = dataInitializer.getDeletedUser();
+        Assertions.assertEquals(user.toString(), userService.getById(user.getId(), user.isDeleted()).toString());
     }
 }

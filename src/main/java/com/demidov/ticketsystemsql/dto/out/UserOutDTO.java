@@ -19,4 +19,6 @@ public class UserOutDTO {
     private String city;
 
     private List<Integer> purchaseIdList;
+
+    private boolean isDeleted;
 }

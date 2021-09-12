@@ -2,8 +2,10 @@ package com.demidov.ticketsystemsql.services;
 
 import com.demidov.ticketsystemsql.dto.in.VenueInDTO;
 import com.demidov.ticketsystemsql.dto.out.VenueOutDTO;
+import com.demidov.ticketsystemsql.entities.Event;
 import com.demidov.ticketsystemsql.entities.Venue;
 import com.demidov.ticketsystemsql.exceptions.CommonAppException;
+import com.demidov.ticketsystemsql.repositories.EventRepository;
 import com.demidov.ticketsystemsql.repositories.VenueRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ public class VenueService {
     private final static String DTO_IS_NULL = "DTO must not be null";
 
     private final VenueRepository venueRepository;
+    private final EventRepository eventRepository;
     private final ObjectMapper mapper;
 
     public Venue getById(Integer id) {
@@ -35,9 +38,9 @@ public class VenueService {
     }
 
     public List<Venue> getAllByCity(String city) {
-        Optional<List<Venue>> venueList = venueRepository.findAllByCityOrderByName(city);
-        if (venueList.isPresent()) {
-            return venueList.get();
+        List<Venue> venueList = venueRepository.findAllByCityOrderByName(city);
+        if (!venueList.isEmpty()) {
+            return venueList;
         } else throw new CommonAppException("No venues found in the city: " + city);
     }
 
@@ -60,7 +63,15 @@ public class VenueService {
     public void deleteById(Integer id) {
         if (!venueRepository.existsById(id)) {
             throw new CommonAppException(NO_VENUE_MESSAGE + id);
-        } else venueRepository.deleteById(id);
+        } else {
+            Venue venue = venueRepository.getById(id);
+            List<Event> eventList = eventRepository.findAllByVenue(venue);
+            for (Event event : eventList
+                 ) {
+                event.setVenue(null);
+            }
+            venueRepository.deleteById(id);
+        }
     }
 
     public VenueInDTO toInDTO(Venue venue) {

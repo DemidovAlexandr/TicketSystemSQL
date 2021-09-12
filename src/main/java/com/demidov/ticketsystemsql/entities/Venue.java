@@ -5,11 +5,11 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.apache.commons.lang3.builder.ToStringExclude;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,4 +29,19 @@ public class Venue {
     private String streetAddress;
     private String description;
     private String contacts;
+
+    @ToString.Exclude
+    @ToStringExclude
+    @OneToMany(mappedBy = "venue")
+    private List<Event> eventList = new ArrayList<>();
+
+    public void addEvent(Event event) {
+        eventList.add(event);
+        event.setVenue(this);
+    }
+
+    public void removeEvent(Event event) {
+        eventList.remove(event);
+        event.setVenue(null);
+    }
 }

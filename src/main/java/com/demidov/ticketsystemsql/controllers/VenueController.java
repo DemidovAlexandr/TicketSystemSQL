@@ -4,11 +4,13 @@ import com.demidov.ticketsystemsql.dto.in.VenueInDTO;
 import com.demidov.ticketsystemsql.dto.out.VenueOutDTO;
 import com.demidov.ticketsystemsql.enums.ControllerMessages;
 import com.demidov.ticketsystemsql.webservices.VenueWebService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping(path = "/venues")
 public class VenueController {
@@ -28,9 +30,14 @@ public class VenueController {
 
     @GetMapping(path = "/all")
     public @ResponseBody
-    List<VenueOutDTO> getAll() {
-        return webService.getAll();
+    List<VenueOutDTO> getAll(@RequestParam(value = "city", required = false) String city) {
+        if (city == null) {
+            return webService.getAll();
+        } else {
+            return webService.getAllByCity(city);
+        }
     }
+
 
     @PostMapping
     public VenueOutDTO create(@RequestBody VenueInDTO dto) {

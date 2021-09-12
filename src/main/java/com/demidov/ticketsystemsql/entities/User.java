@@ -6,9 +6,11 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.*;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,6 +21,10 @@ import java.util.List;
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
+@SQLDelete(sql = "UPDATE user SET deleted = true WHERE id=?")
+//@Where(clause = "deleted = false")
+@FilterDef(name = "deletedUserFilter", parameters = @ParamDef(name = "isDeleted", type = "boolean"))
+@Filter(name = "deletedUserFilter", condition = "deleted = :isDeleted")
 public class User {
 
     @Id
@@ -42,4 +48,6 @@ public class User {
     @OneToMany(mappedBy = "user")
     @Nullable
     private List<Purchase> purchaseList;
+
+    private boolean deleted = Boolean.FALSE;
 }

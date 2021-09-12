@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ValidDTO {
 
+    private final UserInDTO deletedUserInDto = initDeletedUser();
     private final UserInDTO userInDTO = initUserDto();
     private final GenreInDTO genreInDTO = initGenreDTO();
     private final SubgenreInDTO subgenreInDTO = initSubgenreDTO();
@@ -23,6 +24,19 @@ public class ValidDTO {
     private final TicketInDTO ticketInDTO = initTicketDTO();
     private final PurchaseInDTO purchaseInDTO = initPurchaseDTO();
 
+
+    private UserInDTO initDeletedUser() {
+        UserInDTO dto = new UserInDTO();
+        dto.setName("John");
+        dto.setSurname("Doe");
+        dto.setDateOfBirth(LocalDate.of(1985, 11, 5));
+        dto.setCity("Moscow");
+        dto.setTelephone("+79231234567");
+        dto.setEmail("john@johnwebsite.com");
+        dto.setPurchaseIdList(List.of());
+        dto.setDeleted(true);
+        return dto;
+    }
 
     private UserInDTO initUserDto() {
         UserInDTO dto = new UserInDTO();
