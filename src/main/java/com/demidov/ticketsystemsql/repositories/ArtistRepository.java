@@ -11,4 +11,6 @@ public interface ArtistRepository extends JpaRepository<Artist, Integer> {
 
     @Query("select a from Artist a where a.id in :idList")
     Optional<List<Artist>> findAllById(List<Integer> idList);
+
+    Optional<Artist> findArtistByName(String name);
 }

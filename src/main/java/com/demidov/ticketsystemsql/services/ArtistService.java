@@ -3,9 +3,11 @@ package com.demidov.ticketsystemsql.services;
 import com.demidov.ticketsystemsql.dto.in.ArtistInDTO;
 import com.demidov.ticketsystemsql.dto.out.ArtistOutDTO;
 import com.demidov.ticketsystemsql.entities.Artist;
+import com.demidov.ticketsystemsql.entities.Event;
 import com.demidov.ticketsystemsql.entities.Subgenre;
 import com.demidov.ticketsystemsql.exceptions.CommonAppException;
 import com.demidov.ticketsystemsql.repositories.ArtistRepository;
+import com.demidov.ticketsystemsql.repositories.EventRepository;
 import com.demidov.ticketsystemsql.repositories.SubgenreRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +22,10 @@ import java.util.Optional;
 public class ArtistService {
 
     private static final String NO_ARTIST_MESSAGE = "There is no such artist with id: ";
-    private static final String NO_SUBGENRE_MESSAGE = "There is no such subgenre with id: ";
     private static final String DTO_IS_NULL = "DTO must not be null";
 
     private final ArtistRepository artistRepository;
-    private final SubgenreRepository subgenreRepository;
+    private final EventRepository eventRepository;
     private final ObjectMapper mapper;
 
     public Artist getById(Integer artistId) {
@@ -40,8 +41,12 @@ public class ArtistService {
 
     @Transactional
     public Artist create(ArtistInDTO dto) {
+        if (artistRepository.findArtistByName(dto.getName()).isPresent()) {
+            Artist artist = artistRepository.findArtistByName(dto.getName()).get();
+            throw new CommonAppException("Artist with that name already exists, id: " + artist.getId());
+        }
         Artist artist = new Artist();
-        setData(artist, dto);
+        artist.setName(dto.getName());
         return artistRepository.save(artist);
     }
 
@@ -49,7 +54,7 @@ public class ArtistService {
     public Artist update(ArtistInDTO dto) {
         Artist artist = artistRepository.findById(dto.getId())
                 .orElseThrow(() -> new CommonAppException(NO_ARTIST_MESSAGE + dto.getId()));
-        setData(artist, dto);
+        artist.setName(dto.getName());
         return artistRepository.save(artist);
     }
 
@@ -57,7 +62,17 @@ public class ArtistService {
     public void deleteById(Integer artistId) {
         if (!artistRepository.existsById(artistId)) {
             throw new CommonAppException(NO_ARTIST_MESSAGE + artistId);
-        } else artistRepository.deleteById(artistId);
+        } else {
+            Artist artist = artistRepository.getById(artistId);
+            List<Event> events = eventRepository.findAllByArtist(artist);
+            if(!events.isEmpty()) {
+                for (Event event : events
+                     ) {
+                    event.removeArtist(artist);
+                }
+            }
+            artistRepository.deleteById(artistId);
+        }
     }
 
     public ArtistInDTO toInDTO(Artist artist) {
@@ -70,12 +85,5 @@ public class ArtistService {
         return Optional.ofNullable(artist)
                 .map(entity -> mapper.convertValue(entity, ArtistOutDTO.class))
                 .orElseThrow(() -> new CommonAppException(DTO_IS_NULL));
-    }
-
-    private void setData(Artist artist, ArtistInDTO dto) {
-        artist.setName(dto.getName());
-//        List<Subgenre> subgenreList = subgenreRepository.findAllById(dto.getSubgenreIdList())
-//                .orElseThrow(() -> new CommonAppException(NO_SUBGENRE_MESSAGE + dto.getSubgenreIdList()));
-//        artist.setSubgenreList(subgenreList);
     }
 }

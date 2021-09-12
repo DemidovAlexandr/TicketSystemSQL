@@ -21,6 +21,9 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     @Query("select e from Event e where :subgenre member of e.subgenreList")
     List<Event> findAllBySubgenre(@Param("subgenre") Subgenre subgenre);
 
+    @Query("select e from Event e where :artist member of e.artistList")
+    List<Event> findAllByArtist(@Param("artist") Artist artist);
+
 //    @Query("select e from Event e where e.beginDate = ?1 and e.genre = ?2 and e.venue.city = ?3 order by e.beginTime")
 //    List<Event> findAllByDateAndGenreAndCity(LocalDate date, Genre genre, String cityName);
 

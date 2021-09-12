@@ -91,4 +91,14 @@ public class Event {
         assert subgenreList != null;
         subgenreList.remove(subgenre);
     }
+
+    public void addArtist(Artist artist) {
+        assert artistList != null;
+        artistList.add(artist);
+    }
+
+    public void removeArtist(Artist artist) {
+        assert artistList != null;
+        artistList.remove(artist);
+    }
 }
