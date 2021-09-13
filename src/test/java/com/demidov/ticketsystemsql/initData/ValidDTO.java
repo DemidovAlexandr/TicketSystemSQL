@@ -112,7 +112,6 @@ public class ValidDTO {
 
     private PurchaseInDTO initPurchaseDTO() {
         PurchaseInDTO dto = new PurchaseInDTO();
-        //dto.setEventId(1);
         dto.setTicketIdList(List.of(1));
         dto.setUserId(1);
         dto.setPaidFor(false);

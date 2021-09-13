@@ -26,7 +26,6 @@ import java.util.List;
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
 @SQLDelete(sql = "UPDATE event SET deleted = true WHERE id=?")
-//@Where(clause = "deleted = false")
 @FilterDef(name = "deletedEventFilter", parameters = @ParamDef(name = "isDeleted", type = "boolean"))
 @Filter(name = "deletedEventFilter", condition = "deleted = :isDeleted")
 public class Event {

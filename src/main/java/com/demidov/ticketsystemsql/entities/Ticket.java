@@ -30,6 +30,7 @@ public class Ticket {
     @Column(nullable = false)
     private Integer price;
 
+
     @JoinColumn(nullable = false)
     @ManyToOne(optional = false)
     private Event event;
@@ -39,5 +40,8 @@ public class Ticket {
     @Nullable
     private Purchase purchase;
 
-
+    @Override
+    public String toString() {
+        return "Ticket [lineNumber=" + lineNumber + ", seatNumber=" + seatNumber + ", price=" + price + ", eventId=" + event.getId() + "]";
+    }
 }

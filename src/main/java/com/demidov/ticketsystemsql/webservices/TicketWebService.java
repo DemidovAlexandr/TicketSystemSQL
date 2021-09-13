@@ -20,6 +20,13 @@ public class TicketWebService {
         return ticketService.toOutDTO(ticketService.getById(id));
     }
 
+    public List<TicketOutDTO> getAll() {
+        return ticketService.getAll()
+                .stream()
+                .map(ticketService::toOutDTO)
+                .collect(Collectors.toList());
+    }
+
     public List<TicketOutDTO> getAllByEvent(Integer eventId) {
         return ticketService.getAllByEventId(eventId)
                 .stream()

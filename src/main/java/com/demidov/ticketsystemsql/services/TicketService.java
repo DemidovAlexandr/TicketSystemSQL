@@ -35,6 +35,10 @@ public class TicketService {
         } else throw new CommonAppException(NO_TICKET_MESSAGE + id);
     }
 
+    public List<Ticket> getAll() {
+        return ticketRepository.findAll();
+    }
+
     public List<Ticket> getAllByEventId(Integer id) {
         List<Ticket> ticketList = ticketRepository.findAllByEvent_IdOrderByLineNumberAscSeatNumberAsc(id);
         if (!ticketList.isEmpty()) {
@@ -44,12 +48,11 @@ public class TicketService {
 
     @Transactional
     public Ticket create(TicketInDTO dto) {
-        Ticket ticket = new Ticket();
-        setData(ticket, dto);
-
-        if (!checkIfUnique(ticket)) {
-            throw new CommonAppException(NOT_UNIQUE_TICKET + ticket);
+        if (checkIfNotUnique(dto)) {
+            throw new CommonAppException(NOT_UNIQUE_TICKET + dto);
         } else {
+            Ticket ticket = new Ticket();
+            setData(ticket, dto);
             ticket.getEvent().addTicket(ticket);
             return ticketRepository.save(ticket);
         }
@@ -59,11 +62,13 @@ public class TicketService {
     public Ticket update(TicketInDTO dto) {
         Ticket ticket = ticketRepository.findById(dto.getId())
                 .orElseThrow(() -> new CommonAppException(NO_TICKET_MESSAGE + dto.getId()));
-        setData(ticket, dto);
 
-        if (!checkIfUnique(ticket)) {
-            throw new CommonAppException(NOT_UNIQUE_TICKET + ticket);
-        } else return ticketRepository.save(ticket);
+        if (checkIfNotUnique(dto)) {
+            throw new CommonAppException(NOT_UNIQUE_TICKET + dto);
+        } else {
+            setData(ticket, dto);
+            return ticketRepository.save(ticket);
+        }
     }
 
     @Transactional
@@ -77,24 +82,36 @@ public class TicketService {
         } else throw new CommonAppException(NO_TICKET_MESSAGE + id);
     }
 
-    private boolean checkIfUnique(Ticket ticket) {
-        Integer rowNumber = ticket.getLineNumber();
-        Integer seatNumber = ticket.getSeatNumber();
-        Integer price = ticket.getPrice();
-        Integer eventId = ticket.getEvent().getId();
-        return ticketRepository.findByEvent_IdAndPriceAndLineNumberAndSeatNumber(eventId, price, rowNumber, seatNumber).isEmpty();
+    private boolean checkIfNotUnique(TicketInDTO dto) {
+        Integer rowNumber = dto.getLineNumber();
+        Integer seatNumber = dto.getSeatNumber();
+        Integer eventId = dto.getEventId();
+        return ticketRepository.findByEvent_IdAndLineNumberAndSeatNumber(eventId, rowNumber, seatNumber).isPresent();
     }
 
     public TicketInDTO toInDTO(Ticket ticket) {
-        return Optional.ofNullable(ticket)
-                .map(entity -> mapper.convertValue(entity, TicketInDTO.class))
-                .orElseThrow(() -> new CommonAppException(DTO_IS_NULL));
+        if (ticket == null) throw new CommonAppException(DTO_IS_NULL);
+        TicketInDTO dto = new TicketInDTO();
+        dto.setEventId(ticket.getEvent().getId());
+        dto.setPurchaseId(ticket.getPurchase() != null ? ticket.getPurchase().getId() : null);
+        dto.setPrice(ticket.getPrice());
+        dto.setLineNumber(ticket.getLineNumber());
+        dto.setSeatNumber(ticket.getSeatNumber());
+
+        return dto;
     }
 
     public TicketOutDTO toOutDTO(Ticket ticket) {
-        return Optional.ofNullable(ticket)
-                .map(entity -> mapper.convertValue(entity, TicketOutDTO.class))
-                .orElseThrow(() -> new CommonAppException(DTO_IS_NULL));
+        if (ticket == null) throw new CommonAppException(DTO_IS_NULL);
+        TicketOutDTO dto = new TicketOutDTO();
+        dto.setId(ticket.getId());
+        dto.setEventId(ticket.getEvent().getId());
+        dto.setPurchaseId(ticket.getPurchase() != null ? ticket.getPurchase().getId() : null);
+        dto.setPrice(ticket.getPrice());
+        dto.setLineNumber(ticket.getLineNumber());
+        dto.setSeatNumber(ticket.getSeatNumber());
+
+        return dto;
     }
 
     private void setData(Ticket ticket, TicketInDTO dto) {

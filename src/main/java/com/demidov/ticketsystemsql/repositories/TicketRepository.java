@@ -1,6 +1,5 @@
 package com.demidov.ticketsystemsql.repositories;
 
-import com.demidov.ticketsystemsql.entities.Purchase;
 import com.demidov.ticketsystemsql.entities.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,5 +22,5 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     @Query("select t from Ticket t where t.event.id = :eventId and t.purchase.id = :purchaseId")
     List<Ticket> findAllByEvent_IdAndPurchase_Id(@Param("eventId") Integer eventId, @Param("purchaseId") @Nullable Integer purchaseId);
 
-    Optional<Ticket> findByEvent_IdAndPriceAndLineNumberAndSeatNumber(Integer eventId, Integer price, Integer rowNumber, Integer SeatNumber);
+    Optional<Ticket> findByEvent_IdAndLineNumberAndSeatNumber(Integer eventId, Integer lineNumber, Integer SeatNumber);
 }

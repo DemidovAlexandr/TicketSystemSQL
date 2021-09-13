@@ -20,15 +20,16 @@ public class TicketController {
         this.webService = webService;
     }
 
-    @GetMapping(path = {"/{id}"})
+    @GetMapping("/{id}")
     public @ResponseBody
     TicketOutDTO getById(@PathVariable Integer id) {
         return webService.getById(id);
     }
 
-    @GetMapping(path = {"/{eventId}"})
-    public List<TicketOutDTO> getByEventId(@PathVariable Integer eventId) {
-        return webService.getAllByEvent(eventId);
+    @GetMapping(path = {"/all"})
+    public List<TicketOutDTO> getAll(@RequestParam(value = "eventId", required = false) Integer eventId) {
+        if(eventId == null) {return webService.getAll();
+        } else return webService.getAllByEvent(eventId);
     }
 
     @PostMapping

@@ -6,7 +6,7 @@ import lombok.Data;
 public class TicketOutDTO {
 
     private Integer id;
-    private Integer rowNumber;
+    private Integer lineNumber;
     private Integer seatNumber;
     private Integer price;
     private Integer eventId;
