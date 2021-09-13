@@ -67,7 +67,10 @@ public class PurchaseService {
                 .orElseThrow(() -> new CommonAppException(NO_ORDER_FOUND + dto.getId()));
 
         setData(purchase, dto);
-        return purchaseRepository.save(purchase);
+        purchaseRepository.save(purchase);
+        addTickets(purchase, dto);
+
+        return purchase;
     }
 
     @Transactional
@@ -131,17 +134,22 @@ public class PurchaseService {
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> new CommonAppException("No user found with id: " + dto.getUserId()));
         purchase.setUser(user);
-
-//        Event event = eventRepository.findById(dto.getEventId())
-//                .orElseThrow(() -> new CommonAppException("No event found with id: " + dto.getEventId()));
-//        purchase.setEvent(event);
     }
 
     @Transactional
     public void addTickets(Purchase purchase, PurchaseInDTO dto) {
-        List<Ticket> tickets = ticketRepository.findAllById(dto.getTicketIdList());
+        List<Ticket> purchasedTickets = purchase.getTicketList();
+        if (!purchasedTickets.isEmpty()) {
+            for (Ticket ticket: purchasedTickets
+                 ) {
+                ticket.setPurchase(null);
+            }
+            purchase.setTicketList(new ArrayList<>());
+        }
+
+        List<Ticket> tickets = ticketRepository.findAllByIdAvailable(dto.getTicketIdList(), dto.getId()); //Only tickets w/o purchase
         if (tickets.isEmpty()) {
-            throw new CommonAppException("No tickets found from the id list: " + dto.getTicketIdList());
+            throw new CommonAppException("No available tickets found from the id list: " + dto.getTicketIdList());
         }
 
         for (Ticket ticket : tickets

@@ -1,5 +1,6 @@
 package com.demidov.ticketsystemsql.controllerTests;
 
+import com.demidov.ticketsystemsql.dto.in.PurchaseInDTO;
 import com.demidov.ticketsystemsql.exceptions.CommonAppException;
 import com.demidov.ticketsystemsql.initData.DataInitializer;
 import com.demidov.ticketsystemsql.initData.ValidDTO;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -26,11 +28,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -81,6 +86,37 @@ public class PurchaseControllerTest {
     }
 
     @Test
+    public void testCreatePurchase() throws Exception {
+        String uri = "/purchases/";
+        PurchaseInDTO dto = validDTO.getPurchaseInDTO();
+        List<Integer> ticketIdList = List.of(dataInitializer.getAvailableTicket().getId());
+        dto.setTicketIdList(ticketIdList);
+        String content = objectMapper.writeValueAsString(dto);
+
+        this.mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
+                .andDo(print())
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(jsonPath("total").value(dataInitializer.getAvailableTicket().getPrice()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testUpdatePurchase() throws Exception {
+        String uri = "/purchases/";
+        PurchaseInDTO dto = purchaseService.toInDTO(dataInitializer.getPurchase());
+        List<Integer> ticketIdList = List.of(dataInitializer.getAvailableTicket().getId(), dataInitializer.getTicket().getId());
+        dto.setTicketIdList(ticketIdList);
+        String content = objectMapper.writeValueAsString(dto);
+
+        this.mockMvc.perform(put(uri).contentType(MediaType.APPLICATION_JSON).content(content))
+                .andDo(print())
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(jsonPath("total").value(dataInitializer.getAvailableTicket().getPrice()
+                        + dataInitializer.getTicket().getPrice()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     public void testGetAll() throws Exception {
         String uri = "/purchases/all";
 
@@ -89,7 +125,15 @@ public class PurchaseControllerTest {
                 .andExpect(status().isOk());
     }
 
-
+    @Test
+    public void testGetAllByUser() throws Exception {
+        String uri = "/purchases/all";
+        this.mockMvc.perform(get(uri).param("userId", validDTO.getPurchaseInDTO().getUserId().toString())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(jsonPath("$.[0].userId").value(1))
+                .andExpect(status().isOk());
+    }
 
     @Test
     public void testDeletePurchaseById() throws Exception {

@@ -22,6 +22,7 @@ public class ValidDTO {
     private final VenueInDTO venueInDTO = initVenueDTO();
     private final EventInDTO eventInDTO = initEventDTO();
     private final TicketInDTO ticketInDTO = initTicketDTO();
+    private final TicketInDTO availableTicket = initAvailableTicket();
     private final PurchaseInDTO purchaseInDTO = initPurchaseDTO();
 
 
@@ -96,6 +97,15 @@ public class ValidDTO {
         dto.setEventId(1);
         dto.setPrice(5000);
         dto.setLineNumber(1);
+        dto.setSeatNumber(1);
+        return dto;
+    }
+
+    private TicketInDTO initAvailableTicket() {
+        TicketInDTO dto = new TicketInDTO();
+        dto.setEventId(1);
+        dto.setPrice(8500);
+        dto.setLineNumber(2);
         dto.setSeatNumber(1);
         return dto;
     }

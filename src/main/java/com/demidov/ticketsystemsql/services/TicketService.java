@@ -36,9 +36,9 @@ public class TicketService {
     }
 
     public List<Ticket> getAllByEventId(Integer id) {
-        Optional<List<Ticket>> optionalTickets = ticketRepository.findAllByEvent_IdOrderByLineNumberAscSeatNumberAsc(id);
-        if (optionalTickets.isPresent()) {
-            return optionalTickets.get();
+        List<Ticket> ticketList = ticketRepository.findAllByEvent_IdOrderByLineNumberAscSeatNumberAsc(id);
+        if (!ticketList.isEmpty()) {
+            return ticketList;
         } else throw new CommonAppException("No tickets found for event with id: " + id);
     }
 

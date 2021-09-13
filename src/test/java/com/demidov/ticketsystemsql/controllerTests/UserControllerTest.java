@@ -91,24 +91,25 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.[0].name").value(validDTO.getUserInDTO().getName()))
                 .andExpect(status().isOk());
     }
-
     @Test
     public void testCreateWithTestName() throws Exception {
         String uri = "/users/";
-        UserInDTO dto = userService.toInDTO(dataInitializer.getUser());
+        UserInDTO dto = validDTO.getUserInDTO();
         dto.setName("Test");
+        dto.setEmail("test@email.com");
         String content = objectMapper.writeValueAsString(dto);
-        this.mockMvc.perform(put(uri).contentType(MediaType.APPLICATION_JSON).content(content))
+        this.mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(print())
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(jsonPath("name").value(dto.getName()))
+                .andExpect(jsonPath("email").value(dto.getEmail()))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void testCreateWithEmailTaken() throws Exception {
         String uri = "/users/";
-        UserInDTO dto = userService.toInDTO(dataInitializer.getUser());
+        UserInDTO dto = validDTO.getUserInDTO();
         String content = objectMapper.writeValueAsString(dto);
 
         Throwable exception = assertThrows(CommonAppException.class, () ->

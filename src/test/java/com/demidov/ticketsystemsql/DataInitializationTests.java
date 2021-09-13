@@ -137,4 +137,11 @@ public class DataInitializationTests {
         User user = dataInitializer.getDeletedUser();
         Assertions.assertEquals(user.toString(), userService.getById(user.getId(), user.isDeleted()).toString());
     }
+
+    @Test
+    public void testAvailableTicketCreation() {
+        Ticket ticket = dataInitializer.getAvailableTicket();
+        Assertions.assertEquals(ticket.getPrice(), ticketService.getById(ticket.getId()).getPrice());
+        Assertions.assertEquals(ticket.getEvent().getName(), ticketService.getById(ticket.getId()).getEvent().getName());
+    }
 }

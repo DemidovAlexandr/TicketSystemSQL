@@ -34,6 +34,7 @@ public class DataInitializer {
     private Ticket ticket;
     private Purchase purchase;
     private User deletedUser;
+    private Ticket availableTicket;
 
 
     public void initData() {
@@ -46,6 +47,7 @@ public class DataInitializer {
         initTicket();
         initPurchase();
         initDeletedUser();
+        initAvailableTicket();
     }
 
     @Transactional
@@ -109,5 +111,12 @@ public class DataInitializer {
         User user = userService.create(validDTO.getDeletedUserInDto());
         log.info("Created deleted user: {}", user);
         this.deletedUser = user;
+    }
+
+    @Transactional
+    public void initAvailableTicket() {
+        Ticket ticket = ticketService.create(validDTO.getAvailableTicket());
+        log.info("Created available ticket: {}", ticket);
+        this.availableTicket = ticket;
     }
 }
