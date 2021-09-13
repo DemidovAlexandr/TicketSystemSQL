@@ -1,4 +1,6 @@
 package com.demidov.ticketsystemsql.controllerTests;
+import com.demidov.ticketsystemsql.dto.in.EventInDTO;
+import com.demidov.ticketsystemsql.dto.out.EventOutDTO;
 import com.demidov.ticketsystemsql.entities.Event;
 import com.demidov.ticketsystemsql.entities.Subgenre;
 import com.demidov.ticketsystemsql.exceptions.CommonAppException;
@@ -31,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
@@ -78,7 +81,54 @@ public class EventControllerTest {
     }
 
     @Test
-    public void testGetEventBySubgenre() throws Exception {
+    public void testGetEventById() throws Exception {
+        String uri = "/events/{id}";
+        Integer id = dataInitializer.getEvent().getId();
+        EventInDTO dto = eventService.toInDTO(dataInitializer.getEvent());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+        this.mockMvc.perform(get(uri, id).contentType(MediaType.APPLICATION_JSON))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(jsonPath("name").value(dto.getName()))
+                .andExpect(jsonPath("beginDate").value(dto.getBeginDate().format(formatter)))
+                .andExpect(jsonPath("beginTime").value(dto.getBeginTime().toString()))
+                .andExpect(jsonPath("venueId").value(dto.getVenueId()))
+                .andExpect(jsonPath("genreId").value(dto.getGenreId()))
+                .andExpect(jsonPath("artistIdList").value(dto.getArtistIdList()))
+                .andExpect(jsonPath("subgenreIdList").value(dto.getSubgenreIdList()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testGetDeletedEventById() throws Exception {
+        String uri = "/events/{id}";
+        Integer id = dataInitializer.getDeletedEvent().getId();
+        EventInDTO dto = validDTO.getDeletedEventDTO();
+
+        this.mockMvc.perform(get(uri, id).param("isDeleted", String.valueOf(true)).contentType(MediaType.APPLICATION_JSON))
+                        .andDo(document(uri.replace("/", "\\")))
+                        .andExpect(jsonPath("name").value(dto.getName()))
+                        .andExpect(status().isOk());
+
+        assertTrue(eventService.getById(id, true).isDeleted());
+    }
+
+
+    @Test
+    public void testDeleteEventById() throws Exception {
+        String uri = "/events/{id}";
+        Integer id = dataInitializer.getEvent().getId();
+
+        assertTrue(eventRepository.existsById(id), "No event to delete in repository");
+        this.mockMvc.perform(delete(uri, id).contentType(MediaType.APPLICATION_JSON))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(status().isOk());
+        assertTrue(eventRepository.existsById(id), "Event was deleted completely");
+        assertTrue(eventRepository.getById(id).isDeleted(), "Event isDeleted flag is false");
+    }
+
+    @Test
+    public void testGetEventBySubgenre() {
         Subgenre subgenre = dataInitializer.getSubgenre();
         List<Event> eventList = eventRepository.findAllBySubgenre(subgenre);
         assertFalse(eventList.isEmpty());

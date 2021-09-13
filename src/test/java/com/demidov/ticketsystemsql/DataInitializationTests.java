@@ -144,4 +144,28 @@ public class DataInitializationTests {
         Assertions.assertEquals(ticket.getPrice(), ticketService.getById(ticket.getId()).getPrice());
         Assertions.assertEquals(ticket.getEvent().getName(), ticketService.getById(ticket.getId()).getEvent().getName());
     }
+
+    @Test
+    public void testDeletedEventCreation() {
+        Event event = dataInitializer.getDeletedEvent();
+        Event actualEvent = eventService.getById(event.getId(), true);
+        assertEquals(event.getName(), actualEvent.getName());
+        assertEquals(event.getBeginDate(), actualEvent.getBeginDate());
+        assertEquals(event.getBeginTime(), actualEvent.getBeginTime());
+        assertEquals(event.getGenre().toString(), actualEvent.getGenre().toString());
+        assertEquals(event.getSubgenreList().toString(), actualEvent.getSubgenreList().toString());
+        assertEquals(event.getArtistList().toString(), actualEvent.getArtistList().toString());
+        assert event.getTicketList() != null;
+        assert actualEvent.getTicketList() != null;
+        assertEquals(List.of(ticketService.getById(dataInitializer.getDeletedEventTicket().getId())).toString(),
+                actualEvent.getTicketList().toString());
+        assertEquals(event.getVenue().toString(), actualEvent.getVenue().toString());
+    }
+
+    @Test
+    public void testDeletedEventTicketCreation() {
+        Ticket ticket = dataInitializer.getDeletedEventTicket();
+        Assertions.assertEquals(ticket.getPrice(), ticketService.getById(ticket.getId()).getPrice());
+        Assertions.assertEquals(ticket.getEvent().getName(), ticketService.getById(ticket.getId()).getEvent().getName());
+    }
 }

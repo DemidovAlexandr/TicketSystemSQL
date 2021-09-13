@@ -43,8 +43,9 @@ public class EventService {
 
         Optional<Event> optionalEvent = eventRepository.findById(id);
         if (optionalEvent.isPresent()) {
+            Event event = eventRepository.getById(id);
             session.disableFilter("deletedEventFilter");
-            return optionalEvent.get();
+            return event;
         } else {
             session.disableFilter("deletedEventFilter");
             throw new CommonAppException(NO_EVENT_MESSAGE + id);
@@ -135,14 +136,61 @@ public class EventService {
     }
 
     public EventInDTO toInDTO(Event event) {
-        return Optional.ofNullable(event)
-                .map(entity -> mapper.convertValue(entity, EventInDTO.class))
-                .orElseThrow(() -> new CommonAppException(DTO_IS_NULL));
+        if (event == null) throw new CommonAppException(DTO_IS_NULL);
+        EventInDTO dto = new EventInDTO();
+        dto.setName(event.getName());
+        if(event.getVenue() != null) {
+            dto.setVenueId(event.getVenue().getId());
+        } else dto.setVenueId(null);
+        dto.setBeginTime(event.getBeginTime());
+        dto.setBeginDate(event.getBeginDate());
+        if(event.getGenre() != null) {
+            dto.setGenreId(event.getGenre().getId());
+        } else dto.setGenreId(null);
+
+        List<Integer> subgenreIdList = new ArrayList<>();
+        List<Subgenre> subgenreList = event.getSubgenreList();
+        if(subgenreList == null || subgenreList.isEmpty()) {
+            dto.setSubgenreIdList(new ArrayList<>());
+        } else {
+            for (Subgenre subgenre:subgenreList
+                 ) {
+                subgenreIdList.add(subgenre.getId());
+            } dto.setSubgenreIdList(subgenreIdList);
+        }
+
+        List<Integer> artistIdList = new ArrayList<>();
+        List<Artist> artistList = event.getArtistList();
+        if(artistList == null || artistList.isEmpty()) {
+            dto.setArtistIdList(new ArrayList<>());
+        } else {
+            for (Artist artist:artistList
+                 ) {
+                artistIdList.add(artist.getId());
+            } dto.setArtistIdList(artistIdList);
+        }
+
+        List<Integer> ticketIdList = new ArrayList<>();
+        List<Ticket> ticketList = event.getTicketList();
+
+        if (ticketList == null || ticketList.isEmpty()) {
+            dto.setTicketIdList(new ArrayList<>());
+        } else {
+            for (Ticket ticket:ticketList
+                 ) {
+                ticketIdList.add(ticket.getId());
+            } dto.setTicketIdList(ticketIdList);
+        }
+
+        dto.setDeleted(event.isDeleted());
+        return dto;
     }
 
     public EventOutDTO toOutDTO(Event event) {
-        return Optional.ofNullable(event)
-                .map(entity -> mapper.convertValue(entity, EventOutDTO.class))
+        EventInDTO inDto = toInDTO(event);
+        inDto.setId(event.getId());
+        return Optional.of(inDto)
+                .map(entity -> mapper.convertValue(inDto, EventOutDTO.class))
                 .orElseThrow(() -> new CommonAppException(DTO_IS_NULL));
     }
 
@@ -173,5 +221,7 @@ public class EventService {
             List<Ticket> ticketList = ticketRepository.findAllById(dto.getTicketIdList());
             event.setTicketList(ticketList);
         }
+
+        event.setDeleted(dto.isDeleted());
     }
 }

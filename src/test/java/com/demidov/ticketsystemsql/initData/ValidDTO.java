@@ -24,7 +24,8 @@ public class ValidDTO {
     private final TicketInDTO ticketInDTO = initTicketDTO();
     private final TicketInDTO availableTicket = initAvailableTicket();
     private final PurchaseInDTO purchaseInDTO = initPurchaseDTO();
-
+    private final EventInDTO deletedEventDTO = initDeletedEventDTO();
+    private final TicketInDTO deletedEventTicketDTO = initDeletedEventTicket();
 
     private UserInDTO initDeletedUser() {
         UserInDTO dto = new UserInDTO();
@@ -34,7 +35,6 @@ public class ValidDTO {
         dto.setCity("Moscow");
         dto.setTelephone("+79231234567");
         dto.setEmail("john@johnwebsite.com");
-        //dto.setPurchaseIdList(List.of());
         dto.setDeleted(true);
         return dto;
     }
@@ -47,7 +47,6 @@ public class ValidDTO {
         dto.setCity("Moscow");
         dto.setTelephone("+79991234567");
         dto.setEmail("bob@bobwebsite.bob");
-        //dto.setPurchaseIdList(List.of(1));
         return dto;
     }
 
@@ -115,6 +114,29 @@ public class ValidDTO {
         dto.setTicketIdList(List.of(1));
         dto.setUserId(1);
         dto.setPaidFor(false);
+        return dto;
+    }
+
+    private EventInDTO initDeletedEventDTO() {
+        EventInDTO dto = new EventInDTO();
+        dto.setName("Deleted concert");
+        dto.setBeginDate(LocalDate.of(2021, 12, 1));
+        dto.setBeginTime(LocalTime.of(22,0));
+        dto.setGenreId(1);
+        dto.setSubgenreIdList(List.of(1));
+        dto.setArtistIdList(List.of(1));
+        dto.setTicketIdList(List.of(3));
+        dto.setVenueId(1);
+        dto.setDeleted(true);
+        return dto;
+    }
+
+    private TicketInDTO initDeletedEventTicket() {
+        TicketInDTO dto = new TicketInDTO();
+        dto.setEventId(2);
+        dto.setPrice(6000);
+        dto.setLineNumber(1);
+        dto.setSeatNumber(3);
         return dto;
     }
 }

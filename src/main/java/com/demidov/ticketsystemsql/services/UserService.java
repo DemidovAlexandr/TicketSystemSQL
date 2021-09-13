@@ -33,10 +33,11 @@ public class UserService {
         Session session = entityManager.unwrap(Session.class);
         Filter filter = session.enableFilter("deletedUserFilter");
         filter.setParameter("isDeleted", isDeleted);
-        Optional<User> user = userRepository.findById(id);
-        if (user.isPresent()) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
             session.disableFilter("deletedUserFilter");
-            return user.get();
+            return user;
         } else {
             session.disableFilter("deletedUserFilter");
             throw new CommonAppException(NO_USER_MESSAGE + id);

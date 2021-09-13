@@ -84,6 +84,21 @@ public class UserControllerTest {
     }
 
     @Test
+    public void testGetDeletedUserById() throws Exception {
+        String uri = "/users/{id}";
+        Integer id = dataInitializer.getDeletedUser().getId();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+        this.mockMvc.perform(get(uri, id).param("isDeleted", String.valueOf(true)).contentType(MediaType.APPLICATION_JSON))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(jsonPath("name").value(validDTO.getDeletedUserInDto().getName()))
+                .andExpect(jsonPath("telephone").value(validDTO.getDeletedUserInDto().getTelephone()))
+                .andExpect(jsonPath("dateOfBirth")
+                        .value(validDTO.getDeletedUserInDto().getDateOfBirth().format(formatter)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     public void testGetAllNotDeleted() throws Exception {
         String uri = "/users/all";
         this.mockMvc.perform(get(uri).param("isDeleted", String.valueOf(false)).contentType(MediaType.APPLICATION_JSON))
@@ -91,6 +106,16 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.[0].name").value(validDTO.getUserInDTO().getName()))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    public void testGetAllDeleted() throws Exception {
+        String uri = "/users/all";
+        this.mockMvc.perform(get(uri).param("isDeleted", String.valueOf(true)).contentType(MediaType.APPLICATION_JSON))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(jsonPath("$.[0].name").value(validDTO.getDeletedUserInDto().getName()))
+                .andExpect(status().isOk());
+    }
+
     @Test
     public void testCreateWithTestName() throws Exception {
         String uri = "/users/";

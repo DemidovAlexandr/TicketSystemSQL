@@ -35,6 +35,8 @@ public class DataInitializer {
     private Purchase purchase;
     private User deletedUser;
     private Ticket availableTicket;
+    private Event deletedEvent;
+    private Ticket deletedEventTicket;
 
 
     public void initData() {
@@ -48,6 +50,8 @@ public class DataInitializer {
         initPurchase();
         initDeletedUser();
         initAvailableTicket();
+        initDeletedEvent();
+        initDeletedEventTicket();
     }
 
     @Transactional
@@ -118,5 +122,19 @@ public class DataInitializer {
         Ticket ticket = ticketService.create(validDTO.getAvailableTicket());
         log.info("Created available ticket: {}", ticket);
         this.availableTicket = ticket;
+    }
+
+    @Transactional
+    public void initDeletedEvent() {
+        Event event = eventService.create(validDTO.getDeletedEventDTO());
+        log.info("Created deleted event: {}", event);
+        this.deletedEvent = event;
+    }
+
+    @Transactional
+    public void initDeletedEventTicket() {
+        Ticket ticket = ticketService.create(validDTO.getDeletedEventTicketDTO());
+        log.info("Created deleted event ticket: {}", ticket);
+        this.deletedEventTicket = ticket;
     }
 }

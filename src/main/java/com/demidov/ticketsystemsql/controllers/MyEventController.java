@@ -30,7 +30,7 @@ public class MyEventController {
 
     @GetMapping("/artist/{id}")
     public @ResponseBody
-    List<EventOutDTO> searchAll(
+    List<EventOutDTO> getAllByArtist(
             @PathVariable Integer id,
             @RequestParam(value = "isDeleted", required = false, defaultValue = "false") boolean isDeleted) {
         return webService.getAllByArtist(id, isDeleted);
