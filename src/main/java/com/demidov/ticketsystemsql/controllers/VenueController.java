@@ -38,7 +38,6 @@ public class VenueController {
         }
     }
 
-
     @PostMapping
     public VenueOutDTO create(@RequestBody VenueInDTO dto) {
         return webService.create(dto);

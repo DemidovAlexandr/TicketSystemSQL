@@ -28,4 +28,6 @@ public class EventInDTO {
     private List<Integer> subgenreIdList;
 
     private List<Integer> ticketIdList;
+
+    private boolean isDeleted;
 }

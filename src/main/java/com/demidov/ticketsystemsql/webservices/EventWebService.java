@@ -17,31 +17,31 @@ public class EventWebService {
 
     private final EventService eventService;
 
-    public EventOutDTO getById(Integer id) {
-        return eventService.toOutDTO(eventService.getById(id));
+    public EventOutDTO getById(Integer id, boolean isDeleted) {
+        return eventService.toOutDTO(eventService.getById(id, isDeleted));
     }
 
-    public List<EventOutDTO> getAll() {
-        return eventService.getAll().stream()
+    public List<EventOutDTO> getAll(boolean isDeleted) {
+        return eventService.getAll(isDeleted).stream()
                 .map(eventService::toOutDTO)
                 .collect(Collectors.toList());
     }
 
-    public List<EventOutDTO> getAllByArtist(Integer artistId) {
-        return eventService.getAllByArtist(artistId).stream()
+    public List<EventOutDTO> getAllByArtist(Integer artistId, boolean isDeleted) {
+        return eventService.getAllByArtist(artistId, isDeleted).stream()
                 .map(eventService::toOutDTO)
                 .collect(Collectors.toList());
     }
 
-    public List<EventOutDTO> getAllByDate(LocalDate date) {
-        return eventService.getAllByDate(date)
+    public List<EventOutDTO> getAllByDate(LocalDate date, boolean isDeleted) {
+        return eventService.getAllByDate(date, isDeleted)
                 .stream()
                 .map(eventService::toOutDTO)
                 .collect(Collectors.toList());
     }
 
-    public List<EventOutDTO> getAllByDateGenreCity(LocalDate date, Integer genreId, String city) {
-        return eventService.getAllByDateGenreCity(date, genreId, city)
+    public List<EventOutDTO> getAllByDateGenreCity(LocalDate date, Integer genreId, String city, boolean isDeleted) {
+        return eventService.getAllByDateGenreCity(date, genreId, city, isDeleted)
                 .stream()
                 .map(eventService::toOutDTO)
                 .collect(Collectors.toList());

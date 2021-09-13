@@ -18,7 +18,7 @@ public class UserInDTO {
     private String email;
     private String city;
 
-    private List<Integer> purchaseIdList;
+    //private List<Integer> purchaseIdList;
 
     private boolean isDeleted;
 }

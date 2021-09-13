@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.apache.commons.lang3.builder.ToStringExclude;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -31,7 +30,6 @@ public class Venue {
     private String contacts;
 
     @ToString.Exclude
-    @ToStringExclude
     @OneToMany(mappedBy = "venue")
     private List<Event> eventList = new ArrayList<>();
 

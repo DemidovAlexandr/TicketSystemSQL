@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = {"/tickets"})
+@RequestMapping(path = {"/events/tickets"})
 public class TicketController {
 
     private final TicketWebService webService;

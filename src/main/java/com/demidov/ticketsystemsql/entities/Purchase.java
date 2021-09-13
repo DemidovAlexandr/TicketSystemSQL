@@ -1,5 +1,6 @@
 package com.demidov.ticketsystemsql.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class Purchase {
     private Integer id;
 
     @Column(columnDefinition = "TIMESTAMP")
+    @JsonFormat(pattern = "dd.MM.yyyy hh:mm")
     private LocalDateTime purchaseDate;
 
     @JoinColumn(nullable = false)
@@ -36,12 +38,13 @@ public class Purchase {
 //    private Event event;
 
     @OrderBy("price")
-    @OneToMany(mappedBy = "purchase")
-    @ToString.Exclude
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "purchase")
     private List<Ticket> ticketList = new ArrayList<>();
 
     @Column(nullable = false)
-    private Integer total;
+    private Integer total = 0;
+
+    private boolean isPaidFor = Boolean.FALSE;
 
     public void addTicket(Ticket ticket) {
         this.ticketList.add(ticket);
@@ -52,7 +55,4 @@ public class Purchase {
         this.ticketList.remove(ticket);
         ticket.setPurchase(null);
     }
-
-//todo use void methods in PurchaseService
-
 }

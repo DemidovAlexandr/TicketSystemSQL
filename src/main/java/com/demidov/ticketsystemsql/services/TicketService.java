@@ -51,7 +51,7 @@ public class TicketService {
             throw new CommonAppException(NOT_UNIQUE_TICKET + ticket);
         } else {
             ticket.getEvent().addTicket(ticket);
-            return ticket;
+            return ticketRepository.save(ticket);
         }
     }
 

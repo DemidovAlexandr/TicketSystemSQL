@@ -22,7 +22,8 @@ public class UserController {
 
     @GetMapping(path = "/{id}")
     public @ResponseBody
-    UserOutDTO getById(@PathVariable Integer id, @RequestParam(value = "isDeleted") boolean isDeleted) {
+    UserOutDTO getById(@PathVariable Integer id,
+                       @RequestParam(value = "isDeleted", required = false, defaultValue = "false") boolean isDeleted) {
         return webService.getById(id, isDeleted);
     }
 

@@ -23,22 +23,25 @@ public class MyEventController {
 
     @GetMapping(path = "/{id}")
     public @ResponseBody
-    EventOutDTO getById(@PathVariable Integer id) {
-        return webService.getById(id);
+    EventOutDTO getById(@PathVariable Integer id,
+                        @RequestParam(value = "isDeleted", required = false, defaultValue = "false") boolean isDeleted) {
+        return webService.getById(id, isDeleted);
     }
 
-    @GetMapping("/byArtist")
+    @GetMapping("/artist/{id}")
     public @ResponseBody
-    List<EventOutDTO> getAllByArtistName(
-            @RequestParam(value = "artistId") Integer artistId) {
-        return webService.getAllByArtist(artistId);
+    List<EventOutDTO> searchAll(
+            @PathVariable Integer id,
+            @RequestParam(value = "isDeleted", required = false, defaultValue = "false") boolean isDeleted) {
+        return webService.getAllByArtist(id, isDeleted);
     }
 
     @GetMapping("/byDate")
     public @ResponseBody
     List<EventOutDTO> getAllByDate(
-            @RequestParam(value = "localDate") LocalDate localDate) {
-        return webService.getAllByDate(localDate);
+            @RequestParam(value = "localDate") LocalDate localDate,
+            @RequestParam(value = "isDeleted", required = false, defaultValue = "false") boolean isDeleted) {
+        return webService.getAllByDate(localDate, isDeleted);
     }
 
     @GetMapping("/byDateGenreCity")
@@ -46,8 +49,9 @@ public class MyEventController {
     List<EventOutDTO> getAllByDateGenreCity(
             @RequestParam(value = "localDate") LocalDate localDate,
             @RequestParam(value = "genreId") Integer genreId,
-            @RequestParam(value = "city") String city) {
-        return webService.getAllByDateGenreCity(localDate, genreId, city);
+            @RequestParam(value = "city") String city,
+            @RequestParam(value = "isDeleted", required = false, defaultValue = "false") boolean isDeleted) {
+        return webService.getAllByDateGenreCity(localDate, genreId, city, isDeleted);
     }
 
     @PostMapping()

@@ -6,11 +6,13 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.*;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OrderBy;
 import javax.validation.constraints.Null;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -23,6 +25,10 @@ import java.util.List;
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
+@SQLDelete(sql = "UPDATE event SET deleted = true WHERE id=?")
+//@Where(clause = "deleted = false")
+@FilterDef(name = "deletedEventFilter", parameters = @ParamDef(name = "isDeleted", type = "boolean"))
+@Filter(name = "deletedEventFilter", condition = "deleted = :isDeleted")
 public class Event {
 
     /*ManyToMany SubgenreList
@@ -70,6 +76,8 @@ public class Event {
     @OrderBy("lineNumber, seatNumber ASC")
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ticket> ticketList = new ArrayList<>();
+
+    private boolean deleted = Boolean.FALSE;
 
     public void addTicket(Ticket ticket) {
         assert ticketList != null;

@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 
@@ -29,10 +30,13 @@ public class Ticket {
     @Column(nullable = false)
     private Integer price;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(nullable = false)
+    @ManyToOne(optional = false)
     private Event event;
 
+    @JoinColumn
     @ManyToOne
+    @Nullable
     private Purchase purchase;
 
 

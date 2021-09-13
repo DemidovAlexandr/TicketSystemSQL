@@ -1,5 +1,6 @@
 package com.demidov.ticketsystemsql.dto.out;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -9,12 +10,15 @@ import java.util.List;
 public class PurchaseOutDTO {
     private Integer id;
 
+    @JsonFormat(pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime purchaseDate;
 
     private Integer userId;
-  //  private Integer eventId;
+   // private Integer eventId;
 
     private List<Integer> ticketIdList;
 
     private Integer total;
+
+    private boolean isPaidFor;
 }

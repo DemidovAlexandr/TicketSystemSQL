@@ -33,7 +33,7 @@ public class ValidDTO {
         dto.setCity("Moscow");
         dto.setTelephone("+79231234567");
         dto.setEmail("john@johnwebsite.com");
-        dto.setPurchaseIdList(List.of());
+        //dto.setPurchaseIdList(List.of());
         dto.setDeleted(true);
         return dto;
     }
@@ -46,7 +46,7 @@ public class ValidDTO {
         dto.setCity("Moscow");
         dto.setTelephone("+79991234567");
         dto.setEmail("bob@bobwebsite.bob");
-        dto.setPurchaseIdList(List.of(1));
+        //dto.setPurchaseIdList(List.of(1));
         return dto;
     }
 
@@ -105,6 +105,7 @@ public class ValidDTO {
         //dto.setEventId(1);
         dto.setTicketIdList(List.of(1));
         dto.setUserId(1);
+        dto.setPaidFor(false);
         return dto;
     }
 }

@@ -2,6 +2,7 @@ package com.demidov.ticketsystemsql.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,6 +45,7 @@ public class User {
     private String email;
     private String city;
 
+    @JsonIgnore
     @ToString.Exclude
     @OneToMany(mappedBy = "user")
     @Nullable

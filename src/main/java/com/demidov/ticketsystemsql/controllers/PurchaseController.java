@@ -26,16 +26,14 @@ public class PurchaseController {
         return webService.getById(id);
     }
 
+
     @GetMapping(path = {"/all"})
     public @ResponseBody
-    List<PurchaseOutDTO> getAll() {
-        return webService.getAll();
-    }
-
-    @GetMapping(path = {"/search"})
-    public @ResponseBody
-    List<PurchaseOutDTO> getAllByUser(@RequestParam(value = "userId") Integer userId) {
-        return webService.getAllByUser(userId);
+    List<PurchaseOutDTO> getAll(
+            @RequestParam(value = "userId", required = false) Integer userId) {
+        if (userId == null) {
+            return webService.getAll();
+        } else return webService.getAllByUser(userId);
     }
 
     @PostMapping

@@ -93,7 +93,7 @@ public class DataInitializationTests {
     @Test
     public void testEventCreation() {
         Event event = dataInitializer.getEvent();
-        Event actualEvent = eventService.getById(event.getId());
+        Event actualEvent = eventService.getById(event.getId(), false);
         assertEquals(event.getName(), actualEvent.getName());
         assertEquals(event.getBeginDate(), actualEvent.getBeginDate());
         assertEquals(event.getBeginTime(), actualEvent.getBeginTime());
@@ -118,7 +118,7 @@ public class DataInitializationTests {
     public void testIfEventsFoundByArtist() {
         Artist artist = dataInitializer.getArtist();
         Event event = dataInitializer.getEvent();
-        List<Event> events = eventService.getAllByArtist(artist.getId());
+        List<Event> events = eventService.getAllByArtist(artist.getId(), false);
         Assertions.assertEquals(events.size(), 1);
         Assertions.assertEquals(event.getName(), events.get(0).getName());
     }
