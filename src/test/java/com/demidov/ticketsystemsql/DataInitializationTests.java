@@ -102,7 +102,8 @@ public class DataInitializationTests {
         assertEquals(event.getArtistList().toString(), actualEvent.getArtistList().toString());
         assert event.getTicketList() != null;
         assert actualEvent.getTicketList() != null;
-        assertEquals(List.of(ticketService.getById(dataInitializer.getTicket().getId())).toString(),
+        assertEquals(List.of(ticketService.getById(dataInitializer.getTicket().getId()),
+                ticketService.getById(dataInitializer.getAvailableTicket().getId())).toString(),
                 actualEvent.getTicketList().toString());
         assertEquals(event.getVenue().toString(), actualEvent.getVenue().toString());
     }
@@ -165,6 +166,66 @@ public class DataInitializationTests {
     @Test
     public void testDeletedEventTicketCreation() {
         Ticket ticket = dataInitializer.getDeletedEventTicket();
+        Assertions.assertEquals(ticket.getPrice(), ticketService.getById(ticket.getId()).getPrice());
+        Assertions.assertEquals(ticket.getEvent().getName(), ticketService.getById(ticket.getId()).getEvent().getName());
+    }
+
+    @Test
+    public void testMovieGenreCreation() {
+        Genre genre = dataInitializer.getMovieGenre();
+        assertEquals(genre.getName(), genreService.getById(genre.getId()).getName());
+    }
+
+    @Test
+    public void testActionSubgenreCreation() {
+        Subgenre subgenre = dataInitializer.getActionSubgenre();
+        assertEquals(subgenre.getName(), subgenreService.getById(subgenre.getId()).getName());
+    }
+
+    @Test
+    public void testComedySubgenreCreation() {
+        Subgenre subgenre = dataInitializer.getComedySubgenre();
+        assertEquals(subgenre.getName(), subgenreService.getById(subgenre.getId()).getName());
+    }
+
+    @Test
+    public void testMovieArtistCreation() {
+        Artist artist = dataInitializer.getMovieArtist();
+        assertEquals(artist.getName(), artistService.getById(artist.getId()).getName());
+    }
+
+    @Test
+    public void testAnotherMovieArtistCreation() {
+        Artist artist = dataInitializer.getAnotherMovieArtist();
+        assertEquals(artist.getName(), artistService.getById(artist.getId()).getName());
+    }
+
+    @Test
+    public void testCinemaVenueCreation() {
+        Venue venue = dataInitializer.getCinemaVenue();
+        assertEquals(venue.getName(), venueService.getById(venue.getId()).getName());
+    }
+
+    @Test
+    public void testMovieEventCreation() {
+        Event event = dataInitializer.getMovieEvent();
+        Event actualEvent = eventService.getById(event.getId(), false);
+        assertEquals(event.getName(), actualEvent.getName());
+        assertEquals(event.getBeginDate(), actualEvent.getBeginDate());
+        assertEquals(event.getBeginTime(), actualEvent.getBeginTime());
+        assertEquals(event.getGenre().toString(), actualEvent.getGenre().toString());
+        assertEquals(event.getSubgenreList().toString(), actualEvent.getSubgenreList().toString());
+        assertEquals(event.getArtistList().toString(), actualEvent.getArtistList().toString());
+        assert event.getTicketList() != null;
+        assert actualEvent.getTicketList() != null;
+        assertEquals(List.of(ticketService.getById(dataInitializer.getMovieTicket().getId())).toString(),
+                actualEvent.getTicketList().toString());
+        assertEquals(event.getVenue().toString(), actualEvent.getVenue().toString());
+    }
+
+    @Test
+    public void testMovieTicketCreation() {
+        Ticket ticket = dataInitializer.getMovieTicket();
         Assertions.assertEquals(ticket.getPrice(), ticketService.getById(ticket.getId()).getPrice());
         Assertions.assertEquals(ticket.getEvent().getName(), ticketService.getById(ticket.getId()).getEvent().getName());
     }

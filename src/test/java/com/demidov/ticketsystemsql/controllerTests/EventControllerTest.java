@@ -112,6 +112,11 @@ public class EventControllerTest {
     }
 
     @Test
+    public void testGetAllEventsByVenue() throws Exception {
+        String uri = "/events/";
+    }
+
+    @Test
     public void testDeleteEventById() throws Exception {
         String uri = "/events/{id}";
         Integer id = dataInitializer.getEvent().getId();
