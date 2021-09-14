@@ -5,6 +5,7 @@ import com.demidov.ticketsystemsql.dto.out.EventOutDTO;
 import com.demidov.ticketsystemsql.enums.ControllerMessages;
 import com.demidov.ticketsystemsql.webservices.EventWebService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -53,8 +54,8 @@ public class MyEventController {
     @GetMapping("/search")
     public @ResponseBody
     List<EventOutDTO> searchAll(
-            @RequestParam(value = "fromDate") LocalDate fromDate,
-            @RequestParam(value = "toDate") LocalDate toDate,
+            @RequestParam(value = "fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fromDate,
+            @RequestParam(value = "toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate toDate,
             @RequestParam(value = "city") String city,
             @RequestParam(value = "genreId", required = false) Integer genreId,
             @RequestParam(value = "subgenreId", required = false) Integer subgenreId,

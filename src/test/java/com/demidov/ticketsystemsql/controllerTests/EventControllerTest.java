@@ -1,5 +1,7 @@
 package com.demidov.ticketsystemsql.controllerTests;
 import com.demidov.ticketsystemsql.dto.in.EventInDTO;
+import com.demidov.ticketsystemsql.dto.in.SubgenreInDTO;
+import com.demidov.ticketsystemsql.dto.in.VenueInDTO;
 import com.demidov.ticketsystemsql.entities.Event;
 import com.demidov.ticketsystemsql.entities.Subgenre;
 import com.demidov.ticketsystemsql.initData.DataInitializer;
@@ -23,6 +25,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -113,7 +117,120 @@ public class EventControllerTest {
 
     @Test
     public void testGetAllEventsByVenue() throws Exception {
+        String uri = "/events/venues/{id}";
+        Integer id = dataInitializer.getVenue().getId();
+
+        this.mockMvc.perform(get(uri, id).contentType(MediaType.APPLICATION_JSON))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[0].name").value(dataInitializer.getEvent().getName()));;
+    }
+
+    @Test
+    public void getAllEventsByArtist() throws Exception {
+        String uri = "/events/artists/{id}";
+        Integer id = dataInitializer.getArtist().getId();
+
+        this.mockMvc.perform(get(uri, id).contentType(MediaType.APPLICATION_JSON))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[0].name").value(dataInitializer.getEvent().getName()));
+    }
+
+    @Test
+    public void testSearchByDatesAndCity() throws Exception {
+        EventInDTO eventDto = validDTO.getEventInDTO();
+        VenueInDTO venueDto = validDTO.getVenueInDTO();
+        String uri = "/events/search";
+        String fromDate = LocalDate.of(2021, 9, 30).toString();
+        String toDate = LocalDate.of(2021, 11, 5).toString();
+        String city = venueDto.getCity();
+
+        this.mockMvc.perform(get(uri).param("fromDate", fromDate).param("toDate", toDate).param("city", city)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(jsonPath("$.[0].name").value(eventDto.getName()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testSearchByDatesAndCityAndGenre() throws Exception {
+        EventInDTO eventDto = validDTO.getEventInDTO();
+        VenueInDTO venueDto = validDTO.getVenueInDTO();
+        String uri = "/events/search";
+        String fromDate = LocalDate.of(2021, 9, 30).toString();
+        String toDate = LocalDate.of(2021, 11, 5).toString();
+        String city = venueDto.getCity();
+        Integer genreId = eventDto.getGenreId();
+
+        this.mockMvc.perform(get(uri).param("fromDate", fromDate)
+                        .param("toDate", toDate)
+                        .param("city", city)
+                        .param("genreId", String.valueOf(genreId))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(jsonPath("$.[0].name").value(eventDto.getName()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testSearchByDatesAndCityAndGenreAndSubgenre() throws Exception {
+        EventInDTO eventDto = validDTO.getMovieEventInDTO();
+        VenueInDTO venueDto = validDTO.getCinemaVenueDTO();
+
+        String uri = "/events/search";
+        String fromDate = LocalDate.of(2021, 9, 1).toString();
+        String toDate = LocalDate.of(2021, 11, 5).toString();
+        String city = venueDto.getCity();
+        Integer genreId = eventDto.getGenreId();
+        Integer subgenreId = dataInitializer.getComedySubgenre().getId();
+
+        this.mockMvc.perform(get(uri).param("fromDate", fromDate)
+                        .param("toDate", toDate)
+                        .param("city", city)
+                        .param("genreId", String.valueOf(genreId))
+                        .param("subgenreId", String.valueOf(subgenreId))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(jsonPath("$.[0].name").value(eventDto.getName()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testCreateEvent() throws Exception {
+        EventInDTO dto = validDTO.getMovieEventInDTO();
+        dto.setBeginDate(LocalDate.of(2021, 9, 26));
+
         String uri = "/events/";
+        String content = objectMapper.writeValueAsString(dto);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+        this.mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("name").value(dto.getName()))
+                .andExpect(jsonPath("beginDate").value(dto.getBeginDate().format(formatter)));
+    }
+
+    @Test
+    public void testUpdateEvent() throws Exception {
+        EventInDTO dto = eventService.toInDTO(dataInitializer.getMovieEvent());
+        List<Integer> subgenreIdList = List.of(dataInitializer.getActionSubgenre().getId());
+
+        dto.setBeginDate(dto.getBeginDate().plusDays(1L));
+        dto.setBeginTime(dto.getBeginTime().plusHours(3L));
+        dto.setSubgenreIdList(subgenreIdList);
+
+        String uri = "/events/";
+        String content = objectMapper.writeValueAsString(dto);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+        this.mockMvc.perform(put(uri).contentType(MediaType.APPLICATION_JSON).content(content))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(jsonPath("beginDate").value(dto.getBeginDate().format(formatter).toString()))
+                .andExpect(jsonPath("beginTime").value(dto.getBeginTime().toString()))
+                .andExpect(jsonPath("subgenreIdList").value(dto.getSubgenreIdList().get(0)))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -127,13 +244,5 @@ public class EventControllerTest {
                 .andExpect(status().isOk());
         assertTrue(eventRepository.existsById(id), "Event was deleted completely");
         assertTrue(eventRepository.getById(id).isDeleted(), "Event isDeleted flag is false");
-    }
-
-    @Test
-    public void testGetEventBySubgenre() {
-        Subgenre subgenre = dataInitializer.getSubgenre();
-        List<Event> eventList = eventRepository.findAllBySubgenre(subgenre);
-        assertFalse(eventList.isEmpty());
-        assertEquals(eventList.toString(), List.of(dataInitializer.getEvent()).toString());
     }
 }

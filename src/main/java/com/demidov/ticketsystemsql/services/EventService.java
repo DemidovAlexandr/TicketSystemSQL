@@ -98,34 +98,6 @@ public class EventService {
         return events;
     }
 
-    //single date
-//    public List<Event> getAll(LocalDate fromDate, boolean isDeleted) {
-//        Session session = entityManager.unwrap(Session.class);
-//        Filter filter = session.enableFilter("deletedEventFilter");
-//        filter.setParameter("isDeleted", isDeleted);
-//
-//        List<Event> events = eventRepository.findAllByDate(fromDate, fromDate);
-//        if (events.isEmpty()) {
-//            log.info("No events found for the date: {}", fromDate);
-//        }
-//        session.disableFilter("deletedEventFilter");
-//        return events;
-//    }
-//
-//    //single date and city
-//    public List<Event> getAll(LocalDate fromDate, String city, boolean isDeleted) {
-//        Session session = entityManager.unwrap(Session.class);
-//        Filter filter = session.enableFilter("deletedEventFilter");
-//        filter.setParameter("isDeleted", isDeleted);
-//
-//        List<Event> events = eventRepository.findAllByDate(fromDate, fromDate, city);
-//        if (events.isEmpty()) {
-//            log.info("No events found for the date {} and city {}", fromDate, city);
-//        }
-//        session.disableFilter("deletedEventFilter");
-//        return events;
-//    }
-
     //period of dates and city
     public List<Event> getAll(LocalDate fromDate, LocalDate toDate, String city, boolean isDeleted) {
         Session session = entityManager.unwrap(Session.class);
@@ -210,8 +182,13 @@ public class EventService {
     }
 
     public EventInDTO toInDTO(Event event) {
+
         if (event == null) throw new CommonAppException(DTO_IS_NULL);
+
         EventInDTO dto = new EventInDTO();
+        if (event.getId() != null) {
+            dto.setId(event.getId());
+        }
         dto.setName(event.getName());
         if(event.getVenue() != null) {
             dto.setVenueId(event.getVenue().getId());

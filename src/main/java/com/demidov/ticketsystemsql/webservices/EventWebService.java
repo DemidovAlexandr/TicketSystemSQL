@@ -48,20 +48,6 @@ public class EventWebService {
                 .collect(Collectors.toList());
     }
 
-//    public List<EventOutDTO> getAll(LocalDate date, boolean isDeleted) {
-//        return eventService.getAll(date, isDeleted)
-//                .stream()
-//                .map(eventService::toOutDTO)
-//                .collect(Collectors.toList());
-//    }
-
-//    public List<EventOutDTO> getAll(LocalDate fromDate, String city, boolean isDeleted) {
-//        return eventService.getAll(fromDate, city, isDeleted)
-//                .stream()
-//                .map(eventService::toOutDTO)
-//                .collect(Collectors.toList());
-//    }
-
     public List<EventOutDTO> getAll(LocalDate fromDate, LocalDate toDate, String city, boolean isDeleted) {
         return eventService.getAll(fromDate, toDate, city, isDeleted).stream()
                 .map(eventService::toOutDTO)
