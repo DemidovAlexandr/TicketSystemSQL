@@ -1,9 +1,6 @@
 package com.demidov.ticketsystemsql.controllerTests;
 import com.demidov.ticketsystemsql.dto.in.EventInDTO;
-import com.demidov.ticketsystemsql.dto.in.SubgenreInDTO;
 import com.demidov.ticketsystemsql.dto.in.VenueInDTO;
-import com.demidov.ticketsystemsql.entities.Event;
-import com.demidov.ticketsystemsql.entities.Subgenre;
 import com.demidov.ticketsystemsql.initData.DataInitializer;
 import com.demidov.ticketsystemsql.initData.ValidDTO;
 import com.demidov.ticketsystemsql.repositories.EventRepository;
@@ -26,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -123,7 +119,7 @@ public class EventControllerTest {
         this.mockMvc.perform(get(uri, id).contentType(MediaType.APPLICATION_JSON))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.[0].name").value(dataInitializer.getEvent().getName()));;
+                .andExpect(jsonPath("$.[0].name").value(dataInitializer.getEvent().getName()));
     }
 
     @Test
@@ -227,7 +223,7 @@ public class EventControllerTest {
 
         this.mockMvc.perform(put(uri).contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(document(uri.replace("/", "\\")))
-                .andExpect(jsonPath("beginDate").value(dto.getBeginDate().format(formatter).toString()))
+                .andExpect(jsonPath("beginDate").value(dto.getBeginDate().format(formatter)))
                 .andExpect(jsonPath("beginTime").value(dto.getBeginTime().toString()))
                 .andExpect(jsonPath("subgenreIdList").value(dto.getSubgenreIdList().get(0)))
                 .andExpect(status().isOk());

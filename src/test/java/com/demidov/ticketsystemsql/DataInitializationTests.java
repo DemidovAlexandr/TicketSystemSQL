@@ -97,6 +97,8 @@ public class DataInitializationTests {
         assertEquals(event.getName(), actualEvent.getName());
         assertEquals(event.getBeginDate(), actualEvent.getBeginDate());
         assertEquals(event.getBeginTime(), actualEvent.getBeginTime());
+        assert event.getGenre() != null;
+        assert actualEvent.getGenre() != null;
         assertEquals(event.getGenre().toString(), actualEvent.getGenre().toString());
         assertEquals(event.getSubgenreList().toString(), actualEvent.getSubgenreList().toString());
         assertEquals(event.getArtistList().toString(), actualEvent.getArtistList().toString());
@@ -105,6 +107,8 @@ public class DataInitializationTests {
         assertEquals(List.of(ticketService.getById(dataInitializer.getTicket().getId()),
                 ticketService.getById(dataInitializer.getAvailableTicket().getId())).toString(),
                 actualEvent.getTicketList().toString());
+        assert event.getVenue() != null;
+        assert actualEvent.getVenue() != null;
         assertEquals(event.getVenue().toString(), actualEvent.getVenue().toString());
     }
 
@@ -153,6 +157,8 @@ public class DataInitializationTests {
         assertEquals(event.getName(), actualEvent.getName());
         assertEquals(event.getBeginDate(), actualEvent.getBeginDate());
         assertEquals(event.getBeginTime(), actualEvent.getBeginTime());
+        assert event.getGenre() != null;
+        assert actualEvent.getGenre() != null;
         assertEquals(event.getGenre().toString(), actualEvent.getGenre().toString());
         assertEquals(event.getSubgenreList().toString(), actualEvent.getSubgenreList().toString());
         assertEquals(event.getArtistList().toString(), actualEvent.getArtistList().toString());
@@ -160,6 +166,8 @@ public class DataInitializationTests {
         assert actualEvent.getTicketList() != null;
         assertEquals(List.of(ticketService.getById(dataInitializer.getDeletedEventTicket().getId())).toString(),
                 actualEvent.getTicketList().toString());
+        assert event.getVenue() != null;
+        assert actualEvent.getVenue() != null;
         assertEquals(event.getVenue().toString(), actualEvent.getVenue().toString());
     }
 
@@ -213,6 +221,8 @@ public class DataInitializationTests {
         assertEquals(event.getName(), actualEvent.getName());
         assertEquals(event.getBeginDate(), actualEvent.getBeginDate());
         assertEquals(event.getBeginTime(), actualEvent.getBeginTime());
+        assert event.getGenre() != null;
+        assert actualEvent.getGenre() != null;
         assertEquals(event.getGenre().toString(), actualEvent.getGenre().toString());
         assertEquals(event.getSubgenreList().toString(), actualEvent.getSubgenreList().toString());
         assertEquals(event.getArtistList().toString(), actualEvent.getArtistList().toString());
@@ -220,6 +230,8 @@ public class DataInitializationTests {
         assert actualEvent.getTicketList() != null;
         assertEquals(List.of(ticketService.getById(dataInitializer.getMovieTicket().getId())).toString(),
                 actualEvent.getTicketList().toString());
+        assert event.getVenue() != null;
+        assert actualEvent.getVenue() != null;
         assertEquals(event.getVenue().toString(), actualEvent.getVenue().toString());
     }
 

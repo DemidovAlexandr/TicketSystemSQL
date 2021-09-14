@@ -1,14 +1,12 @@
 package com.demidov.ticketsystemsql.initData;
 
 import com.demidov.ticketsystemsql.dto.in.*;
-import com.demidov.ticketsystemsql.entities.Ticket;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
