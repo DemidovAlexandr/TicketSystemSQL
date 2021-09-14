@@ -27,16 +27,6 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
                                          @Param("city") String city,
                                          @Param("genreId") Integer genreId, @Param("subgenre") Subgenre subgenre);
 
-    @Query("select e from Event e where e.beginDate between :fromDate and :toDate " +
-            "and :artist member of e.artistList order by e.beginDate, e.beginTime")
-    List<Event> findAllByArtist(@Param("fromDate") LocalDate fromDate, @Param("toDate") LocalDate toDate,
-                                @Param("artist") Artist artist);
-
-    @Query("select e from Event e where e.beginDate between :fromDate and :toDate " +
-            "and e.venue = :venue order by e.beginDate, e.beginTime")
-    List<Event> findAllByVenue(@Param("fromDate") LocalDate fromDate, @Param("toDate") LocalDate toDate,
-                               @Param("venue") Venue venue);
-
     //Service methods:
 
     @Query("select e from Event e where :artist member of e.artistList order by e.beginDate, e.beginTime")
@@ -50,5 +40,4 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     @Query("select e from Event e where :subgenre member of e.subgenreList order by e.beginDate")
     List<Event> findAllBySubgenre(@Param("subgenre") Subgenre subgenre);
-
 }
