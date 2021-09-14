@@ -19,8 +19,5 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
 
     List<Ticket> findAllByEvent_IdOrderByLineNumberAscSeatNumberAsc(Integer eventId);
 
-    @Query("select t from Ticket t where t.event.id = :eventId and t.purchase.id = :purchaseId")
-    List<Ticket> findAllByEvent_IdAndPurchase_Id(@Param("eventId") Integer eventId, @Param("purchaseId") @Nullable Integer purchaseId);
-
     Optional<Ticket> findByEvent_IdAndLineNumberAndSeatNumber(Integer eventId, Integer lineNumber, Integer SeatNumber);
 }

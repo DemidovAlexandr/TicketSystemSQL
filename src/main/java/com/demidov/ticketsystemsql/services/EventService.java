@@ -52,15 +52,25 @@ public class EventService {
         }
     }
 
-    public List<Event> getAll(boolean isDeleted) {
+    //full list of events by venue
+    public List<Event> getAllByVenue(Integer venueId, boolean isDeleted) {
         Session session = entityManager.unwrap(Session.class);
         Filter filter = session.enableFilter("deletedEventFilter");
         filter.setParameter("isDeleted", isDeleted);
-        List<Event> events = eventRepository.findAll();
+
+        Optional<Venue> optionalVenue = venueRepository.findById(venueId);
+        List<Event> events = new ArrayList<>();
+        if (optionalVenue.isPresent()) {
+            events = eventRepository.findAllByVenue(optionalVenue.get());
+            if (events.isEmpty()) {
+                log.info("No events found with this venue: {}", optionalVenue.get());
+            }
+        } else log.info("No venue found with id: {}", venueId);
         session.disableFilter("deletedEventFilter");
         return events;
     }
 
+    //full list of events by artist
     public List<Event> getAllByArtist(Integer artistId, boolean isDeleted) {
         Session session = entityManager.unwrap(Session.class);
         Filter filter = session.enableFilter("deletedEventFilter");
@@ -78,34 +88,98 @@ public class EventService {
         return events;
     }
 
-    public List<Event> getAllByDate(LocalDate date, boolean isDeleted) {
+    //full list of events
+    public List<Event> getAll(boolean isDeleted) {
+        Session session = entityManager.unwrap(Session.class);
+        Filter filter = session.enableFilter("deletedEventFilter");
+        filter.setParameter("isDeleted", isDeleted);
+        List<Event> events = eventRepository.findAll();
+        session.disableFilter("deletedEventFilter");
+        return events;
+    }
+
+    //single date
+//    public List<Event> getAll(LocalDate fromDate, boolean isDeleted) {
+//        Session session = entityManager.unwrap(Session.class);
+//        Filter filter = session.enableFilter("deletedEventFilter");
+//        filter.setParameter("isDeleted", isDeleted);
+//
+//        List<Event> events = eventRepository.findAllByDate(fromDate, fromDate);
+//        if (events.isEmpty()) {
+//            log.info("No events found for the date: {}", fromDate);
+//        }
+//        session.disableFilter("deletedEventFilter");
+//        return events;
+//    }
+//
+//    //single date and city
+//    public List<Event> getAll(LocalDate fromDate, String city, boolean isDeleted) {
+//        Session session = entityManager.unwrap(Session.class);
+//        Filter filter = session.enableFilter("deletedEventFilter");
+//        filter.setParameter("isDeleted", isDeleted);
+//
+//        List<Event> events = eventRepository.findAllByDate(fromDate, fromDate, city);
+//        if (events.isEmpty()) {
+//            log.info("No events found for the date {} and city {}", fromDate, city);
+//        }
+//        session.disableFilter("deletedEventFilter");
+//        return events;
+//    }
+
+    //period of dates and city
+    public List<Event> getAll(LocalDate fromDate, LocalDate toDate, String city, boolean isDeleted) {
         Session session = entityManager.unwrap(Session.class);
         Filter filter = session.enableFilter("deletedEventFilter");
         filter.setParameter("isDeleted", isDeleted);
 
-        List<Event> events = eventRepository.findAllByBeginDateOrderByBeginTimeAsc(date);
+        List<Event> events = eventRepository.findAllByDate(fromDate, toDate, city);
         if (events.isEmpty()) {
-            log.info("No events found for the date: {}", date);
+            log.info("No events found for the dates {}, {} and city: {}", fromDate, toDate, city);
         }
         session.disableFilter("deletedEventFilter");
         return events;
     }
 
-    public List<Event> getAllByDateGenreCity(LocalDate date, Integer genreId, String city, boolean isDeleted) {
+    //period of dates and city and genre
+    public List<Event> getAll(LocalDate fromDate, LocalDate toDate, String city, Integer genreId, boolean isDeleted) {
         Session session = entityManager.unwrap(Session.class);
         Filter filter = session.enableFilter("deletedEventFilter");
         filter.setParameter("isDeleted", isDeleted);
 
         Optional<Genre> optionalGenre = genreRepository.findById(genreId);
-        List<Event> events = new ArrayList<>();
+        if(optionalGenre.isEmpty()) {
+            throw new CommonAppException("No genre is present with id: " + genreId);
+        }
 
-        if (optionalGenre.isPresent()) {
-            Genre genre = optionalGenre.get();
-//            events = eventRepository.findAllByDateAndGenreAndCity(date, genre, city);
-            if (events.isEmpty()) {
-                log.info("No events found by query with parameters: {}, {}, {}", date, genre, city);
-            }
-        } else log.info("No genre found with id: {}", genreId);
+        List<Event> events = eventRepository.findAllByDateAndGenre(fromDate, toDate, city, genreId);
+        if (events.isEmpty()) {
+            log.info("No events found for the dates {}, {}, city {}, and genreId {}", fromDate, toDate, city, genreId);
+        }
+        session.disableFilter("deletedEventFilter");
+        return events;
+    }
+
+    //period of dates and city and genre
+    public List<Event> getAll(LocalDate fromDate, LocalDate toDate, String city, Integer genreId, Integer subgenreId, boolean isDeleted) {
+        Session session = entityManager.unwrap(Session.class);
+        Filter filter = session.enableFilter("deletedEventFilter");
+        filter.setParameter("isDeleted", isDeleted);
+
+        Optional<Genre> optionalGenre = genreRepository.findById(genreId);
+        if(optionalGenre.isEmpty()) {
+            throw new CommonAppException("No genre is present with id: " + genreId);
+        }
+
+        Subgenre subgenre;
+        Optional<Subgenre> optionalSubgenre = subgenreRepository.findById(subgenreId);
+        if(optionalSubgenre.isEmpty()) {
+            throw new CommonAppException("No subGenre is present with id: " + subgenreId);
+        } else subgenre = optionalSubgenre.get();
+
+        List<Event> events = eventRepository.findAllByDateAndGenreAndSubgenre(fromDate, toDate, city, genreId, subgenre);
+        if (events.isEmpty()) {
+            log.info("No events found for the dates {}, {}, city {}, genreId {} and subgenre {}", fromDate, toDate, city, genreId, subgenre);
+        }
         session.disableFilter("deletedEventFilter");
         return events;
     }

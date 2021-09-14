@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.*;
 import org.springframework.lang.Nullable;
 
@@ -13,7 +12,6 @@ import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OrderBy;
-import javax.validation.constraints.Null;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;

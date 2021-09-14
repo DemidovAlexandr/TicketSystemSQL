@@ -28,7 +28,21 @@ public class MyEventController {
         return webService.getById(id, isDeleted);
     }
 
-    @GetMapping("/artist/{id}")
+    @GetMapping(path = "/all")
+    public @ResponseBody
+    List<EventOutDTO> getAll(@RequestParam(value = "isDeleted", required = false, defaultValue = "false") boolean isDeleted) {
+        return webService.getAll(isDeleted);
+    }
+
+    @GetMapping("/venues/{id}")
+    public @ResponseBody
+    List<EventOutDTO> getAllByVenue(
+            @PathVariable Integer id,
+            @RequestParam(value = "isDeleted", required = false, defaultValue = "false") boolean isDeleted) {
+        return webService.getAllByVenue(id, isDeleted);
+    }
+
+    @GetMapping("/artists/{id}")
     public @ResponseBody
     List<EventOutDTO> getAllByArtist(
             @PathVariable Integer id,
@@ -36,22 +50,17 @@ public class MyEventController {
         return webService.getAllByArtist(id, isDeleted);
     }
 
-    @GetMapping("/byDate")
+    @GetMapping("/search")
     public @ResponseBody
-    List<EventOutDTO> getAllByDate(
-            @RequestParam(value = "localDate") LocalDate localDate,
-            @RequestParam(value = "isDeleted", required = false, defaultValue = "false") boolean isDeleted) {
-        return webService.getAllByDate(localDate, isDeleted);
-    }
-
-    @GetMapping("/byDateGenreCity")
-    public @ResponseBody
-    List<EventOutDTO> getAllByDateGenreCity(
-            @RequestParam(value = "localDate") LocalDate localDate,
-            @RequestParam(value = "genreId") Integer genreId,
+    List<EventOutDTO> searchAll(
+            @RequestParam(value = "fromDate") LocalDate fromDate,
+            @RequestParam(value = "toDate") LocalDate toDate,
             @RequestParam(value = "city") String city,
+            @RequestParam(value = "genreId", required = false) Integer genreId,
+            @RequestParam(value = "subgenreId", required = false) Integer subgenreId,
             @RequestParam(value = "isDeleted", required = false, defaultValue = "false") boolean isDeleted) {
-        return webService.getAllByDateGenreCity(localDate, genreId, city, isDeleted);
+
+        return webService.search(fromDate, toDate, city, genreId, subgenreId, isDeleted);
     }
 
     @PostMapping()

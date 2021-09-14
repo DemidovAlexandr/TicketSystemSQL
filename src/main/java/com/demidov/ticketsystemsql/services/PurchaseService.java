@@ -2,7 +2,6 @@ package com.demidov.ticketsystemsql.services;
 
 import com.demidov.ticketsystemsql.dto.in.PurchaseInDTO;
 import com.demidov.ticketsystemsql.dto.out.PurchaseOutDTO;
-import com.demidov.ticketsystemsql.entities.Event;
 import com.demidov.ticketsystemsql.entities.Purchase;
 import com.demidov.ticketsystemsql.entities.Ticket;
 import com.demidov.ticketsystemsql.entities.User;

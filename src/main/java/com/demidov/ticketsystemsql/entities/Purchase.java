@@ -33,10 +33,6 @@ public class Purchase {
     @ManyToOne(optional = false)
     private User user;
 
-//    @JoinColumn(nullable = false)
-//    @ManyToOne(optional = false)
-//    private Event event;
-
     @OrderBy("price")
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "purchase")
     private List<Ticket> ticketList = new ArrayList<>();

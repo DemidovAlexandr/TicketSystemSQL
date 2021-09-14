@@ -10,21 +10,48 @@ import java.util.List;
 
 public interface EventRepository extends JpaRepository<Event, Integer> {
 
-    List<Event> findAllByBeginDateOrderByBeginTimeAsc(LocalDate date);
+//    @Query("select e from Event e where e.beginDate between :fromDate and :toDate order by e.beginDate, e.beginTime")
+//    List<Event> findAllByDate(@Param("fromDate") LocalDate fromDate, @Param("toDate") LocalDate toDate);
 
-    List<Event> findAllByVenue(Venue venue);
+    //Controller methods:
 
-    List<Event> findAllByGenre(Genre genre);
+    @Query("select e from Event e where e.beginDate between :fromDate and :toDate " +
+            "and e.venue.city = :city order by e.beginDate, e.beginTime")
+    List<Event> findAllByDate(@Param("fromDate") LocalDate fromDate, @Param("toDate") LocalDate toDate, @Param("city") String city);
+
+    @Query("select e from Event e where e.beginDate between :fromDate and :toDate " +
+            "and e.venue.city = :city and e.genre.id = :genreId order by e.beginDate, e.beginTime")
+    List<Event> findAllByDateAndGenre(@Param("fromDate") LocalDate fromDate, @Param("toDate") LocalDate toDate,
+                                             @Param("city") String city, @Param("genreId") Integer genreId);
+
+    @Query("select e from Event e where e.beginDate between :fromDate and :toDate " +
+            "and e.venue.city = :city and e.genre.id = :genreId and :subgenre member of e.subgenreList order by e.beginDate, e.beginTime")
+    List<Event> findAllByDateAndGenreAndSubgenre(@Param("fromDate") LocalDate fromDate, @Param("toDate") LocalDate toDate,
+                                         @Param("city") String city,
+                                         @Param("genreId") Integer genreId, @Param("subgenre") Subgenre subgenre);
+
+    @Query("select e from Event e where e.beginDate between :fromDate and :toDate " +
+            "and :artist member of e.artistList order by e.beginDate, e.beginTime")
+    List<Event> findAllByArtist(@Param("fromDate") LocalDate fromDate, @Param("toDate") LocalDate toDate,
+                                @Param("artist") Artist artist);
+
+    @Query("select e from Event e where e.beginDate between :fromDate and :toDate " +
+            "and e.venue = :venue order by e.beginDate, e.beginTime")
+    List<Event> findAllByVenue(@Param("fromDate") LocalDate fromDate, @Param("toDate") LocalDate toDate,
+                               @Param("venue") Venue venue);
+
+    //Service methods:
+
+    @Query("select e from Event e where :artist member of e.artistList order by e.beginDate, e.beginTime")
+    List<Event> findAllByArtist(@Param("artist") Artist artist);
+
+    @Query("select e from Event e where e.venue = :venue order by e.beginDate, e.beginTime")
+    List<Event> findAllByVenue(@Param("venue") Venue venue);
+
+    @Query("select e from Event e where e.genre = :genre order by e.beginDate, e.beginTime")
+    List<Event> findAllByGenre(@Param("genre") Genre genre);
 
     @Query("select e from Event e where :subgenre member of e.subgenreList order by e.beginDate")
     List<Event> findAllBySubgenre(@Param("subgenre") Subgenre subgenre);
-
-    @Query("select e from Event e where :artist member of e.artistList order by e.beginDate")
-    List<Event> findAllByArtist(@Param("artist") Artist artist);
-
-    //date, date - genre, date - city, genre - city, date - venue & PERIOD
-
-//    @Query("select e from Event e where e.beginDate = ?1 and e.genre = ?2 and e.venue.city = ?3 order by e.beginTime")
-//    List<Event> findAllByDateAndGenreAndCity(LocalDate date, Genre genre, String cityName);
 
 }

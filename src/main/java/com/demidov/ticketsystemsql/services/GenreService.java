@@ -4,14 +4,11 @@ import com.demidov.ticketsystemsql.dto.in.GenreInDTO;
 import com.demidov.ticketsystemsql.dto.out.GenreOutDTO;
 import com.demidov.ticketsystemsql.entities.Event;
 import com.demidov.ticketsystemsql.entities.Genre;
-import com.demidov.ticketsystemsql.entities.Subgenre;
 import com.demidov.ticketsystemsql.exceptions.CommonAppException;
 import com.demidov.ticketsystemsql.repositories.EventRepository;
 import com.demidov.ticketsystemsql.repositories.GenreRepository;
-import com.demidov.ticketsystemsql.repositories.SubgenreRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

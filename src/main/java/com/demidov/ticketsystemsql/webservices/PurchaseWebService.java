@@ -2,7 +2,6 @@ package com.demidov.ticketsystemsql.webservices;
 
 import com.demidov.ticketsystemsql.dto.in.PurchaseInDTO;
 import com.demidov.ticketsystemsql.dto.out.PurchaseOutDTO;
-import com.demidov.ticketsystemsql.entities.Purchase;
 import com.demidov.ticketsystemsql.services.PurchaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,17 +1,11 @@
 package com.demidov.ticketsystemsql.controllerTests;
 import com.demidov.ticketsystemsql.dto.in.EventInDTO;
-import com.demidov.ticketsystemsql.dto.out.EventOutDTO;
 import com.demidov.ticketsystemsql.entities.Event;
 import com.demidov.ticketsystemsql.entities.Subgenre;
-import com.demidov.ticketsystemsql.exceptions.CommonAppException;
 import com.demidov.ticketsystemsql.initData.DataInitializer;
 import com.demidov.ticketsystemsql.initData.ValidDTO;
 import com.demidov.ticketsystemsql.repositories.EventRepository;
-import com.demidov.ticketsystemsql.repositories.GenreRepository;
-import com.demidov.ticketsystemsql.repositories.SubgenreRepository;
 import com.demidov.ticketsystemsql.services.EventService;
-import com.demidov.ticketsystemsql.services.GenreService;
-import com.demidov.ticketsystemsql.services.SubgenreService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
@@ -19,23 +13,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.ConfigurableMockMvcBuilder;
-import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.util.NestedServletException;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -113,6 +102,14 @@ public class EventControllerTest {
         assertTrue(eventService.getById(id, true).isDeleted());
     }
 
+    @Test
+    public void testGetAllEvents() throws Exception {
+        String uri = "/events/all";
+
+        this.mockMvc.perform(get(uri).contentType(MediaType.APPLICATION_JSON))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(status().isOk());
+    }
 
     @Test
     public void testDeleteEventById() throws Exception {

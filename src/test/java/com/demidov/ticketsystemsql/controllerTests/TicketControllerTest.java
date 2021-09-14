@@ -1,13 +1,10 @@
 package com.demidov.ticketsystemsql.controllerTests;
 
-import com.demidov.ticketsystemsql.dto.in.PurchaseInDTO;
 import com.demidov.ticketsystemsql.dto.in.TicketInDTO;
 import com.demidov.ticketsystemsql.exceptions.CommonAppException;
 import com.demidov.ticketsystemsql.initData.DataInitializer;
 import com.demidov.ticketsystemsql.initData.ValidDTO;
-import com.demidov.ticketsystemsql.repositories.PurchaseRepository;
 import com.demidov.ticketsystemsql.repositories.TicketRepository;
-import com.demidov.ticketsystemsql.services.PurchaseService;
 import com.demidov.ticketsystemsql.services.TicketService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -28,15 +25,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

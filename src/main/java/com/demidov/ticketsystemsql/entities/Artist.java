@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Getter
@@ -23,9 +22,5 @@ public class Artist {
     private Integer id;
 
     private String name;
-
-//    @ManyToMany(mappedBy = "artistList", cascade = CascadeType.ALL)
-//    @ToString.Exclude
-//    private List<Subgenre> subgenreList;
 
 }
