@@ -45,7 +45,7 @@ public class Event {
     @JsonFormat(pattern = "dd.MM.yyyy")
     private LocalDate beginDate;
 
-    @Column(columnDefinition = "TIMESTAMP")
+    @Column(columnDefinition = "TIME")
     @JsonFormat(pattern = "HH:mm")
     private LocalTime beginTime;
 

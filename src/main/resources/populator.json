@@ -1,0 +1,134 @@
+[
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.Artist",
+    "id": 1,
+    "city": "Санкт-Петербург",
+    "contacts": "+7-812-718-66-20",
+    "description": "Ледовый Дворец - многоцелевой спортивно-развлекательный комплекс",
+    "name": "Ледовый Дворец",
+    "street_address": "Проспект Пятилеток, 1, лит А"
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.Artist",
+    "id": 2,
+    "city": "Санкт-Петербург",
+    "contacts": "+7-812-713-21-91",
+    "description": "Санкт-Петербургский академический театр имени Ленсовета — драматический театр; создан в Ленинграде в 1933 году под названием «Новый театр», в 1953 переименован в Ленинградский театр имени Ленсовета.",
+    "name": "Театр им. Ленсовета",
+    "street_address": "Владимирский проспект, 12"
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.Artist",
+    "id": 3,
+    "city": "Санкт-Петербург",
+    "contacts": "+7-812-942-80-20",
+    "description": "Первый в истории кинотеатр в Санкт-Петербурге",
+    "name": "Кионтеатр Аврора",
+    "street_address": "Невский пр, 60"
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.Genre",
+    "id": 1,
+    "name": "Концерт"
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.Genre",
+    "id": 2,
+    "name": "Театр"
+  },
+  {
+   "_class": "com.demidov.ticketsystemsql.entities.Genre",
+    "id": 3,
+    "name": "Кино"
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.Subgenre",
+    "id": 1,
+    "name": "Метал"
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.Subgenre",
+    "id": 2,
+    "name": "Рок"
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.Subgenre",
+    "id": 3,
+    "name": "Драма"
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.Subgenre",
+    "id": 4,
+    "name": "Комедия"
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.Subgenre",
+    "id": 5,
+    "name": "Триллер"
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.Subgenre",
+    "id": 6,
+    "name": "Экшн"
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.User",
+    "id": 1,
+    "city": "Санкт-Петербург",
+    "dateOfBirth": "29.10.1993",
+    "deleted": "false",
+    "email": "demidov@anymail.com",
+    "name": "Александр",
+    "surname": "Демидов",
+    "telephone": "+79991112233"
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.User",
+    "id": 2,
+    "city": "Санкт-Петербург",
+    "dateOfBirth": "01.01.1991",
+    "deleted": "false",
+    "email": "testUser@testmail.com",
+    "name": "Test",
+    "surname": "User",
+    "telephone": "+79991113344"
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.User",
+    "id": 3,
+    "city": "Москва",
+    "dateOfBirth": "01.01.1991",
+    "deleted": "true",
+    "email": "deletedUser@testmail.com",
+    "name": "Deleted",
+    "surname": "User",
+    "telephone": "+79991113344"
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.Venue",
+    "id": 1,
+    "city": "Санкт-Петербург",
+    "contacts": "+7-812-718-66-20",
+    "description": "Ледовый Дворец - многоцелевой спортивно-развлекательный комплекс",
+    "name": "Ледовый Дворец",
+    "street_address": "Проспект Пятилеток, 1, лит А"
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.Venue",
+    "id": 2,
+    "city": "Санкт-Петербург",
+    "contacts": "+7-812-713-21-91",
+    "description": "Санкт-Петербургский академический театр имени Ленсовета — драматический театр; создан в Ленинграде в 1933 году под названием «Новый театр», в 1953 переименован в Ленинградский театр имени Ленсовета.",
+    "name": "Театр им. Ленсовета",
+    "street_address": "Владимирский проспект, 12"
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.Venue",
+    "id": 3,
+    "city": "Санкт-Петербург",
+    "contacts": "+7-812-942-80-20",
+    "description": "Первый в истории кинотеатр в Санкт-Петербурге",
+    "name": "Кионтеатр Аврора",
+    "street_address": "Невский пр, 60"
+  }
+]
