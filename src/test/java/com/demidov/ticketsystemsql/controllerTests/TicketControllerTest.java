@@ -81,6 +81,14 @@ public class TicketControllerTest {
     }
 
     @Test
+    public void testGetAllTickets() throws Exception {
+        String uri = "/events/tickets/all";
+        this.mockMvc.perform(get(uri).contentType(MediaType.APPLICATION_JSON))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     public void testGetTicketsByEvent() throws Exception {
         String uri = "/events/tickets/all";
         Integer eventId = dataInitializer.getEvent().getId();
