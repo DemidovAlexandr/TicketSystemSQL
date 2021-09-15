@@ -104,7 +104,6 @@ public class PurchaseService {
             ticketIdList.add(ticket.getId());
         }
         dto.setTicketIdList(ticketIdList);
-        dto.setPaidFor(purchase.isPaidFor());
         return dto;
     }
 
@@ -122,12 +121,10 @@ public class PurchaseService {
         }
         dto.setTicketIdList(ticketIdList);
         dto.setTotal(purchase.getTotal());
-        dto.setPaidFor(purchase.isPaidFor());
         return dto;
     }
 
     private void setData(Purchase purchase, PurchaseInDTO dto) {
-        purchase.setPaidFor(dto.isPaidFor());
         purchase.setPurchaseDate(LocalDateTime.now());
 
         User user = userRepository.findById(dto.getUserId())

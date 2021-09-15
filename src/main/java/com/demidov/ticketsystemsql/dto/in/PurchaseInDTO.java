@@ -10,9 +10,6 @@ public class PurchaseInDTO {
     private Integer id;
 
     private Integer userId;
-    //private Integer eventId;
 
     private List<Integer> ticketIdList;
-    
-    private boolean isPaidFor;
 }

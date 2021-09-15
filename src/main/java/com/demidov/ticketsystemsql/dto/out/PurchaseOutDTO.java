@@ -14,11 +14,8 @@ public class PurchaseOutDTO {
     private LocalDateTime purchaseDate;
 
     private Integer userId;
-   // private Integer eventId;
 
     private List<Integer> ticketIdList;
 
     private Integer total;
-
-    private boolean isPaidFor;
 }

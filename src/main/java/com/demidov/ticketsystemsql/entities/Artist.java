@@ -14,7 +14,7 @@ import javax.persistence.*;
 @ToString
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+        property = "id", scope = Artist.class)
 public class Artist {
     @Column(nullable = false)
     @Id

@@ -121,7 +121,6 @@ public class ValidDTO {
         PurchaseInDTO dto = new PurchaseInDTO();
         dto.setTicketIdList(List.of(1));
         dto.setUserId(1);
-        dto.setPaidFor(false);
         return dto;
     }
 

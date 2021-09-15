@@ -3,6 +3,12 @@ package com.demidov.ticketsystemsql.entities;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -18,7 +24,7 @@ import java.util.List;
 @ToString
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+        property = "id", scope = Purchase.class)
 public class Purchase {
 
     @Id
@@ -26,7 +32,9 @@ public class Purchase {
     private Integer id;
 
     @Column(columnDefinition = "TIMESTAMP")
-    @JsonFormat(pattern = "dd.MM.yyyy hh:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime purchaseDate;
 
     @JoinColumn(nullable = false)
@@ -39,8 +47,6 @@ public class Purchase {
 
     @Column(nullable = false)
     private Integer total = 0;
-
-    private boolean isPaidFor = Boolean.FALSE;
 
     public void addTicket(Ticket ticket) {
         this.ticketList.add(ticket);

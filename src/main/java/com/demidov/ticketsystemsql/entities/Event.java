@@ -3,6 +3,12 @@ package com.demidov.ticketsystemsql.entities;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
@@ -22,17 +28,11 @@ import java.util.List;
 @Setter
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+        property = "id", scope = Event.class)
 @SQLDelete(sql = "UPDATE event SET deleted = true WHERE id=?")
 @FilterDef(name = "deletedEventFilter", parameters = @ParamDef(name = "isDeleted", type = "boolean"))
 @Filter(name = "deletedEventFilter", condition = "deleted = :isDeleted")
 public class Event {
-
-    /*ManyToMany SubgenreList
-    * ManyToOne Genre
-    * ManyToOne Venue
-    * ManyToMany ArtistList
-    * */
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,10 +43,14 @@ public class Event {
 
     @Column(columnDefinition = "DATE")
     @JsonFormat(pattern = "dd.MM.yyyy")
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate beginDate;
 
     @Column(columnDefinition = "TIME")
     @JsonFormat(pattern = "HH:mm")
+    @JsonSerialize(using = LocalTimeSerializer.class)
+    @JsonDeserialize(using = LocalTimeDeserializer.class)
     private LocalTime beginTime;
 
     @ManyToOne

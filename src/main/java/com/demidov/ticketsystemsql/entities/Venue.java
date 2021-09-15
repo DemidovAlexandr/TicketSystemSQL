@@ -16,7 +16,7 @@ import java.util.List;
 @ToString
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+        property = "id", scope = Venue.class)
 public class Venue {
 
     @Id

@@ -2,29 +2,37 @@
   {
     "_class": "com.demidov.ticketsystemsql.entities.Artist",
     "id": 1,
-    "city": "Санкт-Петербург",
-    "contacts": "+7-812-718-66-20",
-    "description": "Ледовый Дворец - многоцелевой спортивно-развлекательный комплекс",
-    "name": "Ледовый Дворец",
-    "street_address": "Проспект Пятилеток, 1, лит А"
+    "name": "Metallica"
   },
   {
     "_class": "com.demidov.ticketsystemsql.entities.Artist",
     "id": 2,
-    "city": "Санкт-Петербург",
-    "contacts": "+7-812-713-21-91",
-    "description": "Санкт-Петербургский академический театр имени Ленсовета — драматический театр; создан в Ленинграде в 1933 году под названием «Новый театр», в 1953 переименован в Ленинградский театр имени Ленсовета.",
-    "name": "Театр им. Ленсовета",
-    "street_address": "Владимирский проспект, 12"
+    "name": "Rammstein"
   },
   {
     "_class": "com.demidov.ticketsystemsql.entities.Artist",
     "id": 3,
-    "city": "Санкт-Петербург",
-    "contacts": "+7-812-942-80-20",
-    "description": "Первый в истории кинотеатр в Санкт-Петербурге",
-    "name": "Кионтеатр Аврора",
-    "street_address": "Невский пр, 60"
+    "name": "Михаил Боярский"
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.Artist",
+    "id": 4,
+    "name": "Константин Хабенский"
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.Artist",
+    "id": 5,
+    "name": "Райан Рейнольдс"
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.Artist",
+    "id": 6,
+    "name": "Энтони Хопкинс"
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.Artist",
+    "id": 7,
+    "name": "Джоди Фостер"
   },
   {
     "_class": "com.demidov.ticketsystemsql.entities.Genre",
@@ -111,7 +119,7 @@
     "contacts": "+7-812-718-66-20",
     "description": "Ледовый Дворец - многоцелевой спортивно-развлекательный комплекс",
     "name": "Ледовый Дворец",
-    "street_address": "Проспект Пятилеток, 1, лит А"
+    "streetAddress": "Проспект Пятилеток, 1, лит А"
   },
   {
     "_class": "com.demidov.ticketsystemsql.entities.Venue",
@@ -120,7 +128,7 @@
     "contacts": "+7-812-713-21-91",
     "description": "Санкт-Петербургский академический театр имени Ленсовета — драматический театр; создан в Ленинграде в 1933 году под названием «Новый театр», в 1953 переименован в Ленинградский театр имени Ленсовета.",
     "name": "Театр им. Ленсовета",
-    "street_address": "Владимирский проспект, 12"
+    "streetAddress": "Владимирский проспект, 12"
   },
   {
     "_class": "com.demidov.ticketsystemsql.entities.Venue",
@@ -129,6 +137,402 @@
     "contacts": "+7-812-942-80-20",
     "description": "Первый в истории кинотеатр в Санкт-Петербурге",
     "name": "Кионтеатр Аврора",
-    "street_address": "Невский пр, 60"
+    "streetAddress": "Невский пр, 60"
+  },
+    {
+    "_class": "com.demidov.ticketsystemsql.entities.Purchase",
+    "id": 1,
+    "purchaseDate": "15.09.2021 15:00",
+    "total": 7000,
+    "user":{"id": "1"}
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.Purchase",
+    "id": 2,
+    "purchaseDate": "15.09.2021 16:00",
+    "total": 1000,
+    "user": {"id": "1"}
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.Event",
+    "id": 1,
+    "beginDate": "02.10.2021",
+    "beginTime": "19:00",
+    "deleted": "false",
+    "name": "Rammstein",
+    "genre":{"id": "1"},
+    "venue":{"id": "1"},
+    "artistList":[{"id": "2", "name": "Rammstein"}],
+    "subgenreList":[{"id": "1", "name": "Метал"}, {"id": "2", "name": "Рок"}]
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.Event",
+    "id": 2,
+    "beginDate": "20.10.2021",
+    "beginTime": "20:00",
+    "deleted": "false",
+    "name": "Metallica",
+    "genre":{"id": "1"},
+    "venue":{"id": "1"},
+    "artistList":[{"id": "1", "name": "Metallica"}],
+    "subgenreList":[{"id": "1", "name": "Метал"}, {"id": "2", "name": "Рок"}]
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.Event",
+    "id": 3,
+    "beginDate": "13.11.2021",
+    "beginTime": "15:00",
+    "deleted": "false",
+    "name": "Контрабас",
+    "genre":{"id": "2"},
+    "venue":{"id": "2"},
+    "artistList":[{"id": "4", "name": "Константин Хабенский"}],
+    "subgenreList":[{"id": "3", "name": "Драма"}, {"id": "4", "name": "Комедия"}]
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.Event",
+    "id": 4,
+    "beginDate": "30.09.2021",
+    "beginTime": "13:00",
+    "deleted": "true",
+    "name": "Смешанные чувства",
+    "genre":{"id": "2"},
+    "venue":{"id": "2"},
+    "artistList":[{"id": "3", "name": "Михаил Боярский"}],
+    "subgenreList":[{"id": "4", "name": "Комедия"}]
+  },
+  {
+    "_class": "com.demidov.ticketsystemsql.entities.Event",
+    "id": 5,
+    "beginDate": "07.10.2021",
+    "beginTime": "17:00",
+    "deleted": "false",
+    "name": "Молчание ягнят",
+    "genre":{"id": "3"},
+    "venue":{"id": "3"},
+    "artistList":[{"id": "6", "name": "Энтони Хопкинс"}, {"id": "7", "name": "Джоди Фостер"}],
+    "subgenreList":[{"id": "5", "name": "Триллер"}]
+  },
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 1, 
+    "lineNumber": 1, 
+    "price": 7000, 
+    "seatNumber": 1, 
+    "event": {"id": "1"}, 
+    "purchase": {"id": "1"} 
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 2, 
+    "lineNumber": 1, 
+    "price": 7000, 
+    "seatNumber": 2, 
+    "event": {"id": "1"}
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 3, 
+    "lineNumber": 1, 
+    "price": 7000, 
+    "seatNumber": 3, 
+    "event": {"id": "1"}    
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 4, 
+    "lineNumber": 1, 
+    "price": 7000, 
+    "seatNumber": 4, 
+    "event": {"id": "1"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 5, 
+    "lineNumber": 1, 
+    "price": 7000, 
+    "seatNumber": 5, 
+    "event": {"id": "1"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 6, 
+    "lineNumber": 1, 
+    "price": 7000, 
+    "seatNumber": 6, 
+    "event": {"id": "1"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 7, 
+    "lineNumber": 1, 
+    "price": 7000, 
+    "seatNumber": 7, 
+    "event": {"id": "1"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 8, 
+    "lineNumber": 1, 
+    "price": 7000, 
+    "seatNumber": 8, 
+    "event": {"id": "1"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 9, 
+    "lineNumber": 1, 
+    "price": 7000, 
+    "seatNumber": 9, 
+    "event": {"id": "1"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 10, 
+    "lineNumber": 1, 
+    "price": 7000, 
+    "seatNumber": 10, 
+    "event": {"id": "1"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 11, 
+    "lineNumber": 2, 
+    "price": 10000, 
+    "seatNumber": 1, 
+    "event": {"id": "1"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 12, 
+    "lineNumber": 2, 
+    "price": 10000, 
+    "seatNumber": 2, 
+    "event": {"id": "1"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 13, 
+    "lineNumber": 2, 
+    "price": 10000, 
+    "seatNumber": 3, 
+    "event": {"id": "1"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 14, 
+    "lineNumber": 2, 
+    "price": 10000, 
+    "seatNumber": 4, 
+    "event": {"id": "1"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 15, 
+    "lineNumber": 2, 
+    "price": 10000, 
+    "seatNumber": 5, 
+    "event": {"id": "1"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 16, 
+    "lineNumber": 1, 
+    "price": 9000, 
+    "seatNumber": 1, 
+    "event": {"id": "2"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 17, 
+    "lineNumber": 1, 
+    "price": 9000, 
+    "seatNumber": 2, 
+    "event": {"id": "2"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 18, 
+    "lineNumber": 1, 
+    "price": 9000, 
+    "seatNumber": 3, 
+    "event": {"id": "2"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 19, 
+    "lineNumber": 1, 
+    "price": 9000, 
+    "seatNumber": 4, 
+    "event": {"id": "2"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 20, 
+    "lineNumber": 1, 
+    "price": 9000, 
+    "seatNumber": 5, 
+    "event": {"id": "2"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 21, 
+    "lineNumber": 1, 
+    "price": 9000, 
+    "seatNumber": 6, 
+    "event": {"id": "2"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 22, 
+    "lineNumber": 1, 
+    "price": 9000, 
+    "seatNumber": 7, 
+    "event": {"id": "2"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 23, 
+    "lineNumber": 1, 
+    "price": 9000, 
+    "seatNumber": 8, 
+    "event": {"id": "2"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 24, 
+    "lineNumber": 1, 
+    "price": 9000, 
+    "seatNumber": 9, 
+    "event": {"id": "2"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 25, 
+    "lineNumber": 1, 
+    "price": 9000, 
+    "seatNumber": 10, 
+    "event": {"id": "2"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 26, 
+    "lineNumber": 4, 
+    "price": 3000, 
+    "seatNumber": 7, 
+    "event": {"id": "3"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 27, 
+    "lineNumber": 4, 
+    "price": 3000, 
+    "seatNumber": 8, 
+    "event": {"id": "3"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 28, 
+    "lineNumber": 9, 
+    "price": 2000, 
+    "seatNumber": 3, 
+    "event": {"id": "3"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 29, 
+    "lineNumber": 11, 
+    "price": 2000, 
+    "seatNumber": 11, 
+    "event": {"id": "3"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 30, 
+    "lineNumber": 1, 
+    "price": 5000, 
+    "seatNumber": 7, 
+    "event": {"id": "3"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 31, 
+    "lineNumber": 2, 
+    "price": 5000, 
+    "seatNumber": 4, 
+    "event": {"id": "3"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 32, 
+    "lineNumber": 10, 
+    "price": 1200, 
+    "seatNumber": 5, 
+    "event": {"id": "4"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 33, 
+    "lineNumber": 4, 
+    "price": 1500, 
+    "seatNumber": 3, 
+    "event": {"id": "4"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 34, 
+    "lineNumber": 8, 
+    "price": 1200, 
+    "seatNumber": 6, 
+    "event": {"id": "4"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 35, 
+    "lineNumber": 15, 
+    "price": 600, 
+    "seatNumber": 8, 
+    "event": {"id": "4"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 36, 
+    "lineNumber": 6, 
+    "price": 500, 
+    "seatNumber": 10, 
+    "event": {"id": "5"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 37, 
+    "lineNumber": 7, 
+    "price": 500, 
+    "seatNumber": 6, 
+    "event": {"id": "5"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 38, 
+    "lineNumber": 8, 
+    "price": 500, 
+    "seatNumber": 4, 
+    "event": {"id": "5"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 39, 
+    "lineNumber": 3, 
+    "price": 500, 
+    "seatNumber": 8, 
+    "event": {"id": "5"}     
+  }, 
+  { 
+    "_class": "com.demidov.ticketsystemsql.entities.Ticket",
+    "id": 40, 
+    "lineNumber": 10, 
+    "price": 1000, 
+    "seatNumber": 3, 
+    "event": {"id": "5"}, 
+    "purchase": {"id": "2"} 
   }
 ]

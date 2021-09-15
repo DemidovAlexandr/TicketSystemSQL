@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Setter
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+        property = "id", scope = Ticket.class)
 public class Ticket {
 
     @Id

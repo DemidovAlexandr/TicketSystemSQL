@@ -14,7 +14,7 @@ import javax.persistence.*;
 @ToString
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+        property = "id", scope = Subgenre.class)
 public class Subgenre {
 
     @Id
