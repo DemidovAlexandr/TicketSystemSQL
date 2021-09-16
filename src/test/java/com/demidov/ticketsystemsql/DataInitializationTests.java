@@ -4,21 +4,23 @@ import com.demidov.ticketsystemsql.entities.*;
 import com.demidov.ticketsystemsql.initData.DataInitializer;
 import com.demidov.ticketsystemsql.services.*;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.springframework.transaction.annotation.Transactional;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_CLASS;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD;
+
 import java.util.List;
 
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@DirtiesContext(classMode = BEFORE_EACH_TEST_METHOD)
 @Slf4j
 public class DataInitializationTests {
 
@@ -49,14 +51,9 @@ public class DataInitializationTests {
     @Autowired
     private DataInitializer dataInitializer;
 
-    private boolean isInitialized;
-
-    @BeforeAll
+    @BeforeEach
     public void setUp() {
-        if (!isInitialized) {
-            dataInitializer.initData();
-            isInitialized = true;
-        }
+        dataInitializer.initData();
     }
 
     @Test

@@ -1,13 +1,13 @@
 package com.demidov.ticketsystemsql.controllerTests;
 
 import com.demidov.ticketsystemsql.dto.in.UserInDTO;
-import com.demidov.ticketsystemsql.exceptions.CommonAppException;
 import com.demidov.ticketsystemsql.initData.DataInitializer;
 import com.demidov.ticketsystemsql.initData.ValidDTO;
 import com.demidov.ticketsystemsql.repositories.UserRepository;
 import com.demidov.ticketsystemsql.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,11 +23,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.util.NestedServletException;
 
 import java.time.format.DateTimeFormatter;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD;
@@ -137,16 +136,10 @@ public class UserControllerTest {
         UserInDTO dto = validDTO.getUserInDTO();
         String content = objectMapper.writeValueAsString(dto);
 
-        Throwable exception = assertThrows(CommonAppException.class, () ->
-        {
-            try {
-                this.mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
-                        .andDo(document(uri.replace("/", "\\")));
-            } catch (NestedServletException e) {
-                throw e.getCause();
-            }
-        });
-        assertEquals(exception.getMessage(), "This email is already registered: " + dto.getEmail());
+        this.mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors.[0]", Matchers.containsString("This email is already registered")));
     }
 
     @Test

@@ -1,13 +1,13 @@
 package com.demidov.ticketsystemsql.controllerTests;
 
 import com.demidov.ticketsystemsql.dto.in.VenueInDTO;
-import com.demidov.ticketsystemsql.exceptions.CommonAppException;
 import com.demidov.ticketsystemsql.initData.DataInitializer;
 import com.demidov.ticketsystemsql.initData.ValidDTO;
 import com.demidov.ticketsystemsql.repositories.VenueRepository;
 import com.demidov.ticketsystemsql.services.VenueService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,9 +23,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.util.NestedServletException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD;
@@ -76,19 +76,14 @@ public class VenueControllerTest {
     }
 
     @Test
-    public void testGetByNonExistingId() {
+    public void testGetByNonExistingId() throws Exception {
         String uri = "/venues/{id}";
         Integer id = -1;
 
-        Throwable exception = assertThrows(CommonAppException.class, () -> {
-            try {
-                this.mockMvc.perform(get(uri, id).contentType(MediaType.APPLICATION_JSON))
-                        .andDo(document(uri.replace("/", "\\")));
-            } catch (NestedServletException e) {
-                throw e.getCause();
-            }
-        });
-        assertEquals(exception.getMessage(), "There is no such venue with id: " + id);
+        this.mockMvc.perform(get(uri, id).contentType(MediaType.APPLICATION_JSON))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors.[0]", Matchers.containsString("There is no such venue with id")));
     }
 
     @Test

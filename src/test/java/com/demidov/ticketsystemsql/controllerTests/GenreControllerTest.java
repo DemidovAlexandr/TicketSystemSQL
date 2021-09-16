@@ -1,14 +1,15 @@
 package com.demidov.ticketsystemsql.controllerTests;
 
 import com.demidov.ticketsystemsql.dto.in.GenreInDTO;
-import com.demidov.ticketsystemsql.exceptions.CommonAppException;
 import com.demidov.ticketsystemsql.initData.DataInitializer;
 import com.demidov.ticketsystemsql.initData.ValidDTO;
 import com.demidov.ticketsystemsql.repositories.GenreRepository;
 import com.demidov.ticketsystemsql.services.GenreService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.*;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,9 +23,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.util.NestedServletException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD;
@@ -91,17 +92,12 @@ public class GenreControllerTest {
         GenreInDTO dto = validDTO.getGenreInDTO();
         String content = objectMapper.writeValueAsString(dto);
 
-        Throwable exception = assertThrows(CommonAppException.class, () ->
-        {
-            try {
-                this.mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
-                        .andDo(document(uri.replace("/", "\\")));
-            } catch (NestedServletException e) {
-                throw e.getCause();
-            }
-        });
-        assertEquals(exception.getMessage(), "Genre with such name already exists, id: "
-                + genreService.getByName(dto.getName()).getId());
+        this.mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors.[0]", Matchers.containsString("Genre with such name already exists")));
+
+
     }
 
     @Test

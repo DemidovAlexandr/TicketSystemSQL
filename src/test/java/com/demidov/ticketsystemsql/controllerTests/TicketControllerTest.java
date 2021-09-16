@@ -8,6 +8,7 @@ import com.demidov.ticketsystemsql.repositories.TicketRepository;
 import com.demidov.ticketsystemsql.services.TicketService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -122,17 +123,10 @@ public class TicketControllerTest {
         TicketInDTO dto = validDTO.getAvailableTicket();
         String content = objectMapper.writeValueAsString(dto);
 
-        Throwable exception = assertThrows(CommonAppException.class, () ->
-        {
-            try {
-                this.mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
-                        .andDo(document(uri.replace("/", "\\")));
-            } catch (NestedServletException e) {
-                throw e.getCause();
-            }
-        });
-        assertEquals(exception.getMessage(), "This ticket is not unique: "
-                + dto);
+        this.mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors.[0]", Matchers.containsString("This ticket is not unique")));
     }
 
     @Test
@@ -161,17 +155,10 @@ public class TicketControllerTest {
         dto.setLineNumber(dto.getLineNumber() + 1);
         String content = objectMapper.writeValueAsString(dto);
 
-        Throwable exception = assertThrows(CommonAppException.class, () ->
-        {
-            try {
-                this.mockMvc.perform(put(uri).contentType(MediaType.APPLICATION_JSON).content(content))
-                        .andDo(document(uri.replace("/", "\\")));
-            } catch (NestedServletException e) {
-                throw e.getCause();
-            }
-        });
-        assertEquals(exception.getMessage(), "This ticket is not unique: "
-                + dto);
+        this.mockMvc.perform(put(uri).contentType(MediaType.APPLICATION_JSON).content(content))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors.[0]", Matchers.containsString("This ticket is not unique")));
     }
 
     @Test
