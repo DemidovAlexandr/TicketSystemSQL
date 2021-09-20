@@ -11,13 +11,11 @@ public class UserOutDTO {
     private String name;
     private String surname;
 
-    @JsonFormat(pattern = "dd.MM.yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDate dateOfBirth;
     private String telephone;
     private String email;
     private String city;
-
-    //private List<Integer> purchaseIdList;
 
     private boolean isDeleted;
 }
